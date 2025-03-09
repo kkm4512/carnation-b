@@ -1,6 +1,6 @@
 services:
   mysql:
-    container_name: mysql_container
+    container_name: carnation_mysql_container
     image: mysql
     ports:
       - 3306:3306
