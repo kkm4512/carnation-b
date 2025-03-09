@@ -1,0 +1,8 @@
+server:
+  profiles:
+    active: dev,prd
+
+# JWT
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
