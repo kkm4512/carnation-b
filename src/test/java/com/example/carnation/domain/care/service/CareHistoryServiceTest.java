@@ -5,6 +5,7 @@ import com.example.carnation.domain.care.cqrs.*;
 import com.example.carnation.domain.care.dto.CareHistoryRequestDto;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.care.dto.PatientRequestDto;
+import com.example.carnation.domain.care.entity.CareAssignment;
 import com.example.carnation.domain.care.entity.CareHistory;
 import com.example.carnation.domain.care.entity.CareMedia;
 import com.example.carnation.domain.user.cqrs.UserQuery;
@@ -53,7 +54,6 @@ class CareHistoryServiceTest {
     CaregiverQuery caregiverQuery;
     @Autowired
     PatientQuery patientQuery;
-
     // Object
     SignupRequestDto signupRequestDto1;
 
@@ -78,7 +78,8 @@ class CareHistoryServiceTest {
         long beforePatientCount = patientQuery.count();
 
         // when - 간병 기록 생성
-        careAssignmentService.create(authUser, careGiverDto, patientDto);
+        CareAssignment careAssignment = careAssignmentService.create(authUser, careGiverDto, patientDto);
+
 
         // given - 간병 기록 입력 데이터
         String text = "환자 식사 제공 및 산책 수행";
@@ -87,7 +88,7 @@ class CareHistoryServiceTest {
         CareHistoryRequestDto dto = new CareHistoryRequestDto(text, imageFiles, videoFiles);
 
         // when - 간병 기록 저장
-        careHistoryService.create(authUser, 1L, dto);
+        careHistoryService.create(authUser, careAssignment.getId(), dto);
 
         // then - CareAssignment이 정상적으로 저장되었는지 확인
         long afterAssignmentCount = careAssignmentQuery.count();

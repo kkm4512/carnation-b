@@ -23,12 +23,12 @@ public class CareAssignmentService {
     private final CareAssignmentQuery careAssignmentQuery;
     private final CareAssignmentCommand careAssignmentCommand;
 
-    public void create(final AuthUser authUser,final CaregiverRequestDto caregiverDto, final PatientRequestDto patientDto) {
+    public CareAssignment create(final AuthUser authUser,final CaregiverRequestDto caregiverDto, final PatientRequestDto patientDto) {
         User user = User.of(authUser);
         Patient patient = Patient.of(user, patientDto);
         Caregiver caregiver = Caregiver.of(user, caregiverDto);
         CareAssignment careAssignment = CareAssignment.of(user,patient,caregiver);
-        careAssignmentCommand.save(careAssignment);
+        return careAssignmentCommand.save(careAssignment);
     }
 
     public Page<CareAssignmentResponse> readAllMe(final AuthUser authUser, final Pageable pageable) {
