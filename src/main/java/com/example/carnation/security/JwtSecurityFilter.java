@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import static com.example.carnation.common.response.enums.UserApiResponse.NOT_LOGIN;
 import static com.example.carnation.security.JwtManager.AUTHORIZATION_HEADER;
+import static com.example.carnation.security.JwtManager.BEARER_PREFIX;
 
 @Slf4j
 @Component
@@ -53,6 +54,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
 
         try {
             if (jwt != null) {
+                jwt = jwt.replace(BEARER_PREFIX, "");
                 Claims claims = jm.toClaims(jwt);
                 Long userId = Long.parseLong(claims.getSubject());
                 String email = claims.get("email", String.class);

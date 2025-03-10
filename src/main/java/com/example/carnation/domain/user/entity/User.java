@@ -1,7 +1,9 @@
 package com.example.carnation.domain.user.entity;
 
 import com.example.carnation.common.exception.UserException;
-import com.example.carnation.domain.careRecord.entity.CareRecord;
+import com.example.carnation.domain.care.entity.CareAssignment;
+import com.example.carnation.domain.care.entity.Caregiver;
+import com.example.carnation.domain.care.entity.Patient;
 import com.example.carnation.domain.user.constans.UserType;
 import com.example.carnation.security.AuthUser;
 import com.example.carnation.security.UserRole;
@@ -74,10 +76,17 @@ public class User {
     @Column
     private LocalDateTime updatedAt;
 
-    /** 사용자가 작성한 간병 기록 목록 */
-    @Schema(description = "사용자가 작성한 간병 기록 목록")
+    @Schema(description = "사용자가 작성한 간병 배정 목록")
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CareRecord> careRecords = new ArrayList<>();
+    private List<CareAssignment> careAssignments = new ArrayList<>();
+
+    @Schema(description = "사용자가 작성한 간병인 목록")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Patient> patients = new ArrayList<>();
+
+    @Schema(description = "사용자가 작성한 피간병인 목록")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Caregiver> caregivers = new ArrayList<>();
 
     public User(Long id, String nickname, String email, UserRole userRole, UserType userType) {
         this.id = id;
