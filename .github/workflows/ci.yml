@@ -52,13 +52,14 @@ jobs:
 
       - name: Check MySQL Data
         run: |
-          docker exec -it carnation_mysql_container \
-          mysql -u root -p'root12!@12' -D carnation -e "
+          docker exec carnation_mysql_container \
+          mysql --protocol=tcp -u root -p'root12!@12' -D carnation -e "
             SELECT * FROM care_assignment;
             SELECT AUTO_INCREMENT 
             FROM INFORMATION_SCHEMA.TABLES 
             WHERE TABLE_SCHEMA = 'carnation' AND TABLE_NAME = 'care_assignment';
           "
+
 
 
 
