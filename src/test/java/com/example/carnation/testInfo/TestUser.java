@@ -1,14 +1,16 @@
 package com.example.carnation.testInfo;
 
-import com.example.carnation.domain.user.dto.req.SigninRequestDto;
-import com.example.carnation.domain.user.dto.req.SignupRequestDto;
+import com.example.carnation.domain.user.dto.SigninRequestDto;
+import com.example.carnation.domain.user.dto.SignupRequestDto;
 
 public class TestUser {
     public static SignupRequestDto getSignupRequestDto1() {
         return new SignupRequestDto(
                 "test@naver.com1",
                 "!@Skdud3401",
-                "testNickname1"
+                "testNickname1",
+                null,
+                null
         );
     }
 

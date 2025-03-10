@@ -27,7 +27,6 @@ public enum UserApiResponse implements ApiResponseEnum {
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이메일이 중복 되었습니다"),
 
     // 500
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류가 발생했습니다, 관리자에게 문의 해주세요");
     ;
 
     private final HttpStatus httpStatus;
