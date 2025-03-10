@@ -1,6 +1,8 @@
 package com.example.carnation.domain.care.dto;
 
 import com.example.carnation.domain.care.entity.CareAssignment;
+import com.example.carnation.domain.care.entity.Caregiver;
+import com.example.carnation.domain.care.entity.Patient;
 import com.example.carnation.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(description = "간병 배정 응답 DTO") // DTO 전
-public class CareAssignmentResponse {
+public class CareAssignmentDto {
     @Schema(description = "간병 배정 ID", example = "1")
     private Long id;
 
@@ -28,19 +30,19 @@ public class CareAssignmentResponse {
     private User user;
 
     @Schema(description = "간병 배정 피간병인 (Patient)", example = "1")
-    private PatientDto patientDto;
+    private Patient patient;
 
     @Schema(description = "간병 배정 간병인 (Caregiver)", example = "1")
-    private CaregiverDto caregiverDto;
+    private Caregiver caregiver;
 
-    public static CareAssignmentResponse of(CareAssignment entity) {
-        return new CareAssignmentResponse(
+    public static CareAssignmentDto of(CareAssignment entity) {
+        return new CareAssignmentDto(
                 entity.getId(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
                 entity.getUser(),
-                PatientDto.of(entity.getPatient()),
-                CaregiverDto.of(entity.getCaregiver())
+                entity.getPatient(),
+                entity.getCaregiver()
         );
     }
 }

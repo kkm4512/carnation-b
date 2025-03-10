@@ -13,6 +13,7 @@ public enum FileApiResponse implements ApiResponseEnum {
     FILE_UPLOAD_FAILED(HttpStatus.BAD_REQUEST, "파일 업로드에 실패했습니다."),
     INVALID_IMAGE_FILE(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지 파일입니다."),
     INVALID_VIDEO_FILE(HttpStatus.BAD_REQUEST, "유효하지 않은 비디오 파일입니다."),
+    DIRECTORY_MAKE_FAIL(HttpStatus.BAD_REQUEST, "디렉토리 생성에 실패 하였습니다"),
 
     // 403 Forbidden (권한 없음)
     FILE_ACCESS_DENIED(HttpStatus.FORBIDDEN, "해당 파일에 대한 접근 권한이 없습니다."),

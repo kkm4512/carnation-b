@@ -56,11 +56,11 @@ public class Patient {
         this.residentRegistrationNumber = residentRegistrationNumber;
     }
 
-    public static Patient of(User user, PatientRequestDto patientDto) {
+    public static Patient of(User user, PatientRequestDto dto) {
         return new Patient(
                 user,
-                patientDto.getName(),
-                patientDto.getResidentRegistrationNumber()
+                dto.getName(),
+                dto.getResidentRegistrationNumber()
         );
     }
 }

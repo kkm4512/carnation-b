@@ -3,10 +3,7 @@ package com.example.carnation.domain.care.entity;
 import com.example.carnation.domain.care.constans.MediaType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,7 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-@Schema(description = "간병인이 업로드한 사진 및 동영상 파일")
+@Schema(description = "간병인이 업로드한 미디어 파일")
+@Builder
 public class CareMedia {
 
     @Id
@@ -25,9 +23,9 @@ public class CareMedia {
     @Schema(description = "간병인이 작성한 사진, 동영상 ID", example = "1")
     private Long id;
 
-    @Schema(description = "S3에 저장된 파일 URL", example = "https://s3.example.com/file1.jpg")
+    @Schema(description = "저장된 File 상대경로 ", example = "s3.example.com/file1.jpg")
     @Column(nullable = false)
-    private String fileUrl;
+    private String filePath;
 
     @Column(nullable = false)
     private String fileName;
@@ -57,13 +55,4 @@ public class CareMedia {
     @JoinColumn(name = "care_history_id")
     @Schema(description = "연결된 간병 기록 ID", example = "10")
     private CareHistory careHistory;
-
-    public CareMedia(String fileUrl, MediaType mediaType, CareHistory careHistory, String fileName, String fileOriginName, String fileSize) {
-        this.fileUrl = fileUrl;
-        this.mediaType = mediaType;
-        this.careHistory = careHistory;
-        this.fileName = fileName;
-        this.fileOriginName = fileOriginName;
-        this.fileSize = fileSize;
-    }
 }
