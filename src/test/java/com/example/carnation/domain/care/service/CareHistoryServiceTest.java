@@ -1,6 +1,7 @@
 package com.example.carnation.domain.care.service;
 
 import com.example.carnation.TestInfo;
+import com.example.carnation.common.repository.DatabaseResetRepository;
 import com.example.carnation.domain.care.cqrs.*;
 import com.example.carnation.domain.care.dto.CareHistoryRequestDto;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
@@ -12,6 +13,7 @@ import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.domain.user.entity.User;
 import com.example.carnation.domain.user.service.UserService;
 import com.example.carnation.security.AuthUser;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,6 +55,8 @@ class CareHistoryServiceTest {
     CaregiverQuery caregiverQuery;
     @Autowired
     PatientQuery patientQuery;
+    @Autowired
+    DatabaseResetRepository databaseResetRepository;
 
     // Object
     SignupRequestDto signupRequestDto1;
@@ -61,6 +65,11 @@ class CareHistoryServiceTest {
     void init() {
         signupRequestDto1 = TestInfo.getSignupRequestDto1();
         userService.signUp(signupRequestDto1);
+    }
+
+    @AfterEach
+    void reset() {
+        databaseResetRepository.resetAllAutoIncrement();
     }
 
     @Test

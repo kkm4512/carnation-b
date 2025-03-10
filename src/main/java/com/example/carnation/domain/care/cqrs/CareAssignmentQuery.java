@@ -38,7 +38,6 @@ public class CareAssignmentQuery {
 
     @Transactional(readOnly = true)
     public CareAssignment findOne(Long id) {
-        log.error("Not Found Id: {}", id);
         return repository.findById(id).orElseThrow(() -> new CareException(NOT_FOUND));
     }
 }
