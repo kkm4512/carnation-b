@@ -50,6 +50,19 @@ jobs:
       - name: docker ps 확인
         run: docker ps
 
+      - name: Check MySQL Data
+        run: |
+          docker exec carnation_mysql_container \
+          mysql -u root -p'root12!@12' -D carnation -e "
+            SELECT * FROM care_assignment;
+            SELECT AUTO_INCREMENT 
+            FROM INFORMATION_SCHEMA.TABLES 
+            WHERE TABLE_SCHEMA = 'carnation' AND TABLE_NAME = 'care_assignment';
+          "
+
+
+
+
       - name: 빌드 및 테스트 코드 돌리는중 ...
         run: |
           chmod +x ./gradlew
