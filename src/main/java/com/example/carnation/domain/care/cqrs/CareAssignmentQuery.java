@@ -5,6 +5,7 @@ import com.example.carnation.domain.care.entity.CareAssignment;
 import com.example.carnation.domain.care.repository.CareAssignmentRepository;
 import com.example.carnation.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponse.NOT_FO
 
 @Component
 @RequiredArgsConstructor
+@Slf4j(topic = "CareAssignmentQuery")
 public class CareAssignmentQuery {
     private final CareAssignmentRepository repository;
 
@@ -36,6 +38,7 @@ public class CareAssignmentQuery {
 
     @Transactional(readOnly = true)
     public CareAssignment findOne(Long id) {
+        log.error("Not Found Id: {}", id);
         return repository.findById(id).orElseThrow(() -> new CareException(NOT_FOUND));
     }
 }
