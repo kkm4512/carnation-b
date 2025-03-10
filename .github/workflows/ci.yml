@@ -62,6 +62,16 @@ jobs:
           chmod +x ./gradlew
           ./gradlew build --info --stacktrace
 
+      - name: Check MySQL Data
+        run: |
+          docker exec carnation_mysql_container \
+          mysql -u root -p'root12!@12' -D carnation -e "
+            SELECT * FROM care_assignment;
+            SELECT AUTO_INCREMENT 
+            FROM INFORMATION_SCHEMA.TABLES 
+            WHERE TABLE_SCHEMA = 'carnation' AND TABLE_NAME = 'care_assignment';
+          "
+
       - name: Upload Test Report
         if: always() # 실패해도 실행됨
         uses: actions/upload-artifact@v4  # ✅ 최신 버전 v4로 업데이트
