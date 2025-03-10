@@ -47,6 +47,9 @@ jobs:
         run: |
           docker-compose up -d
 
+      - name: docker ps 확인
+        run: docker ps
+
       - name: 빌드 및 테스트 코드 돌리는중 ...
         run: |
           chmod +x ./gradlew
