@@ -2,10 +2,10 @@ package com.example.carnation.domain.care.service;
 
 import com.example.carnation.TestInfo;
 import com.example.carnation.domain.care.cqrs.*;
+import com.example.carnation.domain.care.dto.CareAssignmentResponse;
 import com.example.carnation.domain.care.dto.CareHistoryRequestDto;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.care.dto.PatientRequestDto;
-import com.example.carnation.domain.care.entity.CareAssignment;
 import com.example.carnation.domain.care.entity.CareHistory;
 import com.example.carnation.domain.care.entity.CareMedia;
 import com.example.carnation.domain.user.cqrs.UserQuery;
@@ -78,7 +78,7 @@ class CareHistoryServiceTest {
         long beforePatientCount = patientQuery.count();
 
         // when - 간병 기록 생성
-        CareAssignment careAssignment = careAssignmentService.create(authUser, careGiverDto, patientDto);
+        CareAssignmentResponse careAssignment = careAssignmentService.create(authUser, careGiverDto, patientDto);
 
 
         // given - 간병 기록 입력 데이터

@@ -4,9 +4,9 @@ import com.example.carnation.TestInfo;
 import com.example.carnation.domain.care.cqrs.CareAssignmentQuery;
 import com.example.carnation.domain.care.cqrs.CaregiverQuery;
 import com.example.carnation.domain.care.cqrs.PatientQuery;
+import com.example.carnation.domain.care.dto.CareAssignmentResponse;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.care.dto.PatientRequestDto;
-import com.example.carnation.domain.care.entity.CareAssignment;
 import com.example.carnation.domain.user.cqrs.UserQuery;
 import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.domain.user.entity.User;
@@ -69,7 +69,7 @@ class CareAssignmentServiceTest {
         long beforePatientCount = patientQuery.count();
 
         // when - 간병 기록 생성
-        CareAssignment careAssignment = careAssignmentService.create(authUser, careGiverDto, patientDto);
+        CareAssignmentResponse careAssignment = careAssignmentService.create(authUser, careGiverDto, patientDto);
 
         // then - CareRecord가 정상적으로 저장되었는지 검증
         long afterCareAssignmentCount = careAssignmentQuery.count();
@@ -86,12 +86,12 @@ class CareAssignmentServiceTest {
 
         // 4. CareRecord와 Caregiver, Patient의 연관관계 검증
         assertNotNull(careAssignment, "careAssignment가 정상적으로 저장되어야 합니다.");
-        assertNotNull(careAssignment.getCaregiver(), "Caregiver가 careAssignment와 연관되어야 합니다.");
-        assertNotNull(careAssignment.getPatient(), "Patient가 careAssignment와 연관되어야 합니다.");
+        assertNotNull(careAssignment.getCaregiverDto(), "Caregiver가 careAssignment와 연관되어야 합니다.");
+        assertNotNull(careAssignment.getPatientDto(), "Patient가 careAssignment와 연관되어야 합니다.");
 
         // 5. Caregiver와 Patient의 정보가 정상적으로 저장되었는지 확인
-        assertEquals(careGiverDto.getName(), careAssignment.getCaregiver().getName(), "Caregiver 이름이 일치해야 합니다.");
-        assertEquals(patientDto.getName(), careAssignment.getPatient().getName(), "Patient 이름이 일치해야 합니다.");
+        assertEquals(careGiverDto.getName(), careAssignment.getCaregiverDto().getName(), "Caregiver 이름이 일치해야 합니다.");
+        assertEquals(patientDto.getName(), careAssignment.getPatientDto().getName(), "Patient 이름이 일치해야 합니다.");
     }
 
 }

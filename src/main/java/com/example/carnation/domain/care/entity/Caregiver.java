@@ -99,18 +99,18 @@ public class Caregiver {
         this.endDate = endDate;
     }
 
-    public static Caregiver of(User user, CaregiverRequestDto caregiverDto) {
+    public static Caregiver of(User user, CaregiverRequestDto dto) {
         return new Caregiver(
                 user,
-                caregiverDto.getName(),
-                caregiverDto.getResidentRegistrationNumber(),
-                caregiverDto.getHeight(),
-                caregiverDto.getWeight(),
-                caregiverDto.getBloodType(),
-                caregiverDto.getRelationship(),
-                caregiverDto.getPhoneNumber(),
-                caregiverDto.getStartDate(),
-                caregiverDto.getEndDate()
+                dto.getName(),
+                dto.getResidentRegistrationNumber(),
+                dto.getHeight(),
+                dto.getWeight(),
+                dto.getBloodType(),
+                dto.getRelationship(),
+                dto.getPhoneNumber(),
+                dto.getStartDate(),
+                dto.getEndDate()
         );
     }
 }

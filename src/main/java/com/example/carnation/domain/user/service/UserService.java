@@ -25,7 +25,7 @@ public class UserService {
     private final PasswordEncoder pe;
     private final JwtManager jm;
 
-    public void signUp(final SignupRequestDto dto) {
+    public User signUp(final SignupRequestDto dto) {
         userQuery.existsByEmail(dto.getEmail());
 
         String encodedPassword = pe.encode(dto.getPassword());
@@ -38,7 +38,7 @@ public class UserService {
                 dto.getUserType()
         );
 
-        userCommand.save(user);
+        return userCommand.save(user);
     }
 
 
