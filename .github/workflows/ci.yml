@@ -22,12 +22,7 @@ jobs:
           echo "${{ secrets.ENV }}" > .env
         shell: bash
 
-      - name: docker-compose 파일 생성
-        run: |
-          echo "${{ secrets.DOCKER-COMPOSE }}" > docker-compose.yml
-        shell: bash
-
-      - name: Docker Compose 실행 (MySQL 포함)
+      - name: Docker Compose 실행
         run: |
           docker-compose up -d
 
