@@ -19,6 +19,7 @@ import static com.example.carnation.common.response.enums.UserApiResponse.*;
 public class JwtManager {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String BEARER_PREFIX = "Bearer ";
     private static final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
 
     @Value("${jwt.secret.key}")
@@ -35,7 +36,7 @@ public class JwtManager {
     public String generateJwt(JwtDto jwtDto) {
         Date date = new Date();
 
-        return Jwts.builder()
+        return BEARER_PREFIX + Jwts.builder()
                 .setSubject(String.valueOf(jwtDto.getUserId()))
                 .claim("email", jwtDto.getEmail())
                 .claim("nickname", jwtDto.getNickname())

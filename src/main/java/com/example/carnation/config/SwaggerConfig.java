@@ -30,10 +30,10 @@ import org.springframework.context.annotation.Configuration;
 )
 @SecurityScheme(
         name = "JWT",
-        type = SecuritySchemeType.HTTP,
-        scheme = "bearer",
-        bearerFormat = "JWT",
-        description = "JWT Token을 입력하세요. (Bearer {token}) 형식"
+        type = SecuritySchemeType.APIKEY,  // 변경: Bearer 자동 적용 방지
+        in = io.swagger.v3.oas.annotations.enums.SecuritySchemeIn.HEADER,
+        paramName = "Authorization",
+        description = "JWT Token을 입력하세요. (토큰만 입력, 'Bearer ' 제외)"
 )
 public class SwaggerConfig {
 
