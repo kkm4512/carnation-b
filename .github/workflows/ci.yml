@@ -22,8 +22,8 @@ jobs:
           echo "${{ secrets.ENV }}" > .env
         shell: bash
 
-      - name: 환경 변수 확인
-        run: cat .env
+      - name: Check current user
+        run: whoami
 
       - name: MySQL 도커 컨테이너 실행
         uses: mirromutth/mysql-action@v1.1
