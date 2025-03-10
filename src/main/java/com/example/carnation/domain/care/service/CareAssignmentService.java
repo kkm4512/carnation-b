@@ -20,20 +20,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j(topic = "CareRecordService")
 public class CareAssignmentService {
-    private final CareAssignmentQuery careRecordQuery;
-    private final CareAssignmentCommand careRecordCommand;
+    private final CareAssignmentQuery careAssignmentQuery;
+    private final CareAssignmentCommand careAssignmentCommand;
 
     public void create(final AuthUser authUser,final CaregiverRequestDto caregiverDto, final PatientRequestDto patientDto) {
         User user = User.of(authUser);
         Patient patient = Patient.of(user, patientDto);
         Caregiver caregiver = Caregiver.of(user, caregiverDto);
         CareAssignment careAssignment = CareAssignment.of(user,patient,caregiver);
-        careRecordCommand.save(careAssignment);
+        careAssignmentCommand.save(careAssignment);
     }
 
     public Page<CareAssignmentResponse> readAllMe(final AuthUser authUser, final Pageable pageable) {
         User user = User.of(authUser);
-        Page<CareAssignment> responses = careRecordQuery.readAllMe(user, pageable);
+        Page<CareAssignment> responses = careAssignmentQuery.readAllMe(user, pageable);
         return responses.map(CareAssignmentResponse::of);
     }
 }

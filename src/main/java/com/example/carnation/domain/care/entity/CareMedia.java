@@ -62,5 +62,8 @@ public class CareMedia {
         this.fileUrl = fileUrl;
         this.mediaType = mediaType;
         this.careHistory = careHistory;
+        this.fileName = fileName;
+        this.fileOriginName = fileOriginName;
+        this.fileSize = fileSize;
     }
 }

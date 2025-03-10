@@ -1,6 +1,6 @@
 package com.example.carnation.domain.file.validation;
 
-import com.example.carnation.common.exception.CareException;
+import com.example.carnation.common.exception.FileException;
 import com.example.carnation.common.response.enums.FileApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -43,16 +43,16 @@ public class FileValidation {
      */
     private static void validateFile(MultipartFile file, long maxSize, List<String> allowedExtensions, FileApiResponse errorResponse) {
         if (file == null || file.isEmpty()) {
-            throw new CareException(FileApiResponse.EMPTY_FILE);
+            throw new FileException(FileApiResponse.EMPTY_FILE);
         }
 
         if (file.getSize() > maxSize) {
-            throw new CareException(FileApiResponse.FILE_SIZE_EXCEEDED);
+            throw new FileException(FileApiResponse.FILE_SIZE_EXCEEDED);
         }
 
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || !isAllowedExtension(originalFilename, allowedExtensions)) {
-            throw new CareException(errorResponse);
+            throw new FileException(errorResponse);
         }
     }
 
