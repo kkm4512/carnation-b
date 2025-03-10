@@ -22,11 +22,17 @@ jobs:
           echo "${{ secrets.ENV }}" > .env
         shell: bash
 
+      - name: 환경 변수 확인
+        run: cat .env
+
       - name: MySQL 도커 컨테이너 실행
         uses: mirromutth/mysql-action@v1.1
         with:
           mysql database: ${MYSQL_DB_NAME}
           mysql root password: ${MYSQL_PASSWORD}
+
+      - name: MySQL 컨테이너 상태 확인
+        run: docker ps -a
 
       - name: 빌드 및 테스트 코드 돌리는중 ...
         run: |
