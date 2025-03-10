@@ -1,11 +1,11 @@
 package com.example.carnation.domain.care.service;
 
 import com.example.carnation.TestInfo;
-import com.example.carnation.common.repository.DatabaseResetRepository;
 import com.example.carnation.domain.care.cqrs.*;
 import com.example.carnation.domain.care.dto.CareHistoryRequestDto;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.care.dto.PatientRequestDto;
+import com.example.carnation.domain.care.entity.CareAssignment;
 import com.example.carnation.domain.care.entity.CareHistory;
 import com.example.carnation.domain.care.entity.CareMedia;
 import com.example.carnation.domain.user.cqrs.UserQuery;
@@ -13,7 +13,6 @@ import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.domain.user.entity.User;
 import com.example.carnation.domain.user.service.UserService;
 import com.example.carnation.security.AuthUser;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,9 +54,6 @@ class CareHistoryServiceTest {
     CaregiverQuery caregiverQuery;
     @Autowired
     PatientQuery patientQuery;
-    @Autowired
-    DatabaseResetRepository databaseResetRepository;
-
     // Object
     SignupRequestDto signupRequestDto1;
 
@@ -65,11 +61,6 @@ class CareHistoryServiceTest {
     void init() {
         signupRequestDto1 = TestInfo.getSignupRequestDto1();
         userService.signUp(signupRequestDto1);
-    }
-
-    @AfterEach
-    void reset() {
-        databaseResetRepository.resetAllAutoIncrement();
     }
 
     @Test
@@ -87,7 +78,7 @@ class CareHistoryServiceTest {
         long beforePatientCount = patientQuery.count();
 
         // when - 간병 기록 생성
-        careAssignmentService.create(authUser, careGiverDto, patientDto);
+        CareAssignment careAssignment = careAssignmentService.create(authUser, careGiverDto, patientDto);
 
 
         // given - 간병 기록 입력 데이터
@@ -97,7 +88,7 @@ class CareHistoryServiceTest {
         CareHistoryRequestDto dto = new CareHistoryRequestDto(text, imageFiles, videoFiles);
 
         // when - 간병 기록 저장
-        careHistoryService.create(authUser, 1L, dto);
+        careHistoryService.create(authUser, careAssignment.getId(), dto);
 
         // then - CareAssignment이 정상적으로 저장되었는지 확인
         long afterAssignmentCount = careAssignmentQuery.count();

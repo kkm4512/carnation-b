@@ -1,7 +1,6 @@
 package com.example.carnation.domain.user.service;
 
 import com.example.carnation.TestInfo;
-import com.example.carnation.common.repository.DatabaseResetRepository;
 import com.example.carnation.domain.user.constans.UserType;
 import com.example.carnation.domain.user.cqrs.UserCommand;
 import com.example.carnation.domain.user.cqrs.UserQuery;
@@ -9,7 +8,6 @@ import com.example.carnation.domain.user.dto.SigninRequestDto;
 import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.domain.user.entity.User;
 import com.example.carnation.security.UserRole;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,9 +33,6 @@ class UserServiceTest {
     UserCommand userCommand;
     @Autowired
     UserQuery userQuery;
-    @Autowired
-    DatabaseResetRepository databaseResetRepository;
-
     // Object
     SignupRequestDto signupRequestDto1;
 
@@ -46,10 +41,6 @@ class UserServiceTest {
         signupRequestDto1 = getSignupRequestDto1();
     }
 
-    @AfterEach
-    void reset() {
-        databaseResetRepository.resetAllAutoIncrement();
-    }
 
     @Test
     @DisplayName("유저_회원가입_테스트")
