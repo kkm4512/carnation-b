@@ -1,24 +1,25 @@
 package com.example.carnation.domain.user.service;
 
-import com.example.carnation.domain.user.dto.req.SigninRequestDto;
-import com.example.carnation.domain.user.dto.req.SignupRequestDto;
+import com.example.carnation.domain.user.constans.UserType;
+import com.example.carnation.domain.user.dto.SigninRequestDto;
+import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.domain.user.entity.User;
 import com.example.carnation.domain.user.repository.UserRepository;
+import com.example.carnation.security.UserRole;
 import com.example.carnation.testInfo.TestUser;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 
+import static com.example.carnation.testInfo.TestUser.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("dev")
-// RollBack True를 위한 트랜잭션 환경 설정
 @Transactional
 class UserServiceTest {
 
@@ -32,7 +33,7 @@ class UserServiceTest {
 
     @BeforeEach
     void init() {
-        signupRequestDto1 = TestUser.getSignupRequestDto1();
+        signupRequestDto1 = getSignupRequestDto1();
     }
 
     @Test
@@ -46,6 +47,8 @@ class UserServiceTest {
         // then - DB조회시, 정상적으로 있는지 확인
         Optional<User> findUser = userRepository.findByEmail("test@naver.com1");
         assertThat(findUser).isPresent();
+        assertEquals(UserRole.ROLE_USER, findUser.get().getUserRole());
+        assertEquals(UserType.CAREGIVER, findUser.get().getUserType());
 
     }
 

@@ -40,6 +40,7 @@ public class JwtManager {
                 .claim("email", jwtDto.getEmail())
                 .claim("nickname", jwtDto.getNickname())
                 .claim("userRole", jwtDto.getUserRole())
+                .claim("userType", jwtDto.getUserType())
                 .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                 .setIssuedAt(date) // 발급일
                 .signWith(key, signatureAlgorithm) // 암호화 알고리즘

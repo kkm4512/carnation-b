@@ -56,9 +56,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         // 허용된 Origin 추가
         config.setAllowedOrigins(List.of(
-                "http://localhost:3000",      // 로컬 개발용
-                "https://naejeonhaja.com",    // 메인 도메인
-                "https://www.naejeonhaja.com" // www 서브도메인
+                // 일단 공백
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용된 HTTP 메서드
         config.setAllowedHeaders(List.of("Content-Type", "Authorization")); // 허용된 헤더

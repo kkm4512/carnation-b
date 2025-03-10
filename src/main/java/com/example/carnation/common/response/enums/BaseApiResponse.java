@@ -11,7 +11,20 @@ public enum BaseApiResponse implements ApiResponseEnum {
 
     // 400
     FAIL(HttpStatus.BAD_REQUEST,"요청하신 작업에 실패 하였습니다"),
-    TEAM_MISMATCH(HttpStatus.BAD_REQUEST, "팀을 만들 수 없습니다, 라인을 더 폭넓혀 보세요 ! (아니면 티어가 너무 안맞을수도 ㅎ;)"),
+    INVALID_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다"),
+
+    // 404
+    NOT_FOUND(HttpStatus.NOT_FOUND, "데이터를 찾을 수 없습니다"),
+
+    // 405
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "지원하지 않는 HTTP 요청 입니다"),
+
+    // 409
+    CONFLICT(HttpStatus.CONFLICT,"중복값이 발생 하였습니다"),
+
+    // 500
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류가 발생했습니다, 관리자에게 문의 해주세요");
+
     ;
 
     private final HttpStatus httpStatus;
