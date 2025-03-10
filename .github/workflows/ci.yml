@@ -28,6 +28,10 @@ jobs:
       - name: Check if running inside a container
         run: cat /proc/1/cgroup
 
+      - name: Debug Docker Info
+        run: docker info
+
+
 
       - name: MySQL 도커 컨테이너 실행
         uses: mirromutth/mysql-action@v1.1
