@@ -80,6 +80,7 @@ class CareHistoryServiceTest {
         // when - 간병 기록 생성
         careAssignmentService.create(authUser, careGiverDto, patientDto);
 
+
         // given - 간병 기록 입력 데이터
         String text = "환자 식사 제공 및 산책 수행";
         List<MultipartFile> imageFiles = getTestImages();
