@@ -54,7 +54,7 @@ jobs:
 
       - name: Upload Test Report
         if: always() # 실패해도 실행됨
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # ✅ 최신 버전 v4로 업데이트
         with:
           name: test-report
           path: build/reports/tests/test/
