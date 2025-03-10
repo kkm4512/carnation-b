@@ -28,7 +28,8 @@ public class CareAssignmentService {
         Patient patient = Patient.of(user, patientDto);
         Caregiver caregiver = Caregiver.of(user, caregiverDto);
         CareAssignment careAssignment = CareAssignment.of(user,patient,caregiver);
-        careAssignmentCommand.save(careAssignment);
+        CareAssignment save = careAssignmentCommand.save(careAssignment);
+        log.info("save careAssignment Id: {}", save.getId());
     }
 
     public Page<CareAssignmentResponse> readAllMe(final AuthUser authUser, final Pageable pageable) {
