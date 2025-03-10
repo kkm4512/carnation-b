@@ -31,6 +31,9 @@ jobs:
       - name: Debug Docker Info
         run: docker info
 
+      - name: Debug Docker log check
+        run: docker logs 307da28232c4
+
 
 
       - name: MySQL 도커 컨테이너 실행
