@@ -33,7 +33,7 @@ jobs:
         run: docker volume ls
 
 
-      - name: 기존 Docker 컨테이너 및 볼륨 삭제
+      - name: 기존 Docker 컨테이너 및 모든 볼륨 삭제
         run: |
           echo "🛑 모든 Docker 컨테이너 중지 및 삭제..."
           docker stop $(docker ps -aq) || true
@@ -42,13 +42,11 @@ jobs:
           echo "🗑️ 사용하지 않는 Docker 볼륨 삭제..."
           docker volume prune -f
           
-          echo "🗑️ MySQL 데이터 볼륨 삭제 (존재할 경우)..."
-          if docker volume ls | grep -q "mysql_data"; then
-            docker volume rm mysql_data || true
-            echo "✅ MySQL 데이터 볼륨 삭제 완료!"
-          else
-            echo "⚠️ MySQL 데이터 볼륨이 존재하지 않음. 삭제할 필요 없음."
-          fi
+          echo "🗑️ 모든 Docker 볼륨 삭제..."
+          docker volume rm $(docker volume ls -q) || true
+          
+          echo "✅ Docker 정리 완료!"
+
 
       - name: 도커 불륨 확인
         run: docker volume ls
