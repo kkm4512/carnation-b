@@ -31,8 +31,13 @@ jobs:
           chmod +x ./gradlew
           ./gradlew build
 
-      - name: Run Gradle with Debug Logging
-        run: ./gradlew build --info --stacktrace
+      - name: Upload Test Report
+        if: always() # 실패해도 실행됨
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: build/reports/tests/test/
+
 
           
 
