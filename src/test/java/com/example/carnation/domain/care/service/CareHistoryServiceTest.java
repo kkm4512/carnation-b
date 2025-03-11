@@ -8,6 +8,7 @@ import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.care.dto.PatientRequestDto;
 import com.example.carnation.domain.care.entity.CareHistory;
 import com.example.carnation.domain.care.entity.CareMedia;
+import com.example.carnation.domain.file.helper.FileHelper;
 import com.example.carnation.domain.user.cqrs.UserQuery;
 import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.domain.user.entity.User;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +29,8 @@ import java.util.List;
 import static com.example.carnation.TestInfo.*;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest
 @ActiveProfiles("dev")
@@ -40,6 +44,8 @@ class CareHistoryServiceTest {
     UserService userService;
     @Autowired
     CareAssignmentService careAssignmentService;
+    @MockBean
+    FileHelper fileHelper;
 
     // Command _ History
     @Autowired
@@ -88,6 +94,7 @@ class CareHistoryServiceTest {
         CareHistoryRequestDto dto = new CareHistoryRequestDto(text, imageFiles, videoFiles);
 
         // when - 간병 기록 저장
+        doNothing().when(fileHelper).uploads(any(), any()); // 실제 S3 업로드 행위 대체
         careHistoryService.create(authUser, careAssignment.getId(), dto);
 
         // then - CareAssignment이 정상적으로 저장되었는지 확인
