@@ -31,7 +31,8 @@ public enum FileApiResponse implements ApiResponseEnum {
     // 500 Internal Server Error (서버 내부 오류)
     FILE_STORAGE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장 중 오류가 발생했습니다."),
     FILE_PROCESSING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 처리 중 오류가 발생했습니다."),
-    FILE_DELETION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 중 오류가 발생했습니다."),
+    FILE_DELETION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 중 오류가 발생했습니다.")
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;
