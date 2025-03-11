@@ -1,5 +1,6 @@
 package com.example.carnation.domain.care.controller;
 
+import com.example.carnation.common.dto.PageSearchDto;
 import com.example.carnation.common.response.ApiResponse;
 import com.example.carnation.domain.care.dto.CareAssignmentResponse;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
@@ -13,9 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -55,15 +54,13 @@ public class CareAssignmentController {
     )
     @SecurityRequirement(name = "JWT")
     @GetMapping
-    public ApiResponse<Page<CareAssignmentResponse>> readAllMe(
+    public ApiResponse<Page<CareAssignmentResponse>> readAllMePage(
             @AuthenticationPrincipal AuthUser authUser,
-            @Parameter(description = "페이지 번호 (기본값: 1)", example = "1")
-            @RequestParam(defaultValue = "1") Integer page,
-            @Parameter(description = "페이지 크기 (기본값: 10)", example = "10")
-            @RequestParam(defaultValue = "10") Integer size
+            @Parameter(description = "페이징 처리에 필요한 page(페이지 번호), size(페이지 크기), sort(정렬 방식), sortBy(정렬 기준 필드)")
+            @ModelAttribute @Valid PageSearchDto pageSearchDto
     ) {
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createdAt");
-        Page<CareAssignmentResponse> response = careRecordService.readAllMe(authUser, pageable);
+        Pageable pageable = PageSearchDto.of(pageSearchDto);
+        Page<CareAssignmentResponse> response = careRecordService.readAllMePage(authUser, pageable);
         return ApiResponse.of(SUCCESS, response);
     }
 }

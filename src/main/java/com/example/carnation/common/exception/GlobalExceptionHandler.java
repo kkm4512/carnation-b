@@ -5,6 +5,7 @@ import com.example.carnation.common.response.enums.ApiResponseEnum;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,12 +18,21 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import static com.example.carnation.common.response.enums.BaseApiResponse.*;
 
 @RestControllerAdvice
+@Slf4j(topic = "GlobalExceptionHandler")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<?> baseException(BaseException e) {
         ApiResponseEnum apiResponseEnum = e.getApiResponseEnum();
         ApiResponse<Void> apiResponse = new ApiResponse<>(apiResponseEnum);
+        log.error("code: {}, message: {}", apiResponse.getCode(), apiResponse.getMessage());
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
+    }
+
+    @ExceptionHandler(BaseDataException.class)
+    public ResponseEntity<?> baseException(BaseDataException e) {
+        ApiResponse<?> apiResponse = e.getApiResponse();
+        log.error("code: {}, message: {}, data: {}", apiResponse.getCode(), apiResponse.getMessage(), apiResponse.getData());
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 

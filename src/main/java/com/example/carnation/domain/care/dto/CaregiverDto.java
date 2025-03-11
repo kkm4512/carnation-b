@@ -12,14 +12,15 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "간병인 정보 요청 DTO") // DTO 전체 설명
+@Schema(description = "간병인 정보 DTO") // DTO 전체 설명
 public class CaregiverDto {
+
+    @Schema(description = "간병인 ID", example = "1")
+    private Long id;
 
     @Schema(description = "간병인의 이름", example = "이영희")
     @NotBlank(message = "이름은 필수 입력 항목입니다.") // 빈 값 불가
@@ -90,11 +91,9 @@ public class CaregiverDto {
     @Schema(description = "간병 배정을 작성한 사용자 (User)", example = "1")
     private User user;
 
-    @Schema(description = "간병인이 작성한 간병 기록들")
-    private List<CareHistoryDto> careHistories = new ArrayList<>();
-
     public static CaregiverDto of(Caregiver entity) {
         return new CaregiverDto(
+                entity.getId(),
                 entity.getName(),
                 entity.getResidentRegistrationNumber(),
                 entity.getHeight(),
@@ -106,8 +105,7 @@ public class CaregiverDto {
                 entity.getEndDate(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
-                entity.getUser(),
-                CareHistoryDto.of(entity.getCareHistories())
+                entity.getUser()
         );
     }
 }

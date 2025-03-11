@@ -21,8 +21,10 @@ import org.springframework.security.core.GrantedAuthority;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.carnation.common.response.enums.UserApiResponse.NOT_ME;
+import static com.example.carnation.common.response.enums.UserApiResponse.NULL_USER;
 
 @Entity
 @Getter
@@ -121,9 +123,14 @@ public class User {
         );
     }
 
-    public void isMe(Long id){
-        if (this.id.longValue() != id) {
+    public void isMe(Long id) {
+        if (id == null) {
+            throw new UserException(NULL_USER);
+        }
+
+        if (!Objects.equals(this.id, id)) {
             throw new UserException(NOT_ME);
         }
     }
+
 }

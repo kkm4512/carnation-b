@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Configuration;
         type = SecuritySchemeType.APIKEY,  // 변경: Bearer 자동 적용 방지
         in = io.swagger.v3.oas.annotations.enums.SecuritySchemeIn.HEADER,
         paramName = "Authorization",
-        description = "JWT Token을 입력하세요. (토큰만 입력, 'Bearer ' 제외)"
+        description = "Ex) Bearer eyosadi1239s@9sajsa91923nnk1mlas"
 )
 public class SwaggerConfig {
 

@@ -27,5 +27,13 @@ springdoc:
   paths-to-match:
     - /api/**
 
-key:
-  publicDataPortalApiKey: ${PUBLIC_DATA_PORTAL_API_KEY}
+# AWS S3 config
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_BUCKET}
+    stack.auto: false
+    region.static: ${AWS_REGION_STATIC}
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}

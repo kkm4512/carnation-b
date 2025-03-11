@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Schema(description = "Patient (환자) Dto")
+@Schema(description = "피간병인 정보 Dto")
 public class PatientDto {
 
     @Schema(description = "환자 ID", example = "1")

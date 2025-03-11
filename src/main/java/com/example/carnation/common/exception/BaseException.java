@@ -14,7 +14,6 @@ public class BaseException extends RuntimeException {
         super(apiResponseEnum.getMessage());
         this.apiResponseEnum = apiResponseEnum;
         this.originalMessage = null; // 원본 메시지가 없을 경우
-        log.error(apiResponseEnum.getMessage());
     }
 
     // 원초적 e.getMessage()를 가져오기 위함
@@ -22,7 +21,6 @@ public class BaseException extends RuntimeException {
         super(apiResponseEnum.getMessage(), cause);
         this.apiResponseEnum = apiResponseEnum;
         this.originalMessage = cause.getMessage(); // 원초적 메시지 저장
-        log.error(cause.getMessage(), cause);
     }
 
 }

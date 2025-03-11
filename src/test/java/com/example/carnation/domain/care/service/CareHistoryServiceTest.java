@@ -105,7 +105,7 @@ class CareHistoryServiceTest {
         assertEquals(beforePatientCount + 1, afterPatientCount, "Patient 개수가 증가해야 합니다.");
 
         // then - 방금 생성된 CareHistory 조회 및 연관 관계 확인
-        CareHistory careHistory = careHistoryQuery.findAll().get((int) afterCareHistoryCount - 1);
+        CareHistory careHistory = careHistoryQuery.readAll().get((int) afterCareHistoryCount - 1);
         assertNotNull(careHistory, "CareHistory가 정상적으로 저장되어야 합니다.");
         assertEquals(text, careHistory.getText(), "CareHistory의 텍스트가 일치해야 합니다.");
 

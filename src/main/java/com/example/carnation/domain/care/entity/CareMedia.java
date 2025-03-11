@@ -23,9 +23,9 @@ public class CareMedia {
     @Schema(description = "간병인이 작성한 사진, 동영상 ID", example = "1")
     private Long id;
 
-    @Schema(description = "저장된 File 상대경로 ", example = "s3.example.com/file1.jpg")
+    @Schema(description = "저장된 File 절대경로")
     @Column(nullable = false)
-    private String filePath;
+    private String fileAbsolutePath;
 
     @Column(nullable = false)
     private String fileName;
@@ -35,6 +35,10 @@ public class CareMedia {
 
     @Column(nullable = false)
     private String fileSize;
+
+    @Schema(description = "저장된 File 상대경로")
+    @Column(nullable = false)
+    private String fileRelativePath;
 
     @Enumerated(EnumType.STRING)
     @Schema(description = "파일 타입 (IMAGE 또는 VIDEO)", example = "IMAGE")
