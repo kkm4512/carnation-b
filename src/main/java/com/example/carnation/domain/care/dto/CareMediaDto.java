@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "간병 미디어 응답 DTO")
+@Schema(description = "간병 미디어 DTO")
 public class CareMediaDto {
 
     @Schema(description = "미디어 ID", example = "1")
@@ -44,7 +44,7 @@ public class CareMediaDto {
     public static CareMediaDto of(CareMedia entity) {
         return new CareMediaDto(
             entity.getId(),
-            entity.getFilePath(),
+            entity.getFileAbsolutePath(),
             entity.getFileName(),
             entity.getFileOriginName(),
             entity.getFileSize(),

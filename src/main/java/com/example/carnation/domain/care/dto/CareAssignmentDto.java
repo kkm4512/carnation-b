@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Schema(description = "간병 배정 응답 DTO") // DTO 전
+@Schema(description = "간병 배정 DTO") // DTO 전
 public class CareAssignmentDto {
     @Schema(description = "간병 배정 ID", example = "1")
     private Long id;

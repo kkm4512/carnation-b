@@ -28,10 +28,7 @@ public class CareHistoryResponseDto {
     @Schema(description = "수정일시", example = "2024-03-01T10:00:00")
     private LocalDateTime updatedAt;
 
-    @Schema(description = "간병인", example = "1")
-    private CaregiverDto caregiverDto;
-
-    @Schema(description = "S3에 저장된 미디어 URL 리스트")
+    @Schema(description = "S3에 저장된 미디어 리스트")
     private List<CareMediaDto> medias;
 
     public static CareHistoryResponseDto of(CareHistory entity) {
@@ -40,7 +37,6 @@ public class CareHistoryResponseDto {
                 entity.getText(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
-                CaregiverDto.of(entity.getCaregiver()),
                 CareMediaDto.of(entity.getMedias())
         );
     }

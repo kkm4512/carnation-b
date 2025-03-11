@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 public class FileUtil {
+
     public static String getFileExtension(MultipartFile file) {
         if (file.getOriginalFilename() == null || !file.getOriginalFilename().contains(".")) {
             return "";
@@ -31,7 +32,7 @@ public class FileUtil {
     public static String getUniqueFilePath(MultipartFile file, Long id, String path) {
         String fileExtension = FileUtil.getFileExtension(file);
         String uniqueFileName = UUID.randomUUID() + fileExtension;
-        return Paths.get("careAssignment" + path, String.valueOf(id), uniqueFileName).toString();
+        return Paths.get("careAssignment", path, String.valueOf(id), uniqueFileName).toString();
     }
 
     /**

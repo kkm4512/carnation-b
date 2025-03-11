@@ -32,7 +32,7 @@ public class CareAssignmentQuery {
     }
 
     @Transactional(readOnly = true)
-    public Page<CareAssignment> readAllMe(User user, Pageable pageable) {
+    public Page<CareAssignment> readAllMePage(User user, Pageable pageable) {
         return repository.findAllByUser(user, pageable);
     }
 
