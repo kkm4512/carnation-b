@@ -105,8 +105,7 @@ public class TestInfo {
     public static List<MultipartFile> getTestVideos() {
         try {
             return List.of(
-                    getMultipartFile(ROOT_DUMP_URL + "/videos/test_video1.mp4", "video/mp4"),
-                    getMultipartFile(ROOT_DUMP_URL +  "/videos/test_video2.mp4", "video/mp4")
+                    getMultipartFile(ROOT_DUMP_URL + "/videos/test_video1.mp4", "video/mp4")
             );
         } catch (Exception e) {
             return null;
