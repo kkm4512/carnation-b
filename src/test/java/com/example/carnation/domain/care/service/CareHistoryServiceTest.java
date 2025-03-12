@@ -2,10 +2,7 @@ package com.example.carnation.domain.care.service;
 
 import com.example.carnation.TestInfo;
 import com.example.carnation.domain.care.cqrs.*;
-import com.example.carnation.domain.care.dto.CareAssignmentResponse;
-import com.example.carnation.domain.care.dto.CareHistoryRequestDto;
-import com.example.carnation.domain.care.dto.CaregiverRequestDto;
-import com.example.carnation.domain.care.dto.PatientRequestDto;
+import com.example.carnation.domain.care.dto.*;
 import com.example.carnation.domain.care.entity.CareHistory;
 import com.example.carnation.domain.care.entity.CareMedia;
 import com.example.carnation.domain.file.helper.FileHelper;
@@ -91,11 +88,12 @@ class CareHistoryServiceTest {
         String text = "환자 식사 제공 및 산책 수행";
         List<MultipartFile> imageFiles = getTestImages();
         List<MultipartFile> videoFiles = getTestVideos();
-        CareHistoryRequestDto dto = new CareHistoryRequestDto(text, imageFiles, videoFiles);
+        CareHistoryRequestDto careHistoryRequestDto = new CareHistoryRequestDto(text);
+        CareHistoryFilesRequestDto careHistoryFilesRequestDto = CareHistoryFilesRequestDto.of(imageFiles, videoFiles);
 
         // when - 간병 기록 저장
         doNothing().when(fileHelper).uploads(any(), any()); // 실제 S3 업로드 행위 대체
-        careHistoryService.create(authUser, careAssignment.getId(), dto);
+        careHistoryService.create(authUser, careAssignment.getId(), careHistoryRequestDto,careHistoryFilesRequestDto);
 
         // then - CareAssignment이 정상적으로 저장되었는지 확인
         long afterAssignmentCount = careAssignmentQuery.count();

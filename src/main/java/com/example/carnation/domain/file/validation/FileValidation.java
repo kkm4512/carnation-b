@@ -28,11 +28,11 @@ public class FileValidation {
      * @param files 업로드된 이미지 파일 목록
      */
     public static void countImagesFiles(List<MultipartFile> files) {
-        log.info("[파일 개수 검증] 이미지 파일 개수 확인: {}개", files.size());
-
-        if (files.size() > MAX_IMAGE_COUNT) {
-            log.error("[파일 개수 초과] 허용된 이미지 파일 개수({}) 초과: {}개", MAX_IMAGE_COUNT, files.size());
-            throw new FileException(FileApiResponse.FILE_COUNT_IMAGE);
+        if (files != null) {
+            if (files.size() > MAX_IMAGE_COUNT) {
+                log.error("[파일 개수 초과] 허용된 이미지 파일 개수({}) 초과: {}개", MAX_IMAGE_COUNT, files.size());
+                throw new FileException(FileApiResponse.FILE_COUNT_IMAGE);
+            }
         }
     }
 
@@ -41,11 +41,11 @@ public class FileValidation {
      * @param files 업로드된 동영상 파일 목록
      */
     public static void countVideoFiles(List<MultipartFile> files) {
-        log.info("[파일 개수 검증] 동영상 파일 개수 확인: {}개", files.size());
-
-        if (files.size() > MAX_VIDEO_COUNT) {
-            log.error("[파일 개수 초과] 허용된 동영상 파일 개수({}) 초과: {}개", MAX_VIDEO_COUNT, files.size());
-            throw new FileException(FileApiResponse.FILE_COUNT_VIDEO);
+        if (files != null) {
+            if (files.size() > MAX_VIDEO_COUNT) {
+                log.error("[파일 개수 초과] 허용된 동영상 파일 개수({}) 초과: {}개", MAX_VIDEO_COUNT, files.size());
+                throw new FileException(FileApiResponse.FILE_COUNT_VIDEO);
+            }
         }
     }
 
@@ -54,16 +54,10 @@ public class FileValidation {
      * @param file 업로드된 이미지 파일
      */
     public static void validateImageFile(MultipartFile file) {
-        log.info("[파일 검증 시작] 이미지 파일: {}", file.getOriginalFilename());
-
-        if (file.isEmpty()) {
-            log.error("[파일 검증 실패] 빈 파일 업로드 시도");
-            throw new FileException(FileApiResponse.EMPTY_FILE);
+        if (file != null) {
+            validateFile(file, MAX_IMAGE_SIZE, ALLOWED_IMAGE_EXTENSIONS, FileApiResponse.INVALID_IMAGE_FILE);
         }
 
-        validateFile(file, MAX_IMAGE_SIZE, ALLOWED_IMAGE_EXTENSIONS, FileApiResponse.INVALID_IMAGE_FILE);
-
-        log.info("[파일 검증 완료] 유효한 이미지 파일: {}", file.getOriginalFilename());
     }
 
     /**
@@ -71,16 +65,9 @@ public class FileValidation {
      * @param file 업로드된 동영상 파일
      */
     public static void validateVideoFile(MultipartFile file) {
-        log.info("[파일 검증 시작] 동영상 파일: {}", file.getOriginalFilename());
-
-        if (file.isEmpty()) {
-            log.error("[파일 검증 실패] 빈 파일 업로드 시도");
-            throw new FileException(FileApiResponse.EMPTY_FILE);
+        if (file != null) {
+            validateFile(file, MAX_VIDEO_SIZE, ALLOWED_VIDEO_EXTENSIONS, FileApiResponse.INVALID_VIDEO_FILE);
         }
-
-        validateFile(file, MAX_VIDEO_SIZE, ALLOWED_VIDEO_EXTENSIONS, FileApiResponse.INVALID_VIDEO_FILE);
-
-        log.info("[파일 검증 완료] 유효한 동영상 파일: {}", file.getOriginalFilename());
     }
 
     /**

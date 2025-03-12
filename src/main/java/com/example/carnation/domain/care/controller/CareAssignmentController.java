@@ -3,8 +3,7 @@ package com.example.carnation.domain.care.controller;
 import com.example.carnation.common.dto.PageSearchDto;
 import com.example.carnation.common.response.ApiResponse;
 import com.example.carnation.domain.care.dto.CareAssignmentResponse;
-import com.example.carnation.domain.care.dto.CaregiverRequestDto;
-import com.example.carnation.domain.care.dto.PatientRequestDto;
+import com.example.carnation.domain.care.dto.CaregiverPatientRequestDto;
 import com.example.carnation.domain.care.service.CareAssignmentService;
 import com.example.carnation.security.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,10 +36,9 @@ public class CareAssignmentController {
     @SecurityRequirement(name = "JWT")
     public ApiResponse<Void> create(
             @AuthenticationPrincipal AuthUser authUser,
-            @RequestBody @Valid CaregiverRequestDto caregiverDto,
-            @RequestBody @Valid PatientRequestDto patientDto
+            @RequestBody @Valid CaregiverPatientRequestDto dto
     ) {
-        careAssignmentService.create(authUser, caregiverDto, patientDto);
+        careAssignmentService.create(authUser, dto.getCaregiverDto(), dto.getPatientDto());
         return ApiResponse.of(SUCCESS);
     }
 

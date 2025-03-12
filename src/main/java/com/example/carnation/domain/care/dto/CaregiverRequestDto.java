@@ -53,18 +53,14 @@ public class CaregiverRequestDto {
 
     @Schema(
             description = "간병 시작 날짜",
-            example = "2024-03-01T10:00:00",
-            type = "string",
-            format = "date"
+            example = "2024-03-01T10:00:00"
     )
     @NotNull(message = "간병 시작 날짜는 필수 입력 항목입니다.")
     private LocalDateTime startDateTime;
 
     @Schema(
             description = "간병 종료 날짜",
-            example = "2024-03-01T10:00:00",
-            type = "string",
-            format = "date"
+            example = "2024-03-05T10:00:00"
     )
     @NotNull(message = "간병 종료 날짜는 필수 입력 항목입니다.")
     private LocalDateTime endDateTime;
