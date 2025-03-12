@@ -25,14 +25,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> baseException(BaseException e) {
         ApiResponseEnum apiResponseEnum = e.getApiResponseEnum();
         ApiResponse<Void> apiResponse = new ApiResponse<>(apiResponseEnum);
-        log.error("code: {}, message: {}", apiResponse.getCode(), apiResponse.getMessage());
-        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-    }
-
-    @ExceptionHandler(BaseDataException.class)
-    public ResponseEntity<?> baseException(BaseDataException e) {
-        ApiResponse<?> apiResponse = e.getApiResponse();
-        log.error("code: {}, message: {}, data: {}", apiResponse.getCode(), apiResponse.getMessage(), apiResponse.getData());
         return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 
@@ -88,8 +80,8 @@ public class GlobalExceptionHandler {
 
     // 기타 예외 처리 (포괄적인 예외 캐치)
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Void>> handleException(Exception ex) {
-        ApiResponse<Void> apiResponse = new ApiResponse<>(INTERNAL_SERVER_ERROR.getHttpStatus(), INTERNAL_SERVER_ERROR.getMessage() + ":" + ex.getMessage(), null);
-        return ResponseEntity.badRequest().body(apiResponse);
+    public ResponseEntity<ApiResponse<String>> handleException(Exception e) {
+        ApiResponse<String> apiResponse = ApiResponse.of(INTERNAL_SERVER_ERROR,e.getMessage());
+        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
     }
 }

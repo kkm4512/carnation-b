@@ -59,7 +59,5 @@ public class CareHistoryController {
         Page<CareHistoryResponseDto> response = careHistoryService.readAllMePage(authUser, careAssignmentId, pageable);
         return ApiResponse.of(SUCCESS,response);
     }
-
-
 }
 

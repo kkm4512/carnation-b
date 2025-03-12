@@ -25,9 +25,9 @@ import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCES
 @Validated
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/CareAssignment")
-@Tag(name = "CareAssignment API", description = "간병 배정 관리 API")
+@Tag(name = "CareAssignment API", description = "간병 배정 API")
 public class CareAssignmentController {
-    private final CareAssignmentService careRecordService;
+    private final CareAssignmentService careAssignmentService;
 
     @Operation(
             summary = "간병 배정 등록",
@@ -40,7 +40,7 @@ public class CareAssignmentController {
             @RequestBody @Valid CaregiverRequestDto caregiverDto,
             @RequestBody @Valid PatientRequestDto patientDto
     ) {
-        careRecordService.create(authUser, caregiverDto, patientDto);
+        careAssignmentService.create(authUser, caregiverDto, patientDto);
         return ApiResponse.of(SUCCESS);
     }
 
@@ -49,7 +49,7 @@ public class CareAssignmentController {
      * 자신의 것을 조회하는 것이기 때문에, 로그인이 되어 있어야함
      */
     @Operation(
-            summary = "내 간병 배정 기록 조회",
+            summary = "내 간병 배정 기록들 조회",
             description = "현재 로그인한 사용자의 간병 배정 기록을 페이지네이션하여 조회합니다."
     )
     @SecurityRequirement(name = "JWT")
@@ -60,7 +60,7 @@ public class CareAssignmentController {
             @ModelAttribute @Valid PageSearchDto pageSearchDto
     ) {
         Pageable pageable = PageSearchDto.of(pageSearchDto);
-        Page<CareAssignmentResponse> response = careRecordService.readAllMePage(authUser, pageable);
+        Page<CareAssignmentResponse> response = careAssignmentService.readAllMePage(authUser, pageable);
         return ApiResponse.of(SUCCESS, response);
     }
 }

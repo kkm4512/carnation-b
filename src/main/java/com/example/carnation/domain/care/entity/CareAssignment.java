@@ -22,7 +22,7 @@ public class CareAssignment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(description = "간병 배정 ID (피간병인 - 간병인 매핑) ID", example = "1")
+    @Schema(description = "간병 배정 ID", example = "1")
     private Long id;
 
     @CreatedDate

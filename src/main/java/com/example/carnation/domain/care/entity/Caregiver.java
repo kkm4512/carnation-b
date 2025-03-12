@@ -13,7 +13,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +45,6 @@ public class Caregiver {
     @Schema(description = "체중 (kg)", example = "65.0")
     private Double weight;
 
-    @Column(length = 5)
-    @Schema(description = "혈액형", example = "O")
-    private String bloodType;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     @Schema(description = "피간병인과의 관계", example = "PARENT")
@@ -60,12 +55,13 @@ public class Caregiver {
     private String phoneNumber;
 
     @Column(nullable = false)
-    @Schema(description = "간병 시작일", example = "2024-03-01")
-    private LocalDate startDate;
+    @Schema(description = "간병 시작일", example = "2024-03-01T10:00")
+    private LocalDateTime startDateTime;
 
     @Column(nullable = false)
-    @Schema(description = "간병 종료일", example = "2024-03-10")
-    private LocalDate endDate;
+    @Schema(description = "간병 종료일", example = "2024-03-10T10:00")
+    private LocalDateTime endDateTime;
+
 
     @CreatedDate
     @Column(updatable = false)
@@ -86,17 +82,16 @@ public class Caregiver {
     @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CareHistory> careHistories = new ArrayList<>();
 
-    public Caregiver(User user, String name, String residentRegistrationNumber, Double height, Double weight, String bloodType, RelationshipType relationship, String phoneNumber, LocalDate startDate, LocalDate endDate) {
+    public Caregiver(User user, String name, String residentRegistrationNumber, Double height, Double weight, RelationshipType relationship, String phoneNumber, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.user = user;
         this.name = name;
         this.residentRegistrationNumber = residentRegistrationNumber;
         this.height = height;
         this.weight = weight;
-        this.bloodType = bloodType;
         this.relationship = relationship;
         this.phoneNumber = phoneNumber;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
     }
 
     public static Caregiver of(User user, CaregiverRequestDto dto) {
@@ -106,11 +101,10 @@ public class Caregiver {
                 dto.getResidentRegistrationNumber(),
                 dto.getHeight(),
                 dto.getWeight(),
-                dto.getBloodType(),
                 dto.getRelationship(),
                 dto.getPhoneNumber(),
-                dto.getStartDate(),
-                dto.getEndDate()
+                dto.getStartDateTime(),
+                dto.getEndDateTime()
         );
     }
 }

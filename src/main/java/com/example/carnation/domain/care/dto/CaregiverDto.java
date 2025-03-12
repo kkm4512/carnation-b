@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -45,13 +44,6 @@ public class CaregiverDto {
     @Positive(message = "몸무게는 양수여야 합니다.") // 0 이하 값 불가
     private Double weight;
 
-    @Schema(description = "혈액형", example = "O형", nullable = true)
-    @Pattern(
-            regexp = "^(A|B|O|AB)[형]$",
-            message = "혈액형은 A형, B형, O형, AB형 중 하나여야 합니다."
-    ) // 혈액형 형식 검증
-    private String bloodType;
-
     @Schema(description = "피간병인과의 관계", example = "FRIEND") // Enum 값으로 입력
     @NotNull(message = "피간병인과의 관계는 필수 입력 항목입니다.") // 빈 값 불가
     private RelationshipType relationship;
@@ -65,22 +57,22 @@ public class CaregiverDto {
     private String phoneNumber;
 
     @Schema(
-            description = "간병 시작 날짜 (ISO-8601 형식, 예: 2024-09-25)",
-            example = "2024-09-25",
+            description = "간병 시작 날짜",
+            example = "2024-03-01T10:00:00",
             type = "string",
             format = "date"
     )
     @NotNull(message = "간병 시작 날짜는 필수 입력 항목입니다.")
-    private LocalDate startDate;
+    private LocalDateTime startDateTime;
 
     @Schema(
-            description = "간병 종료 날짜 (ISO-8601 형식, 예: 2025-10-25)",
-            example = "2025-10-25",
+            description = "간병 종료 날짜",
+            example = "2024-03-01T10:00:00",
             type = "string",
             format = "date"
     )
     @NotNull(message = "간병 종료 날짜는 필수 입력 항목입니다.")
-    private LocalDate endDate;
+    private LocalDateTime endDateTime;
 
     @Schema(description = "생성일시", example = "2024-03-01T10:00:00")
     private LocalDateTime createdAt;
@@ -98,11 +90,10 @@ public class CaregiverDto {
                 entity.getResidentRegistrationNumber(),
                 entity.getHeight(),
                 entity.getWeight(),
-                entity.getBloodType(),
                 entity.getRelationship(),
                 entity.getPhoneNumber(),
-                entity.getStartDate(),
-                entity.getEndDate(),
+                entity.getStartDateTime(),
+                entity.getEndDateTime(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
                 entity.getUser()
