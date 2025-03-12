@@ -1,0 +1,64 @@
+name: 'CI'
+
+on:
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+  ci:
+    runs-on: self-hosted
+    steps:
+      - name: 깃헙 코드를 VM으로 복사
+        uses: actions/checkout@v4
+
+      - name: 깃헙 액션의 VM에 자바 설치중 ...
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: env 파일 생성
+        run: |
+          echo "${{ secrets.ENV }}" > .env
+        shell: bash
+
+
+      - name: 기존 Docker 컨테이너 및 모든 볼륨 삭제
+        run: |
+          echo "🛑 모든 Docker 컨테이너 중지 및 삭제..."
+          docker stop $(docker ps -aq) || true
+          docker rm $(docker ps -aq) || true
+          
+          echo "🗑️ 사용하지 않는 Docker 볼륨 삭제..."
+          docker volume prune -f
+          
+          echo "🗑️ 모든 Docker 볼륨 삭제..."
+          docker volume rm $(docker volume ls -q) || true
+          
+          echo "✅ Docker 정리 완료!"
+
+
+      - name: Docker Compose 실행
+        run: |
+          docker-compose up -d
+
+
+      - name: Wait for MySQL to be ready
+        run: |
+          echo "⏳ Waiting for MySQL to be ready..."
+          for i in {1..30}; do
+            if docker exec carnation_mysql_container mysqladmin --protocol=tcp -u root -p'root12!@12' ping --silent; then
+              echo "✅ MySQL is ready!"
+              exit 0
+            fi
+            echo "⏳ MySQL is not ready yet. Retrying in 2 seconds..."
+            sleep 2
+          done
+          echo "❌ MySQL did not start within 60 seconds."
+          exit 1
+
+      - name: 빌드 및 테스트 코드 돌리는중 ...
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build --info --stacktrace
+
