@@ -1,13 +1,16 @@
 package com.example.carnation.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.media.StringSchema;
+import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.servers.Server;
+import org.springdoc.core.customizers.OperationCustomizer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,18 +31,29 @@ import org.springframework.context.annotation.Configuration;
                 )
         )
 )
-@SecurityScheme(
-        name = "JWT",
-        type = SecuritySchemeType.APIKEY,  // 변경: Bearer 자동 적용 방지
-        in = io.swagger.v3.oas.annotations.enums.SecuritySchemeIn.HEADER,
-        paramName = "Authorization",
-        description = "Ex) Bearer eyosadi1239s@9sajsa91923nnk1mlas"
-)
 public class SwaggerConfig {
 
+    @Value("${swagger.server-url}")
+    private String serverUrl;  // ✅ 환경 변수 값 읽기
+
     @Bean
-    public OpenAPI openAPI() {
+    public OpenAPI customOpenAPI() {
         return new OpenAPI()
+                .addServersItem(new Server().url(serverUrl))
                 .components(new Components());
+    }
+
+    @Bean
+    public OperationCustomizer addGlobalHeaders() {
+        return (operation, handlerMethod) -> {
+            operation.addParametersItem(new Parameter()
+                    .in("header")
+                    .name("ngrok-skip-browser-warning")
+                    .description("Ngrok Skip")
+                    .required(false)
+                    .schema(new StringSchema()._default("69420"))
+            );
+            return operation;
+        };
     }
 }

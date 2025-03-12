@@ -13,7 +13,6 @@ springdoc:
     groups-order: DESC
     tags-sorter: alpha
     operations-sorter: method
-    disable-swagger-default-url: true
     display-request-duration: true
     defaultModelsExpandDepth: 2
     defaultModelExpandDepth: 2
@@ -35,3 +34,5 @@ cloud:
     credentials:
       accessKey: ${AWS_ACCESS_KEY}
       secretKey: ${AWS_SECRET_KEY}
+
+

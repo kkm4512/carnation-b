@@ -1,5 +1,8 @@
 server:
   port: ${SERVER_LOCAL_PORT}
+
+swagger:
+  server-url: http://localhost:8080
 # DB config
 spring:
   config:
