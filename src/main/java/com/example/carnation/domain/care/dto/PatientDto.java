@@ -1,7 +1,6 @@
 package com.example.carnation.domain.care.dto;
 
 import com.example.carnation.domain.care.entity.Patient;
-import com.example.carnation.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -31,17 +30,13 @@ public class PatientDto {
     @Schema(description = "수정일시", example = "2024-03-02T15:30:00")
     private LocalDateTime updatedAt;
 
-    @Schema(description = "간병 배정을 작성한 사용자 (User)", example = "1")
-    private User user;
-
     public static PatientDto of(Patient entity) {
         return new PatientDto(
                 entity.getId(),
                 entity.getName(),
                 entity.getResidentRegistrationNumber(),
                 entity.getCreatedAt(),
-                entity.getUpdatedAt(),
-                entity.getUser()
+                entity.getUpdatedAt()
         );
     }
 
