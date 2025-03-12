@@ -24,7 +24,6 @@ public enum BaseApiResponse implements ApiResponseEnum {
 
     // 500
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류가 발생했습니다, 관리자에게 문의 해주세요");
-
     ;
 
     private final HttpStatus httpStatus;
