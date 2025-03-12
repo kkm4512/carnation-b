@@ -63,11 +63,7 @@ jobs:
           username: ${{secrets.LOCAL_USERNAME}}
           script: |            
             cd ~/
-            docker-compose down
+            docker stop $(docker ps -q) && docker rm $(docker ps -aq)
+            docker rmi -f $(docker images -q)        
             docker-compose pull 
             docker-compose up --build -d
-            docker image prune -f          
-            
-            
-          
-            
