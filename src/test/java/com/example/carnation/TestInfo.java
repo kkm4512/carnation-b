@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class TestInfo {
@@ -39,11 +40,10 @@ public class TestInfo {
                 "900101-2345678",
                 170.5,
                 65.3,
-                "O형",
                 RelationshipType.FRIEND,
                 "010-1234-5678",
-                LocalDate.of(2024, 9, 25),
-                LocalDate.of(2025, 10, 25)
+                LocalDateTime.of(2024, 9, 25,10,0),
+                LocalDateTime.of(2025, 10, 25,10,0)
         );
     }
 
@@ -53,11 +53,10 @@ public class TestInfo {
                 "850505-3456789",
                 175.0,
                 70.2,
-                "A형",
                 RelationshipType.FRIEND,
                 "010-5678-1234",
-                LocalDate.of(2023, 6, 10),
-                LocalDate.of(2024, 7, 15)
+                LocalDateTime.of(2024, 9, 25,10,0),
+                LocalDateTime.of(2025, 10, 25,10,0)
         );
     }
 

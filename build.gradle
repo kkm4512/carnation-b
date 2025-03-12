@@ -68,8 +68,11 @@ dependencies {
     // AWS Helper Library
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
-    // EvaluatorFilter
+    // EvaluatorFilter - XML 로그 필터용
     implementation 'org.codehaus.janino:janino:3.1.6'
+
+    // PDF
+    implementation 'org.apache.pdfbox:pdfbox:2.0.30'
 }
 
 tasks.named('test') {

@@ -35,6 +35,12 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    // 상태코드, 메세지, 파일 반환시 사용 (서비스 -> 컨트롤러)
+    public static ApiResponse<FileResponse> of(ApiResponseEnum apiResponseEnum, FileResponse fileResponse) {
+        return new ApiResponse<>(apiResponseEnum, fileResponse);
+    }
+
+
     // 상태코드, 메세지만 반환시 사용 (서비스 -> 컨트롤러)
     @Schema(description = "데이터를 반환하지않는 공통 응답", example = "Return Void") // DTO 설명 추가
     public static <T> ApiResponse<T> of(ApiResponseEnum apiResponseEnum) {

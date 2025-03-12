@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "사용자 로그인 요청 DTO") // DTO 설명 추가
 public class SigninRequestDto {
 
-    @Schema(description = "사용자의 이메일 주소", example = "user@example.com")
+    @Schema(description = "사용자의 이메일 주소", example = "test@naver.com1")
     @NotBlank(message = "이메일은 필수 입력 항목입니다.")
     @Email(message = "올바른 이메일 형식이 아닙니다.")
     private String email;
@@ -23,7 +23,7 @@ public class SigninRequestDto {
     @Schema(
             description = "사용자의 비밀번호. 최소 8자 이상, 최대 20자 이하. " +
                     "대문자 1개 이상, 숫자 1개 이상, 특수문자 2개 이상 포함해야 함.",
-            example = "P@ssw0rd!!"
+            example = "!@Skdud3401"
     )
     @NotBlank(message = "비밀번호는 필수 입력 항목입니다.")
     @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해야 합니다.")

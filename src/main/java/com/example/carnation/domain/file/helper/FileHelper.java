@@ -28,7 +28,6 @@ public class FileHelper {
                 String filePath = media.getFileRelativePath();
                 s3Helper.upload(Path.of(filePath),multipartFile);
             }
-            log.info("파일 저장 완료: {}개", multipartFiles.size());
         } catch (Exception e) {
             throw new FileException(FileApiResponse.FILE_UPLOAD_FAILED,e);
         }

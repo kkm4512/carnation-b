@@ -40,15 +40,12 @@ public class CareHistoryService {
 
     public CareHistory create(AuthUser authUser, Long careAssignmentId, CareHistoryRequestDto dto) {
         User user = User.of(authUser);
-        log.info("[간병 기록 생성] 요청자: userId={}, 배정 ID: {}", user.getId(), careAssignmentId);
         FileValidation.countImagesFiles(dto.getImageFiles());
         FileValidation.countVideoFiles(dto.getVideoFiles());
         List<MultipartFile> multipartFiles = Stream.concat(dto.getImageFiles().stream(), dto.getVideoFiles().stream()).toList();
-        log.info("[간병 기록 생성] 업로드할 파일 개수: {} (이미지: {}, 비디오: {})", multipartFiles.size(), dto.getImageFiles().size(), dto.getVideoFiles().size());
         CareAssignment careAssignment = careAssignmentQuery.findOne(careAssignmentId);
         user.isMe(careAssignment.getUser().getId());
         CareHistory careHistory = CareHistory.of(careAssignment, dto);
-        log.info("[간병 기록 생성] 간병 기록 객체 생성 완료 (careAssignmentId={})", careAssignmentId);
         List<CareMedia> medias = new ArrayList<>();
         for (MultipartFile file : dto.getImageFiles()) {
             FileValidation.validateImageFile(file);
@@ -65,7 +62,6 @@ public class CareHistoryService {
                     .build();
             medias.add(careMedia);
         }
-        log.info("[간병 기록 생성] 이미지 파일 처리 완료: {}개", dto.getImageFiles().size());
 
         for (MultipartFile file : dto.getVideoFiles()) {
             FileValidation.validateVideoFile(file);
@@ -83,13 +79,9 @@ public class CareHistoryService {
                     .build();
             medias.add(careMedia);
         }
-        log.info("[간병 기록 생성] 비디오 파일 처리 완료: {}개", dto.getVideoFiles().size());
         careHistory.getMedias().addAll(medias);
-        log.info("[간병 기록 생성] CareHistory에 미디어 데이터 추가 완료 (총 {}개)", medias.size());
         CareHistory savedCareHistory = careHistoryCommand.save(careHistory);
-        log.info("[간병 기록 생성] 간병 기록 저장 완료 (careHistoryId={})", savedCareHistory.getId());
         fileHelper.uploads(multipartFiles, medias);
-        log.info("[간병 기록 생성] 파일 업로드 완료");
         return savedCareHistory;
     }
 
@@ -101,14 +93,9 @@ public class CareHistoryService {
      */
     public Page<CareHistoryResponseDto> readAllMePage(AuthUser authUser, Long careAssignmentId, Pageable pageable) {
         User user = User.of(authUser);
-        log.info("[간병 기록 조회] 요청자: userId={}, 배정 ID: {}", user.getId(), careAssignmentId);
-
         CareAssignment careAssignment = careAssignmentQuery.findOne(careAssignmentId);
         user.isMe(careAssignment.getUser().getId());
-
         Page<CareHistory> responses = careHistoryQuery.readAllMePage(careAssignment.getCaregiver(), pageable);
-        log.info("[간병 기록 조회] 완료 (caregiverId={}, 기록 개수={})", careAssignment.getCaregiver().getId(), responses.getTotalElements());
-
         return responses.map(CareHistoryResponseDto::of);
     }
 
