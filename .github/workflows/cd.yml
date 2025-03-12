@@ -49,6 +49,7 @@ jobs:
         with:
           host: ${{secrets.LOCAL_IP}}
           key: ${{secrets.LOCAL_KEY}}
+          port: 2222  # SSH 포트 2222로 변경
           username: ${{secrets.LOCAL_USERNAME}}
           source: .env
           target: ~/
