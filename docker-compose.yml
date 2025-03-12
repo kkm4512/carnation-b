@@ -10,6 +10,18 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  server:
+    container_name: carnation_server_container
+    image: kkm4512/carnation
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=prd
+
 volumes:
   mysql_data:
-
