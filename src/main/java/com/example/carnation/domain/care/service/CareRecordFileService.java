@@ -1,5 +1,6 @@
 package com.example.carnation.domain.care.service;
 
+import com.example.carnation.common.response.FileResponse;
 import com.example.carnation.domain.care.cqrs.CareAssignmentQuery;
 import com.example.carnation.domain.care.entity.CareAssignment;
 import com.example.carnation.domain.user.entity.User;

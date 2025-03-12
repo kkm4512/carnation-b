@@ -68,7 +68,7 @@ class CareAssignmentServiceTest {
         long beforeCaregiverCount = caregiverQuery.count();
         long beforePatientCount = patientQuery.count();
 
-        // when - 간병 기록 생성
+        // when - 간병 배정 생성
         CareAssignmentResponse careAssignment = careAssignmentService.create(authUser, careGiverDto, patientDto);
 
         // then - CareRecord가 정상적으로 저장되었는지 검증
