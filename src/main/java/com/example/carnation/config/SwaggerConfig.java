@@ -1,9 +1,11 @@
 package com.example.carnation.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.StringSchema;
@@ -30,6 +32,13 @@ import org.springframework.context.annotation.Configuration;
                         url = "https://www.apache.org/licenses/LICENSE-2.0"
                 )
         )
+)
+@SecurityScheme(
+        name = "JWT",
+        type = SecuritySchemeType.APIKEY,  // 변경: Bearer 자동 적용 방지
+        in = io.swagger.v3.oas.annotations.enums.SecuritySchemeIn.HEADER,
+        paramName = "Authorization",
+        description = "Ex) Bearer eyosadi1239s@9sajsa91923nnk1mlas"
 )
 public class SwaggerConfig {
 
