@@ -56,7 +56,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         // 허용된 Origin 추가
         config.setAllowedOrigins(List.of(
-                // 일단 공백
+                "https://bf52-1-229-119-49.ngrok-free.app"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용된 HTTP 메서드
         config.setAllowedHeaders(List.of("Content-Type", "Authorization")); // 허용된 헤더
