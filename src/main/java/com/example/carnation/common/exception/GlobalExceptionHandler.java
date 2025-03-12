@@ -52,29 +52,29 @@ public class GlobalExceptionHandler {
 
     // 데이터 무결성 위반 예외 처리 (예: Unique Key 위반)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        ApiResponse<Void> apiResponse = new ApiResponse<>(CONFLICT.getHttpStatus(), CONFLICT.getMessage() + ":" + ex.getMessage(), null);
+    public ResponseEntity<ApiResponse<String>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        ApiResponse<String> apiResponse = new ApiResponse<>(CONFLICT.getHttpStatus(), CONFLICT.getMessage(), ex.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
     // 엔티티가 존재하지 않을 때 예외 처리
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiResponse<Void>> handleEntityNotFoundException(EntityNotFoundException ex) {
-        ApiResponse<Void> apiResponse = new ApiResponse<>(NOT_FOUND.getHttpStatus(), NOT_FOUND.getMessage() + ":" + ex.getMessage(), null);
+    public ResponseEntity<ApiResponse<String>> handleEntityNotFoundException(EntityNotFoundException ex) {
+        ApiResponse<String> apiResponse = new ApiResponse<>(NOT_FOUND.getHttpStatus(), NOT_FOUND.getMessage(), ex.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
     // 지원되지 않는 HTTP 메서드 요청 예외 처리
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ApiResponse<Void>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
-        ApiResponse<Void> apiResponse = new ApiResponse<>(METHOD_NOT_ALLOWED.getHttpStatus(), METHOD_NOT_ALLOWED.getMessage() + ":" + ex.getMessage(), null);
+    public ResponseEntity<ApiResponse<String>> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+        ApiResponse<String> apiResponse = new ApiResponse<>(METHOD_NOT_ALLOWED.getHttpStatus(), METHOD_NOT_ALLOWED.getMessage(), ex.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
     // 필수 요청 파라미터 누락 예외 처리
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ApiResponse<Void>> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
-        ApiResponse<Void> apiResponse = new ApiResponse<>(FAIL.getHttpStatus(), FAIL.getMessage() + ":" + ex.getMessage(), null);
+    public ResponseEntity<ApiResponse<String>> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+        ApiResponse<String> apiResponse = new ApiResponse<>(FAIL.getHttpStatus(), FAIL.getMessage(), ex.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
 

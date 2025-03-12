@@ -4,6 +4,7 @@ import com.example.carnation.domain.care.constans.MediaType;
 import com.example.carnation.domain.care.cqrs.CareAssignmentQuery;
 import com.example.carnation.domain.care.cqrs.CareHistoryCommand;
 import com.example.carnation.domain.care.cqrs.CareHistoryQuery;
+import com.example.carnation.domain.care.dto.CareHistoryFilesRequestDto;
 import com.example.carnation.domain.care.dto.CareHistoryRequestDto;
 import com.example.carnation.domain.care.dto.CareHistoryResponseDto;
 import com.example.carnation.domain.care.entity.CareAssignment;
@@ -24,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j(topic = "CareHistoryService")
@@ -38,16 +38,16 @@ public class CareHistoryService {
     private static final String AWS_BASE_URL =  "https://carnation-b-bucket.s3.ap-northeast-2.amazonaws.com";
 
 
-    public CareHistory create(AuthUser authUser, Long careAssignmentId, CareHistoryRequestDto dto) {
+    public CareHistory create(AuthUser authUser, Long careAssignmentId, CareHistoryRequestDto careHistoryRequestDto, CareHistoryFilesRequestDto careHistoryFilesRequestDto) {
         User user = User.of(authUser);
-        FileValidation.countImagesFiles(dto.getImageFiles());
-        FileValidation.countVideoFiles(dto.getVideoFiles());
-        List<MultipartFile> multipartFiles = Stream.concat(dto.getImageFiles().stream(), dto.getVideoFiles().stream()).toList();
+        FileValidation.countImagesFiles(careHistoryFilesRequestDto.getImageFiles());
+        FileValidation.countVideoFiles(careHistoryFilesRequestDto.getVideoFiles());
+        List<MultipartFile> multipartFiles = FileUtil.toList(careHistoryFilesRequestDto.getImageFiles(), careHistoryFilesRequestDto.getVideoFiles());
         CareAssignment careAssignment = careAssignmentQuery.findOne(careAssignmentId);
         user.isMe(careAssignment.getUser().getId());
-        CareHistory careHistory = CareHistory.of(careAssignment, dto);
+        CareHistory careHistory = CareHistory.of(careAssignment, careHistoryRequestDto);
         List<CareMedia> medias = new ArrayList<>();
-        for (MultipartFile file : dto.getImageFiles()) {
+        for (MultipartFile file : careHistoryFilesRequestDto.getImageFiles()) {
             FileValidation.validateImageFile(file);
             String relativePath = FileUtil.getUniqueFilePath(file, careAssignment.getId(), "/images");
             String absolutePath = Paths.get(AWS_BASE_URL, relativePath).toString();
@@ -63,7 +63,7 @@ public class CareHistoryService {
             medias.add(careMedia);
         }
 
-        for (MultipartFile file : dto.getVideoFiles()) {
+        for (MultipartFile file : careHistoryFilesRequestDto.getVideoFiles()) {
             FileValidation.validateVideoFile(file);
             String relativePath = FileUtil.getUniqueFilePath(file, careAssignment.getId(), "/videos");
             String absolutePath = Paths.get(AWS_BASE_URL, relativePath).toString();

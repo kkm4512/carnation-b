@@ -1,12 +1,11 @@
 package com.example.carnation.domain.file.util;
 
-import com.example.carnation.common.exception.FileException;
-import com.example.carnation.common.response.enums.FileApiResponse;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class FileUtil {
 
@@ -17,48 +16,24 @@ public class FileUtil {
         return file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
     }
 
-    public static File mkdir(String path) {
-        File file = new File(path);
-        File parentDir = file.getParentFile();
-        if (!parentDir.exists() && !parentDir.mkdirs()) {
-            boolean flag = parentDir.mkdirs();
-            if (!flag) {
-                throw new FileException(FileApiResponse.DIRECTORY_MAKE_FAIL);
-            }
-        }
-        return file;
-    }
-
     public static String getUniqueFilePath(MultipartFile file, Long id, String path) {
         String fileExtension = FileUtil.getFileExtension(file);
         String uniqueFileName = UUID.randomUUID() + fileExtension;
         return Paths.get("careAssignment", path, String.valueOf(id), uniqueFileName).toString();
     }
 
-    /**
-     * InputStream을 받아 파일로 저장하는 메서드
-     */
-    public static void copyFile(MultipartFile multipartFile, File file) {
-        if (multipartFile == null || file == null) {
-            throw new FileException(FileApiResponse.EMPTY_FILE);
+    public static <T> List<T> toList(List<T> list1, List<T> list2) {
+        if (list1 == null && list2 == null) {
+            return List.of(); // 두 리스트 모두 null이면 빈 리스트 반환
         }
-        try {
-            try (InputStream inputStream = multipartFile.getInputStream();
-                 FileOutputStream outputStream = new FileOutputStream(file);
-                 BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream)) {
-
-                byte[] buffer = new byte[8192]; // 8KB 버퍼
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    bufferedOutputStream.write(buffer, 0, bytesRead);
-                }
-                bufferedOutputStream.flush();
-            }
-        } catch (IOException e) {
-            throw new FileException(FileApiResponse.FILE_UPLOAD_FAILED, e);
-        } catch (SecurityException e) {
-            throw new FileException(FileApiResponse.FILE_ACCESS_DENIED, e);
+        if (list1 == null) {
+            return List.copyOf(list2); // list1이 null이면 list2 반환 (불변 리스트로 복사)
         }
+        if (list2 == null) {
+            return List.copyOf(list1); // list2가 null이면 list1 반환 (불변 리스트로 복사)
+        }
+        return Stream.concat(list1.stream(), list2.stream()).toList();
     }
+
 
 }

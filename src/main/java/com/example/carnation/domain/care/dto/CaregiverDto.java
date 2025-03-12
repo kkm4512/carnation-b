@@ -2,7 +2,6 @@ package com.example.carnation.domain.care.dto;
 
 import com.example.carnation.domain.care.constans.RelationshipType;
 import com.example.carnation.domain.care.entity.Caregiver;
-import com.example.carnation.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
@@ -11,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -80,8 +81,8 @@ public class CaregiverDto {
     @Schema(description = "수정일시", example = "2024-03-01T10:00:00")
     private LocalDateTime updatedAt;
 
-    @Schema(description = "간병 배정을 작성한 사용자 (User)", example = "1")
-    private User user;
+    @Schema(description = "간병 기록들")
+    List<CareHistoryDto> careHistoryDtos = new ArrayList<>();
 
     public static CaregiverDto of(Caregiver entity) {
         return new CaregiverDto(
@@ -96,7 +97,7 @@ public class CaregiverDto {
                 entity.getEndDateTime(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
-                entity.getUser()
+                CareHistoryDto.of(entity.getCareHistories())
         );
     }
 }

@@ -2,6 +2,7 @@ package com.example.carnation.domain.care.controller;
 
 import com.example.carnation.common.dto.PageSearchDto;
 import com.example.carnation.common.response.ApiResponse;
+import com.example.carnation.domain.care.dto.CareHistoryFilesRequestDto;
 import com.example.carnation.domain.care.dto.CareHistoryRequestDto;
 import com.example.carnation.domain.care.dto.CareHistoryResponseDto;
 import com.example.carnation.domain.care.service.CareHistoryService;
@@ -14,9 +15,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCESS;
 
@@ -28,7 +33,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCES
 public class CareHistoryController {
     private final CareHistoryService careHistoryService;
 
-    @PostMapping(value = "/{careAssignmentId}", consumes = "multipart/form-data")
+    @PostMapping(value = "/{careAssignmentId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "JWT")
     @Operation(
             summary = "간병 기록 등록",
@@ -37,11 +42,17 @@ public class CareHistoryController {
     public ApiResponse<Void> create(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long careAssignmentId,
-            @Valid @RequestPart CareHistoryRequestDto dto // DTO 전체 유효성 검사 적용
+            @RequestPart(value = "careHistoryRequestDto") @Valid CareHistoryRequestDto careHistoryRequestDto,
+            @RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
+            @RequestPart(value = "videoFiles", required = false) List<MultipartFile> videoFiles
     ) {
-        careHistoryService.create(authUser, careAssignmentId, dto);
+        CareHistoryFilesRequestDto careHistoryFilesRequestDto = CareHistoryFilesRequestDto.of(imageFiles, videoFiles);
+        careHistoryService.create(authUser, careAssignmentId, careHistoryRequestDto, careHistoryFilesRequestDto);
         return ApiResponse.of(SUCCESS);
     }
+
+
+
 
     @GetMapping(value = "/{careAssignmentId}")
     @SecurityRequirement(name = "JWT")
