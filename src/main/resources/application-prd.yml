@@ -1,6 +1,9 @@
 server:
   port: 8080
 
+swagger:
+  server-url: https://1a6f-1-229-119-49.ngrok-free.app
+
 # DB config
 spring:
   config:

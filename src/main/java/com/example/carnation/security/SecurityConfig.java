@@ -54,7 +54,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         // ✅ 모든 Origin 허용 (보안 이슈 최소화를 위해 패턴 기반으로 설정)
-        config.setAllowedOriginPatterns(List.of("http://8e6e-1-229-119-49.ngrok-free.app"));
+        config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // ✅ 허용된 HTTP 메서드
         config.setAllowedHeaders(List.of("*")); // ✅ 모든 헤더 허용
         config.setAllowCredentials(true); // ✅ 인증 정보 허용
