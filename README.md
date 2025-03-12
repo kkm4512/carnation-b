@@ -29,4 +29,4 @@
 - JavaSpring (3.3.1), Java (17), Mysql (9.2.0), Jpa (latest), Jwt (0.11.5), Git, Github, Docker, Docker-compose, Github-action
 
 # Swagger URL
-http://localhost:8080/docs
+https://1a6f-1-229-119-49.ngrok-free.app/docs
