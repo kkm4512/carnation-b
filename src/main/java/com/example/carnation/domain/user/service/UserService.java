@@ -1,6 +1,7 @@
 package com.example.carnation.domain.user.service;
 
 import com.example.carnation.common.exception.UserException;
+import com.example.carnation.domain.user.constans.AuthProvider;
 import com.example.carnation.domain.user.cqrs.UserCommand;
 import com.example.carnation.domain.user.cqrs.UserQuery;
 import com.example.carnation.domain.user.dto.SigninRequestDto;
@@ -12,8 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import static com.example.carnation.common.response.enums.UserApiResponse.INVALID_CREDENTIALS;
+import static com.example.carnation.common.response.enums.UserApiResponse.*;
 
 
 @Service
@@ -26,17 +26,11 @@ public class UserService {
     private final JwtManager jm;
 
     public User signUp(final SignupRequestDto dto) {
-        userQuery.existsByEmail(dto.getEmail());
+        userQuery.validateEmailUniqueness(dto.getEmail());
 
         String encodedPassword = pe.encode(dto.getPassword());
 
-        User user = new User(
-                dto.getNickname(),
-                dto.getEmail(),
-                encodedPassword,
-                dto.getUserRole(),
-                dto.getUserType()
-        );
+        User user = User.of(dto,encodedPassword);
 
         return userCommand.save(user);
     }
@@ -44,6 +38,10 @@ public class UserService {
 
     public String signin(final SigninRequestDto dto) {
         User user = userQuery.findByEmail(dto.getEmail());
+        // 소셜 계정일 경우
+        if (!user.getAuthProvider().equals(AuthProvider.GENERAL)) {
+            throw new UserException(EXISTING_SOCIAL_ACCOUNT);
+        }
 
         if (!pe.matches(dto.getPassword(), user.getPassword())) {
             throw new UserException(INVALID_CREDENTIALS);

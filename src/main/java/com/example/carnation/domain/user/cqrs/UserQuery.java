@@ -22,10 +22,13 @@ public class UserQuery {
     }
 
     @Transactional(readOnly = true)
-    public void existsByEmail(String email){
+    public void validateEmailUniqueness(String email){
         if (repository.existsByEmail(email)) {
             throw new UserException(UserApiResponse.EMAIL_ALREADY_EXISTS);
         }
     }
 
+    public Boolean existsByEmail(String email){
+        return repository.existsByEmail(email);
+    }
 }
