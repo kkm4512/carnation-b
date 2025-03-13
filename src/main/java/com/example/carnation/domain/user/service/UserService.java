@@ -1,19 +1,25 @@
 package com.example.carnation.domain.user.service;
 
+import com.example.carnation.annotation.SaveRefreshToken;
 import com.example.carnation.common.exception.UserException;
+import com.example.carnation.common.service.RedisService;
 import com.example.carnation.domain.user.constans.AuthProvider;
 import com.example.carnation.domain.user.cqrs.UserCommand;
 import com.example.carnation.domain.user.cqrs.UserQuery;
 import com.example.carnation.domain.user.dto.SigninRequestDto;
 import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.security.AuthUser;
 import com.example.carnation.security.JwtDto;
 import com.example.carnation.security.JwtManager;
+import com.example.carnation.security.TokenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import static com.example.carnation.common.response.enums.UserApiResponse.*;
+
+import static com.example.carnation.common.response.enums.UserApiResponse.EXISTING_SOCIAL_ACCOUNT;
+import static com.example.carnation.common.response.enums.UserApiResponse.INVALID_CREDENTIALS;
 
 
 @Service
@@ -24,6 +30,7 @@ public class UserService {
     private final UserCommand userCommand;
     private final PasswordEncoder pe;
     private final JwtManager jm;
+    private final RedisService redisService;
 
     public User signUp(final SignupRequestDto dto) {
         userQuery.validateEmailUniqueness(dto.getEmail());
@@ -36,7 +43,8 @@ public class UserService {
     }
 
 
-    public String signin(final SigninRequestDto dto) {
+    @SaveRefreshToken
+    public TokenDto signin(final SigninRequestDto dto) {
         User user = userQuery.findByEmail(dto.getEmail());
         // 소셜 계정일 경우
         if (!user.getAuthProvider().equals(AuthProvider.GENERAL)) {
@@ -47,10 +55,15 @@ public class UserService {
             throw new UserException(INVALID_CREDENTIALS);
         }
 
-        return jm.generateJwt(JwtDto.of(user));
+        String accessToken = jm.generateAccessToken(JwtDto.of(user));
+        String refreshToken = jm.generateRefreshToken(user.getId());
+        return TokenDto.of(user.getId(), accessToken, refreshToken);
     }
 
 
-
+    public void signout(AuthUser authUser) {
+        User user = User.of(authUser);
+        redisService.deleteRefreshToken(user.getId());
+    }
 }
 

@@ -8,6 +8,9 @@ spring:
       enabled: ${MULTIPART_ENABLED}
       max-file-size: ${MULTIPART_MAX_FILE_SIZE}
       max-request-size: ${MULTIPART_MAX_REQUEST_SIZE}
+  data:
+    redis:
+      password: ${REDIS_PASSWORD}
 
 # JWT
 jwt:
@@ -50,5 +53,6 @@ social:
     scope:
       - email
       - profile
+
 
 

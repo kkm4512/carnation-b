@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/careRecordFiles")
+@RequestMapping("/api/v1/careRecordFile")
 @Tag(name = "CareRecordFile API", description = "간병 배정 기록 관련 파일 API")
 public class CareRecordFileController {
     
