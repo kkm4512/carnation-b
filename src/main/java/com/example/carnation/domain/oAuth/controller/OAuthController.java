@@ -3,6 +3,7 @@ package com.example.carnation.domain.oAuth.controller;
 import com.example.carnation.common.response.ApiResponse;
 import com.example.carnation.domain.oAuth.constans.OAuthProviderName;
 import com.example.carnation.domain.oAuth.service.OAuthService;
+import com.example.carnation.security.TokenDto;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,7 +31,7 @@ public class OAuthController {
             description = "소셜 로그인 후 JWT 토큰을 반환합니다."
     )
     @GetMapping("/callback")
-    public ApiResponse<String> socialLogin(
+    public ApiResponse<TokenDto> socialLogin(
             @Parameter(
                     name = "provider",
                     description = "OAuth 제공자 (KAKAO, NAVER, GOOGLE)",
@@ -48,8 +49,8 @@ public class OAuthController {
             )
             @RequestParam("code") String code
     ) {
-        String jwt = oAuthService.socialLogin(oAuthProviderName, code);
-        return ApiResponse.of(SUCCESS,jwt);
+        TokenDto response = oAuthService.socialLogin(oAuthProviderName, code);
+        return ApiResponse.of(SUCCESS,response);
     }
 }
 
