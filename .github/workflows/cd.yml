@@ -75,3 +75,4 @@ jobs:
             
             # 컨테이너 재시작 (데이터 유지됨)
             docker-compose up --build -d
+            
