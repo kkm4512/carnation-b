@@ -20,8 +20,6 @@ jobs:
       - name: Docker 및 Docker Compose 설치
         run: |
           # 설치 확인
-          docker --version
-          docker-compose --version
           
           echo "🐳 Docker 및 Docker Compose 설치 시작..."
           sudo apt-get update
