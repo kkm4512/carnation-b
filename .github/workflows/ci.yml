@@ -6,7 +6,7 @@ on:
 
 jobs:
   ci:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: 깃헙 코드를 VM으로 복사
         uses: actions/checkout@v4
@@ -17,11 +17,30 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Docker 및 Docker Compose 설치
+        run: |
+          # 설치 확인
+          docker --version
+          docker-compose --version
+          
+          echo "🐳 Docker 및 Docker Compose 설치 시작..."
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          
+          # Docker Compose 설치
+          DOCKER_COMPOSE_VERSION="2.17.2"
+          sudo curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          
+          # 설치 확인
+          docker --version
+          docker-compose --version
+        shell: bash
+
       - name: env 파일 생성
         run: |
           echo "${{ secrets.ENV }}" > .env
         shell: bash
-
 
       - name: 기존 Docker 컨테이너 및 모든 볼륨 삭제
         run: |
@@ -37,7 +56,6 @@ jobs:
           
           echo "✅ Docker 정리 완료!"
 
-
       - name: Docker Compose 실행
         run: |
           docker-compose up -d
@@ -46,4 +64,3 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew build --info --stacktrace
-
