@@ -56,7 +56,7 @@ public class UserService {
         }
 
         String accessToken = jm.generateAccessToken(JwtDto.of(user));
-        String refreshToken = jm.generateRefreshToken(user.getId());
+        String refreshToken = jm.generateRefreshToken(JwtDto.of(user));
         return TokenDto.of(user.getId(), accessToken, refreshToken);
     }
 

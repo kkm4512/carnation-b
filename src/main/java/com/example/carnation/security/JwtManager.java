@@ -38,7 +38,6 @@ public class JwtManager {
 
     public String generateAccessToken(final JwtDto jwtDto) {
         Date date = new Date();
-
         return BEARER_PREFIX + Jwts.builder()
                 .setSubject(String.valueOf(jwtDto.getUserId()))
                 .claim("email", jwtDto.getEmail())
@@ -52,10 +51,10 @@ public class JwtManager {
                 .compact();
     }
 
-    public String generateRefreshToken(final Long id) {
+    public String generateRefreshToken(final JwtDto jwtDto) {
         Date date = new Date();
         return Jwts.builder()
-                .setSubject(String.valueOf(id))
+                .setSubject(String.valueOf(jwtDto.getUserId()))
                 .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_EXPIRED_TIME)) // 만료 시간
                 .setIssuedAt(date) // 발급일
                 .signWith(key, signatureAlgorithm) // 암호화 알고리즘

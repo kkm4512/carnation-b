@@ -32,6 +32,10 @@ public class JwtDto {
     @Schema(description = "사용자 로그인 유형", example = "GOOGLE")
     private AuthProvider authProvider;
 
+    public JwtDto(Long userId) {
+        this.userId = userId;
+    }
+
     public static JwtDto of(User user) {
         return new JwtDto(
                 user.getId(),
@@ -42,4 +46,5 @@ public class JwtDto {
                 user.getAuthProvider()
         );
     }
+
 }
