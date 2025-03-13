@@ -4,7 +4,10 @@ import com.example.carnation.common.exception.UserException;
 import com.example.carnation.domain.care.entity.CareAssignment;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
+import com.example.carnation.domain.oAuth.dto.OAuthUserDto;
+import com.example.carnation.domain.user.constans.AuthProvider;
 import com.example.carnation.domain.user.constans.UserType;
+import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.security.AuthUser;
 import com.example.carnation.security.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -51,7 +54,6 @@ public class User {
 
     /** 비밀번호 (해시 암호화 저장) */
     @Schema(description = "비밀번호 (해시 암호화 저장)", example = "$2a$10$TLs.cok52zPsTb/sfDv.PusUh8FJaTCAnqE1OnQNBywNjXGmJbxHG")
-    @Column(nullable = false)
     private String password;
 
     /** 사용자 역할 (ADMIN, USER 등) */
@@ -65,6 +67,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserType userType;
+
+    @Schema(
+            description = "사용자 로그인 제공자 (KAKAO, NAVER, GOOGLE, GENERAL 등)",
+            example = "KAKAO"
+    )
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AuthProvider authProvider;
 
     /** 생성 날짜 (자동 입력) */
     @Schema(description = "생성 날짜 (자동 입력)", example = "2024-03-01T10:00:00")
@@ -90,6 +100,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Caregiver> caregivers = new ArrayList<>();
 
+    // AuthUser -> User
     public User(Long id, String nickname, String email, UserRole userRole, UserType userType) {
         this.id = id;
         this.nickname = nickname;
@@ -98,12 +109,23 @@ public class User {
         this.userType = userType != null ? userType : UserType.CAREGIVER; // 기본값 적용
     }
 
+    // 일반 회원가입
     public User(String nickname, String email, String password, UserRole userRole, UserType userType) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.userRole = userRole != null ? userRole : UserRole.ROLE_USER; // 기본값 적용
         this.userType = userType != null ? userType : UserType.CAREGIVER; // 기본값 적용
+        this.authProvider = AuthProvider.GENERAL;
+    }
+
+    // 소셜 회원가입
+    public User(String email, String nickname) {
+        this.email = email;
+        this.nickname = nickname;
+        this.userRole = UserRole.ROLE_USER; // 기본값 적용
+        this.userType = UserType.CAREGIVER; // 기본값 적용
+        this.authProvider = determineAuthProvider(email);
     }
 
     public static User of(AuthUser authUser){
@@ -123,6 +145,23 @@ public class User {
         );
     }
 
+    public static User of(OAuthUserDto dto){
+        return new User(
+                dto.getEmail(),
+                dto.getNickname()
+        );
+    }
+
+    public static User of(SignupRequestDto dto, String encodedPassword){
+        return new User(
+            dto.getNickname(),
+            dto.getEmail(),
+            encodedPassword,
+            dto.getUserRole(),
+            dto.getUserType()
+        );
+    }
+
     public void isMe(Long id) {
         if (id == null) {
             throw new UserException(NULL_USER);
@@ -131,6 +170,17 @@ public class User {
         if (!Objects.equals(this.id, id)) {
             throw new UserException(NOT_ME);
         }
+    }
+
+    private AuthProvider determineAuthProvider(String email) {
+        String domain = email.substring(email.indexOf("@") + 1).toLowerCase();
+
+        return switch (domain) {
+            case "kakao.com" -> AuthProvider.KAKAO;
+            case "naver.com" -> AuthProvider.NAVER;
+            case "gmail.com" -> AuthProvider.GOOGLE;
+            default -> AuthProvider.GENERAL;
+        };
     }
 
 }

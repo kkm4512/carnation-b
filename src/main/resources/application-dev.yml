@@ -2,7 +2,7 @@ server:
   port: ${SERVER_LOCAL_PORT}
 
 swagger:
-  server-url: http://localhost:8080
+  server-url: ${SERVER_LOCAL_URL}
 # DB config
 spring:
   config:
@@ -22,3 +22,8 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
         format_sql: true
+
+social:
+  redirect:
+    url: ${SOCIAL_REDIRECT_URL_LOCAL}
+

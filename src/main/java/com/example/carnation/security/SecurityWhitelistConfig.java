@@ -21,7 +21,10 @@ public class SecurityWhitelistConfig {
                     "/health",
                     "/swagger-ui/**",
                     "/api-docs/**",
-                    "/docs"
+                    "/docs",
+                    "/api/v1/oAuth/**",
+                    "/favicon.ico",
+                    "/socialLoginURL"
             ),
             HttpMethod.OPTIONS, List.of("/**") // Preflight 요청 허용
     );

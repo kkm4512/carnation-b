@@ -9,7 +9,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -28,7 +31,7 @@ public class UserController {
     @Operation(summary = "로그인", description = "사용자가 로그인하여 JWT 토큰을 발급받습니다.")
     @PostMapping("/signin")
     public ApiResponse<String> signin(@RequestBody @Valid SigninRequestDto dto) {
-        String result = userService.signin(dto);
-        return ApiResponse.of(BaseApiResponse.SUCCESS, result);
+        String jwt = userService.signin(dto);
+        return ApiResponse.of(BaseApiResponse.SUCCESS, jwt);
     }
 }

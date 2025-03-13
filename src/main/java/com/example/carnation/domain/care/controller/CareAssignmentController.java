@@ -23,7 +23,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCES
 @RestController
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/CareAssignment")
+@RequestMapping("/api/v1/careAssignments")
 @Tag(name = "CareAssignment API", description = "간병 배정 API")
 public class CareAssignmentController {
     private final CareAssignmentService careAssignmentService;
