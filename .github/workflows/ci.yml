@@ -42,21 +42,6 @@ jobs:
         run: |
           docker-compose up -d
 
-
-      - name: Wait for MySQL to be ready
-        run: |
-          echo "⏳ Waiting for MySQL to be ready..."
-          for i in {1..30}; do
-            if docker exec carnation_mysql_container mysqladmin --protocol=tcp -u root -p'root12!@12' ping --silent; then
-              echo "✅ MySQL is ready!"
-              exit 0
-            fi
-            echo "⏳ MySQL is not ready yet. Retrying in 2 seconds..."
-            sleep 2
-          done
-          echo "❌ MySQL did not start within 60 seconds."
-          exit 1
-
       - name: 빌드 및 테스트 코드 돌리는중 ...
         run: |
           chmod +x ./gradlew
