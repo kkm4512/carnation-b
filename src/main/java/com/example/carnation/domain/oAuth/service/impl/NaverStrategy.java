@@ -5,6 +5,7 @@ import com.example.carnation.common.response.enums.RestTemplateApiResponse;
 import com.example.carnation.domain.oAuth.dto.OAuthProviderDto;
 import com.example.carnation.domain.oAuth.dto.OAuthUserDto;
 import com.example.carnation.domain.oAuth.service.interfaces.SocialLoginStrategy;
+import com.example.carnation.domain.user.constans.AuthProvider;
 import com.example.carnation.domain.user.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -82,7 +83,7 @@ public class NaverStrategy implements SocialLoginStrategy {
             String email = responseNode.get("email").asText();
             String nickname = responseNode.get("nickname").asText();
             OAuthUserDto oAuthUserDto = OAuthUserDto.of(email, nickname);
-            return User.of(oAuthUserDto);
+            return User.of(oAuthUserDto, AuthProvider.NAVER);
         } catch (HttpClientErrorException e) {
             log.error("OAuth API 호출 실패: {}", e.getMessage());
             throw new RestTemplateException(RestTemplateApiResponse.FAILED_TO_FETCH_SOCIAL_USER_INFO,e);
