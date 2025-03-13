@@ -61,9 +61,17 @@ jobs:
           key: ${{secrets.LOCAL_KEY}}
           port: 2222  # SSH 포트 2222로 변경
           username: ${{secrets.LOCAL_USERNAME}}
-          script: |            
+          script: |
             cd ~/
-            docker stop $(docker ps -q) && docker rm $(docker ps -aq)
-            docker rmi -f $(docker images -q)        
+            
+            # 기존 컨테이너 정리 (볼륨은 유지)
+            docker-compose down
+            
+            # 안 쓰는 이미지만 삭제 (볼륨 삭제 X)
+            docker image prune -af      
+            
+            # 최신 이미지 가져오기
             docker-compose pull 
+            
+            # 컨테이너 재시작 (데이터 유지됨)
             docker-compose up --build -d
