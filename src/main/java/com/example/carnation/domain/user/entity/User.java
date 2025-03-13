@@ -120,12 +120,12 @@ public class User {
     }
 
     // 소셜 회원가입
-    public User(String email, String nickname) {
+    public User(String email, String nickname, AuthProvider authProvider) {
         this.email = email;
         this.nickname = nickname;
         this.userRole = UserRole.ROLE_USER; // 기본값 적용
         this.userType = UserType.CAREGIVER; // 기본값 적용
-        this.authProvider = determineAuthProvider(email);
+        this.authProvider = authProvider;
     }
 
     public static User of(AuthUser authUser){
@@ -145,10 +145,11 @@ public class User {
         );
     }
 
-    public static User of(OAuthUserDto dto){
+    public static User of(OAuthUserDto dto, AuthProvider authProvider){
         return new User(
                 dto.getEmail(),
-                dto.getNickname()
+                dto.getNickname(),
+                authProvider
         );
     }
 
@@ -170,17 +171,6 @@ public class User {
         if (!Objects.equals(this.id, id)) {
             throw new UserException(NOT_ME);
         }
-    }
-
-    private AuthProvider determineAuthProvider(String email) {
-        String domain = email.substring(email.indexOf("@") + 1).toLowerCase();
-
-        return switch (domain) {
-            case "kakao.com" -> AuthProvider.KAKAO;
-            case "naver.com" -> AuthProvider.NAVER;
-            case "gmail.com" -> AuthProvider.GOOGLE;
-            default -> AuthProvider.GENERAL;
-        };
     }
 
 }
