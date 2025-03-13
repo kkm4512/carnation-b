@@ -55,14 +55,14 @@ public class OAuthProviderDto {
             case NAVER -> new OAuthProviderDto(NAVER,
                     "https://nid.naver.com/oauth2.0/token",
                     "https://openapi.naver.com/v1/nid/me",
-                    OAuthProperties.getRedirectUrl() + "?=" + oAuthProviderName.name(),
+                    OAuthProperties.getRedirectUrl() + "?oAuthProviderName=" + oAuthProviderName.name(),
                     code
             );
 
             case GOOGLE -> new OAuthProviderDto(GOOGLE,
                     "https://oauth2.googleapis.com/token",
                     "https://www.googleapis.com/oauth2/v3/userinfo",
-                    OAuthProperties.getRedirectUrl() + "?=" + oAuthProviderName.name(),
+                    OAuthProperties.getRedirectUrl() + "?oAuthProviderName=" + oAuthProviderName.name(),
                     code
             );
 

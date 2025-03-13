@@ -20,7 +20,6 @@ public class OAuthRedirectController {
     private static final String KAKAO_AUTH_URL = "https://kauth.kakao.com/oauth/authorize";
     private static final String NAVER_AUTH_URL = "https://nid.naver.com/oauth2.0/authorize";
     private static final String GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth";
-
     @Operation(
             summary = "OAuth 로그인 페이지 리다이렉트 URL 생성",
             description = "카카오, 네이버, 구글 로그인 페이지의 URL을 생성하여 반환합니다."
@@ -47,7 +46,7 @@ public class OAuthRedirectController {
                         + "?response_type=code"
                         + "&client_id=" + clientId
                         + "&redirect_uri=" + REDIRECT_URI + "?oAuthProviderName=" + oAuthProviderName
-                        + "&scope=email%20profile"; // Google의 경우 추가 스코프 필요
+                        + "&scope=email%20profile";
 
                 default -> throw new OAuthException(OAUTH_NOT_FOUND_PROVIDER);
             };

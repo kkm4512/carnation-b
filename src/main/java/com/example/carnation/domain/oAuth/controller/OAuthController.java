@@ -3,6 +3,7 @@ package com.example.carnation.domain.oAuth.controller;
 import com.example.carnation.common.response.ApiResponse;
 import com.example.carnation.domain.oAuth.constans.OAuthProviderName;
 import com.example.carnation.domain.oAuth.service.OAuthService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -18,6 +19,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCES
 @RestController
 @RequestMapping("/api/v1/oAuth")
 @RequiredArgsConstructor
+@Hidden
 @Tag(name = "OAuth API", description = "사용자 소셜 로그인 API") // 컨트롤러 설명
 public class OAuthController {
 
@@ -37,7 +39,6 @@ public class OAuthController {
                     in = ParameterIn.QUERY
             )
             @RequestParam OAuthProviderName oAuthProviderName,
-
             @Parameter(
                     name = "code",
                     description = "OAuth 인증 코드",
