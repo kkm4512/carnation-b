@@ -9,11 +9,19 @@ services:
       MYSQL_DATABASE: ${MYSQL_DB_NAME}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    command:
-      --character-set-server=utf8mb4
-      --collation-server=utf8mb4_unicode_ci
     volumes:
       - mysql_data:/var/lib/mysql
+
+  redis:
+    container_name: carnation_redis_container
+    image: redis:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    command: redis-server --requirepass ${REDIS_PASSWORD}
 
   server:
     container_name: carnation_server_container
@@ -22,6 +30,7 @@ services:
       - 8080:8080
     depends_on:
       - mysql
+      - redis
     restart: always
     env_file:
       - .env
@@ -30,3 +39,4 @@ services:
 
 volumes:
   mysql_data:
+  redis_data:

@@ -33,12 +33,12 @@ public class OAuthService {
         if (!flag) {
             User saveUser = userCommand.save(user);
             JwtDto jwtDto = JwtDto.of(saveUser);
-            return jwtManager.generateJwt(jwtDto);
+            return jwtManager.generateAccessToken(jwtDto);
         }
         else {
             User findUser = userQuery.findByEmail(user.getEmail());
             JwtDto jwtDto = JwtDto.of(findUser);
-            return jwtManager.generateJwt(jwtDto);
+            return jwtManager.generateAccessToken(jwtDto);
         }
     }
 }

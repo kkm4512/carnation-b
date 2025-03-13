@@ -12,10 +12,11 @@ public class SecurityWhitelistConfig {
     // 특정 HTTP 메서드별 허용 경로
     public static final Map<HttpMethod, List<String>> PERMIT_METHODS = Map.of(
             HttpMethod.POST, List.of(
-                    "/api/v1/users/**"
+                    "/api/v1/users/signup",
+                    "/api/v1/users/signin",
+                    "/api/v1/token/**"
             ),
             HttpMethod.PUT, List.of(
-                    "/api/v1/users/**"
             ),
             HttpMethod.GET, List.of(
                     "/health",

@@ -28,6 +28,12 @@ public class UserQuery {
         }
     }
 
+    @Transactional(readOnly = true)
+    public User findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new UserException(USER_NOT_FOUND));
+    }
+
     public Boolean existsByEmail(String email){
         return repository.existsByEmail(email);
     }

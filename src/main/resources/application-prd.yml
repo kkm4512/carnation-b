@@ -24,6 +24,11 @@ spring:
         show_sql: true
         format_sql: true
 
+  data:
+    redis:
+      host: ${REDIS_HOST_DEPLOY}
+      port: ${REDIS_PORT_DEPLOY}
+
 social:
   redirect:
     url: ${SOCIAL_REDIRECT_URL_DEPLOY}
