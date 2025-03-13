@@ -2,7 +2,9 @@ package com.example.carnation.domain.oAuth.service.factory;
 
 import com.example.carnation.common.exception.OAuthException;
 import com.example.carnation.domain.oAuth.dto.OAuthProviderDto;
+import com.example.carnation.domain.oAuth.service.impl.GoogleStrategy;
 import com.example.carnation.domain.oAuth.service.impl.KakaoStrategy;
+import com.example.carnation.domain.oAuth.service.impl.NaverStrategy;
 import com.example.carnation.domain.oAuth.service.interfaces.SocialLoginStrategy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +40,10 @@ public class SocialLoginStrategyFactory {
         switch (oAuthProviderDto.getOAuthProviderName()) {
             case KAKAO:
                 return new KakaoStrategy(oAuthProviderDto,kakaoClientId,restTemplate, objectMapper);
-//            case NAVER:
-//                return new NaverStrategy(oAuthProviderDto,naverClientId, naverClientSecret,restTemplate, objectMapper);
-//            case GOOGLE:
-//                return new GoogleStrategy(oAuthProviderDto,googleClientId, googleClientSecret,restTemplate, objectMapper);
+            case NAVER:
+                return new NaverStrategy(oAuthProviderDto,naverClientId, naverClientSecret,restTemplate, objectMapper);
+            case GOOGLE:
+                return new GoogleStrategy(oAuthProviderDto,googleClientId, googleClientSecret,restTemplate, objectMapper);
             default:
                 throw new OAuthException(OAUTH_NOT_FOUND_PROVIDER);
         }
