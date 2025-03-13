@@ -44,7 +44,7 @@ public class User {
 
     /** 사용자 닉네임 (고유값, 필수) */
     @Schema(description = "사용자 닉네임 (고유값, 필수)", example = "카네이션123")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nickname;
 
     /** 사용자 이메일 (고유값, 필수) */
