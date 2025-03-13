@@ -1,6 +1,7 @@
 package com.example.carnation.security;
 
 import com.example.carnation.common.exception.UserException;
+import com.example.carnation.domain.user.constans.AuthProvider;
 import com.example.carnation.domain.user.constans.UserType;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -61,11 +62,13 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
                 String nickname = claims.get("nickname", String.class);
                 String userRoleString = claims.get("userRole", String.class);
                 String userTypeString = claims.get("userType", String.class);
+                String authProviderString = claims.get("authProvider", String.class);
                 UserRole userRole = UserRole.valueOf(userRoleString);
                 UserType userType = UserType.valueOf(userTypeString);
+                AuthProvider authProvider = AuthProvider.valueOf(authProviderString);
 
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                    AuthUser authUser = new AuthUser(userId, email, nickname, userRole,userType);
+                    AuthUser authUser = new AuthUser(userId, email, nickname, userRole,userType,authProvider);
                     JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(authUser);
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);

@@ -28,7 +28,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCES
 @RestController
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/careHistory")
+@RequestMapping("/api/v1/careHistories")
 @Tag(name = "CareHistory API", description = "간병 기록 관리 API")
 public class CareHistoryController {
     private final CareHistoryService careHistoryService;

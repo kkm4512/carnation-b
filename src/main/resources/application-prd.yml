@@ -1,8 +1,8 @@
 server:
-  port: 8080
+  port: ${SERVER_DEPLOY_PORT}
 
 swagger:
-  server-url: https://1a6f-1-229-119-49.ngrok-free.app
+  server-url: ${SERVER_DEPLOY_URL}
 
 # DB config
 spring:
@@ -24,3 +24,6 @@ spring:
         show_sql: true
         format_sql: true
 
+social:
+  redirect:
+    url: ${SOCIAL_REDIRECT_URL_DEPLOY}
