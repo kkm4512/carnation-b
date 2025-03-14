@@ -30,3 +30,11 @@
 
 # Swagger URL
 https://1a6f-1-229-119-49.ngrok-free.app/docs
+
+# ERD Tool
+https://excalidraw.com/
+
+# DEVELOPERS
+KAKAO_DEVELOPERS=https://developers.kakao.com/
+NAVER_DEVELOPERS=https://developers.naver.com/
+GOOGLE_DEVELOPERS=https://console.cloud.google.com/
