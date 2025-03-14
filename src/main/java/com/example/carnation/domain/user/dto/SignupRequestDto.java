@@ -45,6 +45,11 @@ public class SignupRequestDto {
     @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "닉네임은 영문, 숫자, 한글만 허용됩니다.")
     private String nickname;
 
+    @Schema(description = "사용자의 휴대폰 번호 (숫자만 입력)", example = "01012345678")
+    @NotBlank(message = "휴대폰 번호는 필수 입력 값입니다.")
+    @Pattern(regexp = "^(01[016789])\\d{3,4}\\d{4}$", message = "유효한 휴대폰 번호를 입력해주세요.")
+    private String phoneNumber;
+
     @Schema(description = "사용자 역할 (ROLE_USER, ROLE_ADMIN 등)", example = "ROLE_USER", nullable = true, defaultValue = "ROLE_USER")
     private UserRole userRole;
 

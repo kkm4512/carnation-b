@@ -1,6 +1,7 @@
 package com.example.carnation.aop;
 
 import com.example.carnation.common.service.RedisService;
+import com.example.carnation.domain.auth.dto.PhoneAuthResponseDto;
 import com.example.carnation.security.TokenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,5 +34,20 @@ public class AspectModule {
         return result;
     }
 
+    @Pointcut("@annotation(com.example.carnation.annotation.SaveVerificationCode)")
+    public void saveVerificationCodePointcut() {}
+
+    @Around("saveVerificationCodePointcut()")
+    public Object saveVerificationCode(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object result = joinPoint.proceed();
+
+        if (result instanceof PhoneAuthResponseDto) {
+            Object[] args = joinPoint.getArgs();
+            if (args.length > 0 && args[0] instanceof com.example.carnation.domain.auth.dto.PhoneAuthRequestDto) {
+                redisService.saveVerificationCode(((PhoneAuthResponseDto) result).getPhoneNumber(), ((PhoneAuthResponseDto) result).getVerificationCode());
+            }
+        }
+        return result;
+    }
 
 }

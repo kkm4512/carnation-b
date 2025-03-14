@@ -38,7 +38,7 @@ public class CareHistoryService {
     private static final String AWS_BASE_URL =  "https://carnation-b-bucket.s3.ap-northeast-2.amazonaws.com";
 
 
-    public CareHistory create(AuthUser authUser, Long careAssignmentId, CareHistoryRequestDto careHistoryRequestDto, CareHistoryFilesRequestDto careHistoryFilesRequestDto) {
+    public CareHistory create(final AuthUser authUser, final Long careAssignmentId, final CareHistoryRequestDto careHistoryRequestDto, final CareHistoryFilesRequestDto careHistoryFilesRequestDto) {
         User user = User.of(authUser);
         FileValidation.countImagesFiles(careHistoryFilesRequestDto.getImageFiles());
         FileValidation.countVideoFiles(careHistoryFilesRequestDto.getVideoFiles());
@@ -91,7 +91,7 @@ public class CareHistoryService {
      * 현재 로그인한 사용자와, 요청한 간병 배정 데이터의 사용자가 같은지 확인
      * 같다면, 해당 간병 배정속, 간병인이 작성한 모든 데이터 반환
      */
-    public Page<CareHistoryResponseDto> readAllMePage(AuthUser authUser, Long careAssignmentId, Pageable pageable) {
+    public Page<CareHistoryResponseDto> readAllMePage(final AuthUser authUser, final Long careAssignmentId, final Pageable pageable) {
         User user = User.of(authUser);
         CareAssignment careAssignment = careAssignmentQuery.findOne(careAssignmentId);
         user.isMe(careAssignment.getUser().getId());

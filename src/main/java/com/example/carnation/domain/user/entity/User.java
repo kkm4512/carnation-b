@@ -52,6 +52,14 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    /** 📌 사용자의 휴대폰 번호 */
+    @Schema(
+            description = "사용자의 휴대폰 번호 (고유값, 필수 입력)",
+            example = "01012345678"
+    )
+    @Column(nullable = false, unique = true)
+    private String phoneNumber;
+
     /** 비밀번호 (해시 암호화 저장) */
     @Schema(description = "비밀번호 (해시 암호화 저장)", example = "$2a$10$TLs.cok52zPsTb/sfDv.PusUh8FJaTCAnqE1OnQNBywNjXGmJbxHG")
     private String password;
@@ -110,10 +118,11 @@ public class User {
     }
 
     // 일반 회원가입
-    public User(String nickname, String email, String password, UserRole userRole, UserType userType) {
+    public User(String nickname, String email, String password, String phoneNumber, UserRole userRole, UserType userType) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
+        this.phoneNumber = phoneNumber;
         this.userRole = userRole != null ? userRole : UserRole.ROLE_USER; // 기본값 적용
         this.userType = userType != null ? userType : UserType.CAREGIVER; // 기본값 적용
         this.authProvider = AuthProvider.GENERAL;
@@ -145,6 +154,7 @@ public class User {
         );
     }
 
+    // 소셜 회원가입
     public static User of(OAuthUserDto dto, AuthProvider authProvider){
         return new User(
                 dto.getEmail(),
@@ -153,11 +163,13 @@ public class User {
         );
     }
 
+    // 일반 회원가입
     public static User of(SignupRequestDto dto, String encodedPassword){
         return new User(
             dto.getNickname(),
             dto.getEmail(),
             encodedPassword,
+            dto.getPhoneNumber(),
             dto.getUserRole(),
             dto.getUserType()
         );

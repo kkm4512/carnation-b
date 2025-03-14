@@ -1,4 +1,4 @@
-package com.example.carnation.common.constans;
+package com.example.carnation.common.dto.constans;
 import lombok.Getter;
 import org.springframework.data.domain.Sort;
 
