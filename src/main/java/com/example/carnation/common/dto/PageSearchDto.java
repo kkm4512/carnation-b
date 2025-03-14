@@ -1,7 +1,7 @@
 package com.example.carnation.common.dto;
 
-import com.example.carnation.common.constans.SortByEnum;
-import com.example.carnation.common.constans.SortEnum;
+import com.example.carnation.common.dto.constans.SortByEnum;
+import com.example.carnation.common.dto.constans.SortEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AccessLevel;

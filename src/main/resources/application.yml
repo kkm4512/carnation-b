@@ -53,6 +53,13 @@ social:
     scope:
       - email
       - profile
+      -
+coolsms:
+  api:
+    key: ${COOLSMS_KEY}
+    secret: ${COOLSMS_SECRET_KEY}
+    fromNumber: ${COOLSMS_FROM_PHONE_NUMBER}
+    url: ${COOLSMS_URL}
 
 
 

@@ -14,7 +14,8 @@ public class SecurityWhitelistConfig {
             HttpMethod.POST, List.of(
                     "/api/v1/users/signup",
                     "/api/v1/users/signin",
-                    "/api/v1/token/**"
+                    "/api/v1/token/**",
+                    "/api/v1/auth/**"
             ),
             HttpMethod.PUT, List.of(
             ),
