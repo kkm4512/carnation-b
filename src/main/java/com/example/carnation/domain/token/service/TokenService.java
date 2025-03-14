@@ -19,7 +19,7 @@ public class TokenService {
     private final JwtManager jwtManager;
     private final UserQuery userQuery;
 
-    public TokenDto refreshAccessToken(TokenRefreshRequestDto dto) {
+    public TokenDto refreshAccessToken(final TokenRefreshRequestDto dto) {
         jwtManager.validateRefreshToken(dto.getRefreshToken());
         String refreshToken = redisService.getRefreshToken(dto.getUserId());
         jwtManager.compare(dto.getRefreshToken(),refreshToken);

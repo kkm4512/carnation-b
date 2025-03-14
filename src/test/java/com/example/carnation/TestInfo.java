@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,6 +21,7 @@ public class TestInfo {
                 "test@naver.com1",
                 "!@Skdud3401",
                 "testNickname1",
+                "01012345678",
                 null,
                 null
         );
