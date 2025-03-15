@@ -1,7 +1,6 @@
 package com.example.carnation.security;
 
 import com.example.carnation.domain.user.constans.AuthProvider;
-import com.example.carnation.domain.user.constans.UserType;
 import com.example.carnation.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -26,9 +25,6 @@ public class JwtDto {
     @Schema(description = "사용자 역할", example = "ROLE_USER")
     private UserRole userRole;
 
-    @Schema(description = "사용자 유형", example = "CAREGIVER")
-    private UserType userType;
-
     @Schema(description = "사용자 로그인 유형", example = "GOOGLE")
     private AuthProvider authProvider;
 
@@ -42,7 +38,6 @@ public class JwtDto {
                 user.getNickname(),
                 user.getEmail(),
                 user.getUserRole(),
-                user.getUserType(),
                 user.getAuthProvider()
         );
     }

@@ -1,12 +1,11 @@
 package com.example.carnation.domain.user.entity;
 
 import com.example.carnation.common.exception.UserException;
-import com.example.carnation.domain.care.entity.CareAssignment;
+import com.example.carnation.common.util.Validator;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
 import com.example.carnation.domain.oAuth.dto.OAuthUserDto;
 import com.example.carnation.domain.user.constans.AuthProvider;
-import com.example.carnation.domain.user.constans.UserType;
 import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.security.AuthUser;
 import com.example.carnation.security.UserRole;
@@ -22,12 +21,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
-import static com.example.carnation.common.response.enums.UserApiResponse.NOT_ME;
-import static com.example.carnation.common.response.enums.UserApiResponse.NULL_USER;
+import static com.example.carnation.common.response.enums.UserApiResponseEnum.EXISTING_SOCIAL_ACCOUNT;
+import static com.example.carnation.common.response.enums.UserApiResponseEnum.NOT_ME;
 
 @Entity
 @Getter
@@ -70,11 +66,9 @@ public class User {
     @Column(nullable = false)
     private UserRole userRole;
 
-    /** 사용자 유형 (CAREGIVER, PATIENT 등) */
-    @Schema(description = "사용자 유형 (CAREGIVER, PATIENT 등)", example = "CAREGIVER")
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserType userType;
+    @Column(nullable = false, unique = true, length = 14)
+    @Schema(description = "주민등록번호 (14자리)", example = "850101-2345678")
+    private String residentRegistrationNumber;
 
     @Schema(
             description = "사용자 로그인 제공자 (KAKAO, NAVER, GOOGLE, GENERAL 등)",
@@ -96,36 +90,33 @@ public class User {
     @Column
     private LocalDateTime updatedAt;
 
-    @Schema(description = "사용자가 작성한 간병 배정 목록")
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CareAssignment> careAssignments = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id", unique = true)
+    @Schema(description = "유저 - 환자 매핑 (UserPatient)", example = "1")
+    private Patient patient;
 
-    @Schema(description = "사용자가 작성한 간병인 목록")
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Patient> patients = new ArrayList<>();
-
-    @Schema(description = "사용자가 작성한 피간병인 목록")
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Caregiver> caregivers = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "caregiver_id", unique = true)
+    @Schema(description = "유저 - 간병인 매핑 (UserPatient)", example = "1")
+    private Caregiver caregiver;
 
     // AuthUser -> User
-    public User(Long id, String nickname, String email, UserRole userRole, UserType userType) {
+    public User(Long id, String nickname, String email, UserRole userRole) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.userRole = userRole != null ? userRole : UserRole.ROLE_USER; // 기본값 적용
-        this.userType = userType != null ? userType : UserType.CAREGIVER; // 기본값 적용
     }
 
     // 일반 회원가입
-    public User(String nickname, String email, String password, String phoneNumber, UserRole userRole, UserType userType) {
+    public User(String nickname, String email, String password, String phoneNumber, UserRole userRole, String residentRegistrationNumber) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.userRole = userRole != null ? userRole : UserRole.ROLE_USER; // 기본값 적용
-        this.userType = userType != null ? userType : UserType.CAREGIVER; // 기본값 적용
         this.authProvider = AuthProvider.GENERAL;
+        this.residentRegistrationNumber = residentRegistrationNumber;
     }
 
     // 소셜 회원가입
@@ -133,7 +124,6 @@ public class User {
         this.email = email;
         this.nickname = nickname;
         this.userRole = UserRole.ROLE_USER; // 기본값 적용
-        this.userType = UserType.CAREGIVER; // 기본값 적용
         this.authProvider = authProvider;
     }
 
@@ -149,8 +139,7 @@ public class User {
                 authUser.getUserId(),
                 authUser.getNickname(),
                 authUser.getEmail(),
-                userRole,
-                authUser.getUserType()
+                userRole
         );
     }
 
@@ -171,18 +160,32 @@ public class User {
             encodedPassword,
             dto.getPhoneNumber(),
             dto.getUserRole(),
-            dto.getUserType()
+            dto.getResidentRegistrationNumber()
         );
     }
 
-    public void isMe(Long id) {
-        if (id == null) {
-            throw new UserException(NULL_USER);
-        }
+    public void isMe(User user) {
+        Validator.validateNotNullAndEqual(
+            this.id,
+            user.getId(),
+            new UserException(NOT_ME)
+        );
+    }
 
-        if (!Objects.equals(this.id, id)) {
-            throw new UserException(NOT_ME);
+    // 현재 계정이 소셜 계정이 아닌지 검증
+    public void validateNotSocialAccount() {
+        if (!this.authProvider.equals(AuthProvider.GENERAL)) {
+            throw new UserException(EXISTING_SOCIAL_ACCOUNT);
         }
+    }
+
+
+    public void updateCareGiver(Caregiver caregiver) {
+        this.caregiver = caregiver;
+    }
+
+    public void updatePatient(Patient patient) {
+        this.patient = patient;
     }
 
 }

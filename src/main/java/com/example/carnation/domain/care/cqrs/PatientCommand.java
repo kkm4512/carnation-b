@@ -12,7 +12,7 @@ public class PatientCommand {
     private final PatientRepository repository;
 
     @Transactional
-    public Patient save(Patient entity) {
+    public Patient create(Patient entity) {
         return repository.save(entity);
     }
 }

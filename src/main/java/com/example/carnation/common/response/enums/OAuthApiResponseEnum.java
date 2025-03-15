@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum AwsApiResponse implements ApiResponseEnum {
+public enum OAuthApiResponseEnum implements ApiResponseEnum {
 
     // 400
 
@@ -14,21 +14,19 @@ public enum AwsApiResponse implements ApiResponseEnum {
     // 403
 
     // 404
-
+    OAUTH_NOT_FOUND_PROVIDER(HttpStatus.NOT_FOUND, "일치하는 소셜 도매인을 찾을 수 없습니다"),
 
     // 409
 
     // 500
-    AWS_STORAGE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 저장 중 오류가 발생했습니다."),
 
     // 503
-    AWS_CONNECTION_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "AWS 서비스에 연결할 수 없습니다.")
     ;
 
     private final HttpStatus httpStatus;
     private final String message;
 
-    AwsApiResponse(HttpStatus httpStatus, String message) {
+    OAuthApiResponseEnum(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
         this.message = message;
     }

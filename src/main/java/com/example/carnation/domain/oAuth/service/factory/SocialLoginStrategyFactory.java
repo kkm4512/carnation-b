@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import static com.example.carnation.common.response.enums.OAuthApiResponse.OAUTH_NOT_FOUND_PROVIDER;
+import static com.example.carnation.common.response.enums.OAuthApiResponseEnum.OAUTH_NOT_FOUND_PROVIDER;
 
 @Component
 @RequiredArgsConstructor

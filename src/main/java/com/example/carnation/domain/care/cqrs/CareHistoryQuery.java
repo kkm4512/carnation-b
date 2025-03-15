@@ -27,7 +27,7 @@ public class CareHistoryQuery {
     }
 
     @Transactional(readOnly = true)
-    public Page<CareHistory> readAllMePage(Caregiver caregiver, Pageable pageable) {
+    public Page<CareHistory> readPageMe(Caregiver caregiver, Pageable pageable) {
         return repository.findAllByCaregiver(caregiver,pageable);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.carnation.domain.oAuth.service.impl;
 
 import com.example.carnation.common.exception.RestTemplateException;
-import com.example.carnation.common.response.enums.RestTemplateApiResponse;
+import com.example.carnation.common.response.enums.RestTemplateApiResponseEnum;
 import com.example.carnation.domain.oAuth.dto.OAuthProviderDto;
 import com.example.carnation.domain.oAuth.dto.OAuthUserDto;
 import com.example.carnation.domain.oAuth.service.interfaces.SocialLoginStrategy;
@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
-import static com.example.carnation.common.response.enums.RestTemplateApiResponse.FAILED_TO_FETCH_SOCIAL_ACCESS_TOKEN;
+import static com.example.carnation.common.response.enums.RestTemplateApiResponseEnum.FAILED_TO_FETCH_SOCIAL_ACCESS_TOKEN;
 
 @Slf4j(topic = "KakaoStrategy")
 @RequiredArgsConstructor
@@ -73,7 +73,7 @@ public class KakaoStrategy implements SocialLoginStrategy {
             String responseBody = restTemplate.exchange(url, HttpMethod.GET, request, String.class).getBody();
 
             if (responseBody == null) {
-                throw new RestTemplateException(RestTemplateApiResponse.FAILED_TO_FETCH_SOCIAL_USER_INFO);
+                throw new RestTemplateException(RestTemplateApiResponseEnum.FAILED_TO_FETCH_SOCIAL_USER_INFO);
             }
 
             JsonNode jsonNode = objectMapper.readTree(responseBody);
@@ -83,22 +83,22 @@ public class KakaoStrategy implements SocialLoginStrategy {
             return User.of(oAuthUserDto, AuthProvider.KAKAO);
         } catch (HttpClientErrorException e) {
             log.error("OAuth API 호출 실패: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponse.FAILED_TO_FETCH_SOCIAL_USER_INFO);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.FAILED_TO_FETCH_SOCIAL_USER_INFO);
         } catch (HttpServerErrorException e) {
             log.error("OAuth 제공자 서버 오류 발생: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponse.OAUTH_PROVIDER_SERVER_ERROR);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.OAUTH_PROVIDER_SERVER_ERROR);
         } catch (JsonProcessingException e) {
             log.error("OAuth 응답 JSON 파싱 실패: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponse.INVALID_SOCIAL_RESPONSE);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.INVALID_SOCIAL_RESPONSE);
         } catch (IllegalArgumentException e) {
             log.error("OAuth 응답 데이터 형식 오류: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponse.INVALID_SOCIAL_USER_INFO);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.INVALID_SOCIAL_USER_INFO);
         } catch (RestTemplateException e) {
             log.error("RestTemplate 요청 오류: {}", e.getMessage());
             throw e; // 이미 정의된 RestTemplateException 그대로 던지기
         } catch (Exception e) {
             log.error("예상치 못한 오류 발생: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponse.UNEXPECTED_ERROR);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.UNEXPECTED_ERROR);
         }
     }
 

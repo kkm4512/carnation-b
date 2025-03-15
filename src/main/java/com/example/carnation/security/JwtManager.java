@@ -1,7 +1,7 @@
 package com.example.carnation.security;
 
 import com.example.carnation.common.exception.UserException;
-import com.example.carnation.common.response.enums.UserApiResponse;
+import com.example.carnation.common.response.enums.UserApiResponseEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -13,7 +13,7 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-import static com.example.carnation.common.response.enums.UserApiResponse.*;
+import static com.example.carnation.common.response.enums.UserApiResponseEnum.*;
 
 @Slf4j(topic = "JwtManager")
 @Component
@@ -43,7 +43,6 @@ public class JwtManager {
                 .claim("email", jwtDto.getEmail())
                 .claim("nickname", jwtDto.getNickname())
                 .claim("userRole", jwtDto.getUserRole())
-                .claim("userType", jwtDto.getUserType())
                 .claim("authProvider", jwtDto.getAuthProvider())
                 .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_EXPIRED_TIME))
                 .setIssuedAt(date) // 발급일
@@ -100,7 +99,7 @@ public class JwtManager {
 
     public void compare(String refreshToken, String refreshToken1) {
         if (refreshToken == null || !refreshToken.equals(refreshToken1)) {
-            throw new UserException(UserApiResponse.INVALID_REFRESH_TOKEN);
+            throw new UserException(UserApiResponseEnum.INVALID_REFRESH_TOKEN);
         }
     }
 }

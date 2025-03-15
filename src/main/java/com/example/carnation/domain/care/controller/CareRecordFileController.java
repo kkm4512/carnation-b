@@ -16,23 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/careRecordFile")
-@Tag(name = "CareRecordFile API", description = "간병 배정 기록 관련 파일 API")
+@RequestMapping("/api/v1/care-records-files")
+@Tag(name = "CareRecordFiles API", description = "간병 기록 파일 관리 API")
 public class CareRecordFileController {
     
     private final CareRecordFileService careRecordFileService;
 
     @Operation(
-            summary = "간병 배정 PDF 다운로드",
-            description = "특정 간병 배정 기록을 PDF 파일로 변환하여 다운로드합니다."
+            summary = "간병 매칭 PDF 다운로드",
+            description = "특정 간병 매칭 기록을 PDF 파일로 변환하여 다운로드합니다."
     )
     @SecurityRequirement(name = "JWT")
-    @GetMapping("/{careAssignmentId}/pdf")
-    public ResponseEntity<byte[]> generateAssignmentPdf(
+    @GetMapping("/{careMatchingId}/pdf")
+    public ResponseEntity<byte[]> createPdf(
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long careAssignmentId
+            @PathVariable Long careMatchingId
     ) {
-        byte[] pdfBytes = careRecordFileService.generateAssignmentPdf(authUser, careAssignmentId);
+        byte[] pdfBytes = careRecordFileService.createPdf(authUser, careMatchingId);
         return FileResponse.of("카네이션 간병 서비스 이용내역 확인서" + ".pdf", pdfBytes);
     }
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum AuthApiResponse implements ApiResponseEnum {
+public enum AuthApiResponseEnum implements ApiResponseEnum {
 
     // 400 Bad Request (잘못된 요청)
     INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "잘못된 인증 코드입니다."),
@@ -27,7 +27,7 @@ public enum AuthApiResponse implements ApiResponseEnum {
     private final HttpStatus httpStatus;
     private final String message;
 
-    AuthApiResponse(HttpStatus httpStatus, String message) {
+    AuthApiResponseEnum(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
         this.message = message;
     }

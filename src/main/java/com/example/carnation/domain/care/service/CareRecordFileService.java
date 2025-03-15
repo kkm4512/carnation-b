@@ -1,7 +1,9 @@
 package com.example.carnation.domain.care.service;
 
-import com.example.carnation.domain.care.cqrs.CareAssignmentQuery;
-import com.example.carnation.domain.care.entity.CareAssignment;
+import com.example.carnation.domain.care.cqrs.CareMatchingQuery;
+import com.example.carnation.domain.care.entity.CareMatching;
+import com.example.carnation.domain.care.entity.Caregiver;
+import com.example.carnation.domain.user.cqrs.UserQuery;
 import com.example.carnation.domain.user.entity.User;
 import com.example.carnation.security.AuthUser;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +25,14 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 @Slf4j(topic = "CareRecordFileService")
 public class CareRecordFileService {
-    private final CareAssignmentQuery careAssignmentQuery;
+    private final CareMatchingQuery careMatchingQuery;
 
-    public byte[] generateAssignmentPdf(final AuthUser authUser, final Long careAssignmentId) {
+    public byte[] createPdf(final AuthUser authUser, final Long careMatchingId) {
         User user = User.of(authUser);
-        CareAssignment careAssignment = careAssignmentQuery.findOne(careAssignmentId);
-        user.isMe(careAssignment.getUser().getId());
-
+        CareMatching careMatching = careMatchingQuery.readById(careMatchingId);
+        Caregiver caregiver = careMatching.getCaregiver();
+        // 특정 careMatching에 들어있는 간병인이, 로그인되있는 유저와 동일한지 체크하는 로직
+        caregiver.isMe(user);
         try (PDDocument document = new PDDocument();
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
@@ -51,11 +54,11 @@ public class CareRecordFileService {
 
                 // 날짜 포맷 지정
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시");
-                String startDate = careAssignment.getCaregiver().getStartDateTime().format(formatter);
-                String endDate = careAssignment.getCaregiver().getEndDateTime().format(formatter);
+                String startDate = careMatching.getStartDateTime().format(formatter);
+                String endDate = careMatching.getEndDateTime().format(formatter);
 
                 // 총 이용 시간 계산
-                Duration duration = Duration.between(careAssignment.getCaregiver().getStartDateTime(), careAssignment.getCaregiver().getEndDateTime());
+                Duration duration = Duration.between(careMatching.getStartDateTime(), careMatching.getEndDateTime());
                 long days = duration.toDays();
                 long hours = duration.toHours() % 24;
                 String totalUsage = "(" + days + "일 " + hours + "시간)";
@@ -68,13 +71,13 @@ public class CareRecordFileService {
 
                 // **표 내용 추가**
                 y -= 30;
-                drawTableRow(contentStream, font, "환자 성명", careAssignment.getPatient().getName(), y);
+                drawTableRow(contentStream, font, "환자 성명", careMatching.getPatient().getName(), y);
                 y -= 25;
-                drawTableRow(contentStream, font, "간병인 연락처", careAssignment.getCaregiver().getPhoneNumber(), y);
+                drawTableRow(contentStream, font, "간병인 연락처", careMatching.getCaregiver().getUser().getPhoneNumber(), y);
                 y -= 25;
-                drawTableRow(contentStream, font, "간병인 이름", careAssignment.getCaregiver().getName(), y);
+                drawTableRow(contentStream, font, "간병인 이름", careMatching.getCaregiver().getName(), y);
                 y -= 25;
-                drawTableRow(contentStream, font, "간병인 주민번호", careAssignment.getCaregiver().getResidentRegistrationNumber(), y);
+                drawTableRow(contentStream, font, "간병인 주민번호", careMatching.getCaregiver().getUser().getResidentRegistrationNumber() , y);
                 y -= 25;
                 drawTableRow(contentStream, font, "서비스 이용 기간", startDate + " ~ " + endDate, y);
                 y -= 25;

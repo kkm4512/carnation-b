@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum UserApiResponse implements ApiResponseEnum {
+public enum UserApiResponseEnum implements ApiResponseEnum {
 
     // 400
     INVALID_CREDENTIALS(HttpStatus.BAD_REQUEST, "아이디 또는 비밀번호가 일치하지 않습니다"),
@@ -34,7 +34,7 @@ public enum UserApiResponse implements ApiResponseEnum {
     private final HttpStatus httpStatus;
     private final String message;
 
-    UserApiResponse(HttpStatus httpStatus, String message) {
+    UserApiResponseEnum(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
         this.message = message;
     }

@@ -1,7 +1,7 @@
 package com.example.carnation.domain.file.helper;
 
 import com.example.carnation.common.exception.FileException;
-import com.example.carnation.common.response.enums.FileApiResponse;
+import com.example.carnation.common.response.enums.FileApiResponseEnum;
 import com.example.carnation.domain.aws.helper.S3Helper;
 import com.example.carnation.domain.care.entity.CareMedia;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class FileHelper {
                 s3Helper.upload(Path.of(filePath),multipartFile);
             }
         } catch (Exception e) {
-            throw new FileException(FileApiResponse.FILE_UPLOAD_FAILED,e);
+            throw new FileException(FileApiResponseEnum.FILE_UPLOAD_FAILED,e);
         }
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(description = "간병 미디어 DTO")
-public class CareMediaDto {
+public class CareMediaResponse {
 
     @Schema(description = "미디어 ID", example = "1")
     private Long id;
@@ -41,8 +41,8 @@ public class CareMediaDto {
     @Schema(description = "수정일시", example = "2024-03-02T15:30:00")
     private LocalDateTime updatedAt;
 
-    public static CareMediaDto of(CareMedia entity) {
-        return new CareMediaDto(
+    public static CareMediaResponse of(CareMedia entity) {
+        return new CareMediaResponse(
             entity.getId(),
             entity.getFileAbsolutePath(),
             entity.getFileName(),
@@ -54,7 +54,7 @@ public class CareMediaDto {
         );
     }
 
-    public static List<CareMediaDto> of (List<CareMedia> entities) {
-        return entities.stream().map(CareMediaDto::of).toList();
+    public static List<CareMediaResponse> of (List<CareMedia> entities) {
+        return entities.stream().map(CareMediaResponse::of).toList();
     }
 }

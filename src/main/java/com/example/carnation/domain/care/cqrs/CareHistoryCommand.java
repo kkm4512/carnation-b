@@ -12,7 +12,7 @@ public class CareHistoryCommand {
     private final CareHistoryRepository repository;
 
     @Transactional
-    public CareHistory save(CareHistory entity) {
+    public CareHistory create(CareHistory entity) {
         return repository.save(entity);
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-import static com.example.carnation.common.response.enums.AuthApiResponse.*;
+import static com.example.carnation.common.response.enums.AuthApiResponseEnum.*;
 
 @Service
 @RequiredArgsConstructor

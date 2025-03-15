@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCESS;
+import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SUCCESS;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -42,7 +42,7 @@ public class UserController {
     /**
      * 로그아웃 (Refresh Token 삭제)
      */
-    @Operation(summary = "로그아웃", description = "현재 사용자의 Refresh Token을 삭제하여 강제 로그아웃 처리합니다.")
+    @Operation(summary = "로그아웃", description = "현재 사용자의 Refresh Token을 삭제합니다")
     @PostMapping("/signout")
     public ApiResponse<Void> signout(@AuthenticationPrincipal AuthUser authUser) {
         userService.signout(authUser);

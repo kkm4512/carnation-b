@@ -1,6 +1,5 @@
 package com.example.carnation.domain.user.dto;
 
-import com.example.carnation.domain.user.constans.UserType;
 import com.example.carnation.domain.user.entity.User;
 import com.example.carnation.security.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "사용자 DTO") // DTO 설명 추가
-public class UserDto {
+public class UserResponseDto {
 
     @Schema(description = "사용자 고유 ID", example = "1")
     private Long id;
@@ -28,22 +27,18 @@ public class UserDto {
     @Schema(description = "사용자 역할 (ROLE_ADMIN, ROLE_USER 등)", example = "ROLE_USER")
     private UserRole userRole;
 
-    @Schema(description = "사용자 유형 (CAREGIVER, PATIENT 등)", example = "CAREGIVER")
-    private UserType userType;
-
     @Schema(description = "생성 날짜 (자동 입력)", example = "2024-03-01T10:00:00")
     private LocalDateTime createdAt;
 
     @Schema(description = "마지막 수정 날짜 (자동 입력)", example = "2024-03-01T10:00:00")
     private LocalDateTime updatedAt;
 
-    public static UserDto of(User user) {
-        return new UserDto(
+    public static UserResponseDto of(User user) {
+        return new UserResponseDto(
                 user.getId(),
                 user.getNickname(),
                 user.getEmail(),
                 user.getUserRole(),
-                user.getUserType(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );
