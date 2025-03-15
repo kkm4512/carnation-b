@@ -6,8 +6,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.carnation.common.exception.AwsException;
 import com.example.carnation.common.exception.FileException;
-import com.example.carnation.common.response.enums.AwsApiResponse;
-import com.example.carnation.common.response.enums.FileApiResponse;
+import com.example.carnation.common.response.enums.AwsApiResponseEnum;
+import com.example.carnation.common.response.enums.FileApiResponseEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,13 +33,13 @@ public class S3Helper {
             metadata.setContentLength(file.getSize());
             amazonS3Client.putObject(bucket, path.toString(), file.getInputStream(), metadata);
         } catch (IOException e) {
-            throw new FileException(FileApiResponse.FILE_READ_ERROR, e);
+            throw new FileException(FileApiResponseEnum.FILE_READ_ERROR, e);
         } catch (AmazonServiceException e) {
-            throw new AwsException(AwsApiResponse.AWS_STORAGE_ERROR, e);
+            throw new AwsException(AwsApiResponseEnum.AWS_STORAGE_ERROR, e);
         } catch (SdkClientException e) {
-            throw new AwsException(AwsApiResponse.AWS_CONNECTION_ERROR, e);
+            throw new AwsException(AwsApiResponseEnum.AWS_CONNECTION_ERROR, e);
         } catch (Exception e) {
-            throw new FileException(FileApiResponse.FILE_STORAGE_ERROR, e);
+            throw new FileException(FileApiResponseEnum.FILE_STORAGE_ERROR, e);
         }
     }
 

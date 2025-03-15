@@ -12,7 +12,7 @@ public class CaregiverCommand {
     private final CaregiverRepository repository;
 
     @Transactional
-    public Caregiver save(Caregiver entity) {
+    public Caregiver create(Caregiver entity) {
         return repository.save(entity);
     }
 }

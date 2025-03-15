@@ -23,13 +23,19 @@ public class TokenService {
         jwtManager.validateRefreshToken(dto.getRefreshToken());
         String refreshToken = redisService.getRefreshToken(dto.getUserId());
         jwtManager.compare(dto.getRefreshToken(),refreshToken);
-        User user = userQuery.findById(dto.getUserId());
+        User user = userQuery.readById(dto.getUserId());
         String accessToken = jwtManager.generateAccessToken(JwtDto.of(user));
         return TokenDto.of(
                 user.getId(),
                 accessToken,
                 refreshToken
         );
+    }
 
+    public TokenDto createTokenDto(User user){
+        JwtDto jwtDto = JwtDto.of(user);
+        String accessToken = jwtManager.generateAccessToken(jwtDto);
+        String refreshToken = jwtManager.generateRefreshToken(jwtDto);
+        return TokenDto.of(user.getId(), accessToken, refreshToken);
     }
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum FileApiResponse implements ApiResponseEnum {
+public enum FileApiResponseEnum implements ApiResponseEnum {
 
     // 400 Bad Request (잘못된 요청)
     INVALID_FILE_FORMAT(HttpStatus.BAD_REQUEST, "지원되지 않는 파일 형식입니다."),
@@ -37,7 +37,7 @@ public enum FileApiResponse implements ApiResponseEnum {
     private final HttpStatus httpStatus;
     private final String message;
 
-    FileApiResponse(HttpStatus httpStatus, String message) {
+    FileApiResponseEnum(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
         this.message = message;
     }

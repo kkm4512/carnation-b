@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-@Schema(description = "피간병인과의 관계 Enum") // Swagger 문서화
+@Schema(description = "환자과의 관계 Enum") // Swagger 문서화
 public enum RelationshipType {
     // 가족 관계
     SON("아들"),

@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum SmsApiResponse implements ApiResponseEnum {
+public enum SmsApiResponseEnum implements ApiResponseEnum {
 
     // 400 Bad Request (잘못된 요청)
     INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "유효하지 않은 전화번호 형식입니다."),
@@ -24,7 +24,7 @@ public enum SmsApiResponse implements ApiResponseEnum {
     private final HttpStatus httpStatus;
     private final String message;
 
-    SmsApiResponse(HttpStatus httpStatus, String message) {
+    SmsApiResponseEnum(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
         this.message = message;
     }

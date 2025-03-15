@@ -44,23 +44,23 @@ public class CareHistory {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "care_giver_id")
-    @Schema(description = "간병인 ID", example = "1")
-    private Caregiver caregiver;
+    @JoinColumn(name = "care_matching_id")
+    @Schema(description = "간병 매칭 ID", example = "1")
+    private CareMatching careMatching;
 
     @Schema(description = "S3에 저장된 미디어 URL 리스트")
     @OneToMany(mappedBy = "careHistory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CareMedia> medias = new ArrayList<>();
 
-    public CareHistory(String text, Caregiver caregiver) {
+    public CareHistory(String text, CareMatching careMatching) {
         this.text = text;
-        this.caregiver = caregiver;
+        this.careMatching = careMatching;
     }
 
-    public static CareHistory of(CareAssignment careAssignment, CareHistoryRequestDto dto) {
+    public static CareHistory of(CareMatching careMatching, CareHistoryRequestDto dto) {
         return new CareHistory(
                 dto.getText(),
-                careAssignment.getCaregiver()
+                careMatching
         );
     }
 }

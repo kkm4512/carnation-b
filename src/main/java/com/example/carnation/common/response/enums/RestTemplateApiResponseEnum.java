@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum RestTemplateApiResponse implements ApiResponseEnum {
+public enum RestTemplateApiResponseEnum implements ApiResponseEnum {
 
     // 400 Bad Request
     FAILED_TO_FETCH_SOCIAL_ACCESS_TOKEN(HttpStatus.BAD_REQUEST, "소셜 로그인 액세스 토큰을 가져오는데 실패했습니다."),
@@ -46,7 +46,7 @@ public enum RestTemplateApiResponse implements ApiResponseEnum {
     private final HttpStatus httpStatus;
     private final String message;
 
-    RestTemplateApiResponse(HttpStatus httpStatus, String message) {
+    RestTemplateApiResponseEnum(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
         this.message = message;
     }

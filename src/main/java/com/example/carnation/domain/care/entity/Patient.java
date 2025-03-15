@@ -1,5 +1,8 @@
 package com.example.carnation.domain.care.entity;
 
+import com.example.carnation.common.exception.CareException;
+import com.example.carnation.common.response.enums.BaseApiResponseEnum;
+import com.example.carnation.common.util.Validator;
 import com.example.carnation.domain.care.dto.PatientRequestDto;
 import com.example.carnation.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,9 +34,17 @@ public class Patient {
     @Schema(description = "환자 이름", example = "김철수")
     private String name;
 
-    @Column(nullable = false, unique = true, length = 14)
-    @Schema(description = "주민등록번호 (14자리)", example = "850101-2345678")
-    private String residentRegistrationNumber;
+    @Column(nullable = false, length = 100)
+    @Schema(description = "환자가 있는 장소", example = "서울특별시 강남구 삼성동")
+    private String location;
+
+    @Column(nullable = false, length = 100)
+    @Schema(description = "환자의 병명", example = "고혈압, 당뇨병")
+    private String diagnosis;
+
+    @Column(nullable = false)
+    @Schema(description = "환자 공개 여부 (매칭 시스템에서 노출 여부)", example = "true")
+    private Boolean isVisible;
 
     @CreatedDate
     @Column(updatable = false)
@@ -45,22 +56,34 @@ public class Patient {
     @Schema(description = "수정일시", example = "2024-03-02T15:30:00")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @Schema(description = "간병 배정을 작성한 사용자 (User)", example = "1")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", unique = true)
+    @Schema(description = "환자와 연결된 사용자 ID", example = "5")
     private User user;
 
-    public Patient(User user, String name, String residentRegistrationNumber) {
+    public Patient(User user, String name, String location, String diagnosis, Boolean isVisible) {
         this.user = user;
         this.name = name;
-        this.residentRegistrationNumber = residentRegistrationNumber;
+        this.location = location;
+        this.diagnosis = diagnosis;
+        this.isVisible = isVisible;
     }
 
     public static Patient of(User user, PatientRequestDto dto) {
         return new Patient(
                 user,
                 dto.getName(),
-                dto.getResidentRegistrationNumber()
+                dto.getLocation(),
+                dto.getDiagnosis(),
+                dto.getIsVisible()
+        );
+    }
+
+    public void isMe(User user){
+        Validator.validateNotNullAndEqual(
+                this.getUser().getId(),
+                user.getId(),
+                new CareException(BaseApiResponseEnum.RESOURCE_NOT_OWNED)
         );
     }
 }

@@ -23,51 +23,50 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCESS;
+import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SUCCESS;
 
 @RestController
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/careHistory")
+@RequestMapping("/api/v1/care-history")
 @Tag(name = "CareHistory API", description = "간병 기록 관리 API")
 public class CareHistoryController {
     private final CareHistoryService careHistoryService;
 
-    @PostMapping(value = "/{careAssignmentId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{careMatchingId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "JWT")
     @Operation(
             summary = "간병 기록 등록",
             description = "간병기록을 등록합니다."
     )
-    public ApiResponse<Void> create(
+    public ApiResponse<Void> generate(
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long careAssignmentId,
+            @PathVariable Long careMatchingId,
             @RequestPart(value = "careHistoryRequestDto") @Valid CareHistoryRequestDto careHistoryRequestDto,
             @RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
             @RequestPart(value = "videoFiles", required = false) List<MultipartFile> videoFiles
     ) {
         CareHistoryFilesRequestDto careHistoryFilesRequestDto = CareHistoryFilesRequestDto.of(imageFiles, videoFiles);
-        careHistoryService.create(authUser, careAssignmentId, careHistoryRequestDto, careHistoryFilesRequestDto);
+        careHistoryService.generate(authUser, careMatchingId, careHistoryRequestDto, careHistoryFilesRequestDto);
         return ApiResponse.of(SUCCESS);
     }
 
 
 
 
-    @GetMapping(value = "/{careAssignmentId}")
+    @GetMapping(value = "/{careMatchingId}")
     @SecurityRequirement(name = "JWT")
     @Operation(
-            summary = "자신의 다건 간병 기록 조회",
-            description = "특정 간병 배정에 대한, 자신의 모든 간병기록을 조회합니다."
+            summary = "특정 간병 매칭에 대한, 자신의 모든 간병인 히스토리를 조회합니다."
     )
-    public ApiResponse<Page<CareHistoryResponseDto>> readAllMePage(
+    public ApiResponse<Page<CareHistoryResponseDto>> findPageMe(
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long careAssignmentId,
+            @PathVariable Long careMatchingId,
             @Parameter(description = "페이징 처리에 필요한 page(페이지 번호), size(페이지 크기), sort(정렬 방식), sortBy(정렬 기준 필드)")
             @ModelAttribute @Valid PageSearchDto pageSearchDto
     ) {
         Pageable pageable = PageSearchDto.of(pageSearchDto);
-        Page<CareHistoryResponseDto> response = careHistoryService.readAllMePage(authUser, careAssignmentId, pageable);
+        Page<CareHistoryResponseDto> response = careHistoryService.findPageMe(authUser, careMatchingId, pageable);
         return ApiResponse.of(SUCCESS,response);
     }
 }

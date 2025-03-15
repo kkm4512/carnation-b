@@ -12,7 +12,7 @@ public class UserCommand {
     private final UserRepository repository;
 
     @Transactional
-    public User save(User entity) {
+    public User create(User entity) {
         return repository.save(entity);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.carnation.domain.file.validation;
 
 import com.example.carnation.common.exception.FileException;
-import com.example.carnation.common.response.enums.FileApiResponse;
+import com.example.carnation.common.response.enums.FileApiResponseEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -30,8 +30,7 @@ public class FileValidation {
     public static void countImagesFiles(List<MultipartFile> files) {
         if (files != null) {
             if (files.size() > MAX_IMAGE_COUNT) {
-                log.error("[파일 개수 초과] 허용된 이미지 파일 개수({}) 초과: {}개", MAX_IMAGE_COUNT, files.size());
-                throw new FileException(FileApiResponse.FILE_COUNT_IMAGE);
+                throw new FileException(FileApiResponseEnum.FILE_COUNT_IMAGE);
             }
         }
     }
@@ -43,8 +42,7 @@ public class FileValidation {
     public static void countVideoFiles(List<MultipartFile> files) {
         if (files != null) {
             if (files.size() > MAX_VIDEO_COUNT) {
-                log.error("[파일 개수 초과] 허용된 동영상 파일 개수({}) 초과: {}개", MAX_VIDEO_COUNT, files.size());
-                throw new FileException(FileApiResponse.FILE_COUNT_VIDEO);
+                throw new FileException(FileApiResponseEnum.FILE_COUNT_VIDEO);
             }
         }
     }
@@ -55,7 +53,7 @@ public class FileValidation {
      */
     public static void validateImageFile(MultipartFile file) {
         if (file != null) {
-            validateFile(file, MAX_IMAGE_SIZE, ALLOWED_IMAGE_EXTENSIONS, FileApiResponse.INVALID_IMAGE_FILE);
+            validateFile(file, MAX_IMAGE_SIZE, ALLOWED_IMAGE_EXTENSIONS, FileApiResponseEnum.INVALID_IMAGE_FILE);
         }
 
     }
@@ -66,7 +64,7 @@ public class FileValidation {
      */
     public static void validateVideoFile(MultipartFile file) {
         if (file != null) {
-            validateFile(file, MAX_VIDEO_SIZE, ALLOWED_VIDEO_EXTENSIONS, FileApiResponse.INVALID_VIDEO_FILE);
+            validateFile(file, MAX_VIDEO_SIZE, ALLOWED_VIDEO_EXTENSIONS, FileApiResponseEnum.INVALID_VIDEO_FILE);
         }
     }
 
@@ -77,10 +75,10 @@ public class FileValidation {
      * @param allowedExtensions 허용된 확장자 리스트
      * @param errorResponse 확장자 오류 시 반환할 예외 응답 Enum
      */
-    private static void validateFile(MultipartFile file, long maxSize, List<String> allowedExtensions, FileApiResponse errorResponse) {
+    private static void validateFile(MultipartFile file, long maxSize, List<String> allowedExtensions, FileApiResponseEnum errorResponse) {
         if (file.getSize() > maxSize) {
             log.error("[파일 검증 실패] 파일 크기 초과: {} bytes (허용 최대: {} bytes) - {}", file.getSize(), maxSize, file.getOriginalFilename());
-            throw new FileException(FileApiResponse.FILE_SIZE_EXCEEDED);
+            throw new FileException(FileApiResponseEnum.FILE_SIZE_EXCEEDED);
         }
 
         String originalFilename = file.getOriginalFilename();

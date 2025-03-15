@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCESS;
+import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
