@@ -26,7 +26,7 @@
 ---
 
 # Tech
-- JavaSpring (3.3.1), Java (17), Mysql (9.2.0), Jpa (latest), Jwt (0.11.5), Git, Github, Docker, Docker-compose, Github-action
+- JavaSpring (3.3.1), Java (17), Mysql (9.2.0), Redis(7.4.1), Jpa (3.1.0), Jwt (0.11.5), Git(2.46.2), Github, Docker(27.4.0), Docker-compose(2.29.7), gradle(8.12.1) Github-action
 
 # Swagger URL 
 - DEPLOY
