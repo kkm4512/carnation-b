@@ -2,10 +2,9 @@ package com.example.carnation.domain.care.controller;
 
 import com.example.carnation.common.dto.PageSearchDto;
 import com.example.carnation.common.response.ApiResponse;
+import com.example.carnation.domain.care.constans.UserType;
 import com.example.carnation.domain.care.dto.CareMatchingRequestDto;
 import com.example.carnation.domain.care.dto.CareMatchingResponse;
-import com.example.carnation.domain.care.dto.CaregiverSimpleResponseDto;
-import com.example.carnation.domain.care.dto.PatientSimpleResponseDto;
 import com.example.carnation.domain.care.service.CareMatchingService;
 import com.example.carnation.security.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,9 +34,12 @@ public class CareMatchingController {
     )
     @SecurityRequirement(name = "JWT")
     public ApiResponse<Void> generate(
+            @AuthenticationPrincipal AuthUser authUser,
+            @RequestParam(value = "userType") UserType userType,
             @RequestBody @Valid CareMatchingRequestDto dto
     ) {
-        careMatchingService.generate(dto);
+        dto.updateUserType(userType);
+        careMatchingService.generate(authUser,dto);
         return ApiResponse.of(SUCCESS);
     }
 
@@ -58,21 +60,6 @@ public class CareMatchingController {
         return ApiResponse.of(SUCCESS, response);
     }
 
-    @GetMapping("/caregiver/available")
-    @Operation(
-            summary = "매칭 가능한 간병인 목록 조회",
-            description = "매칭 가능한 간병인 목록들을 페이지네이션으로 조회합니다."
-    )
-    public ApiResponse<Page<CaregiverSimpleResponseDto>> findPageAvailable(
-            @ModelAttribute @Valid PageSearchDto pageSearchDto
-    ){
-        Pageable pageable = PageSearchDto.of(pageSearchDto);
-        Page<CaregiverSimpleResponseDto> response = careMatchingService.findPageAvailableByCaregiver(pageable);
-        return ApiResponse.of(SUCCESS, response);
-    }
-
-
-
     @Operation(
             summary = "로그인한 유저 (환자)의 간병 매칭 목록 페이지네이션 반환")
     @SecurityRequirement(name = "JWT")
@@ -83,19 +70,6 @@ public class CareMatchingController {
     ) {
         Pageable pageable = PageSearchDto.of(pageSearchDto);
         Page<CareMatchingResponse> response = careMatchingService.findPageByPatient(authUser, pageable);
-        return ApiResponse.of(SUCCESS, response);
-    }
-
-    @GetMapping("/patient/available")
-    @Operation(
-            summary = "매칭 가능한 환자 목록 조회",
-            description = "매칭 가능한 환자 목록들을 페이지네이션으로 조회합니다."
-    )
-    public ApiResponse<Page<PatientSimpleResponseDto>> readAllAvailablePage(
-            @ModelAttribute @Valid PageSearchDto pageSearchDto
-    ){
-        Pageable pageable = PageSearchDto.of(pageSearchDto);
-        Page<PatientSimpleResponseDto> response = careMatchingService.findPageAvailableByPatient(pageable);
         return ApiResponse.of(SUCCESS, response);
     }
 }

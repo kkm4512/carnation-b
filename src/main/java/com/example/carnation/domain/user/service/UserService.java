@@ -11,13 +11,11 @@ import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.domain.user.dto.UserResponseDto;
 import com.example.carnation.domain.user.entity.User;
 import com.example.carnation.security.AuthUser;
-import com.example.carnation.security.JwtManager;
 import com.example.carnation.security.TokenDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.carnation.common.response.enums.UserApiResponseEnum.EMAIL_ALREADY_EXISTS;
 import static com.example.carnation.common.response.enums.UserApiResponseEnum.INVALID_CREDENTIALS;
@@ -30,11 +28,9 @@ public class UserService {
     private final UserQuery userQuery;
     private final UserCommand userCommand;
     private final PasswordEncoder pe;
-    private final JwtManager jm;
     private final RedisService redisService;
     private final TokenService tokenService;
 
-    @Transactional
     public UserResponseDto signUp(final SignupRequestDto dto) {
         Boolean flag = userQuery.existsByEmail(dto.getEmail());
         // 중복된 이메일이 없을 경우
@@ -47,12 +43,10 @@ public class UserService {
         else {
             throw new UserException(EMAIL_ALREADY_EXISTS);
         }
-
     }
 
 
     @SaveRefreshToken
-    @Transactional(readOnly = true)
     public TokenDto signin(final SigninRequestDto dto) {
         User user = userQuery.readByEmail(dto.getEmail());
         user.validateNotSocialAccount();
@@ -61,7 +55,6 @@ public class UserService {
     }
 
 
-    @Transactional
     public void signout(final AuthUser authUser) {
         User user = User.of(authUser);
         redisService.deleteRefreshToken(user.getId());
