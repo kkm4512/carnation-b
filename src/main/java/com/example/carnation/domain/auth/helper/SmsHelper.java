@@ -11,8 +11,8 @@ import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import static com.example.carnation.common.response.enums.BaseApiResponse.INTERNAL_SERVER_ERROR;
-import static com.example.carnation.common.response.enums.SmsApiResponse.*;
+import static com.example.carnation.common.response.enums.BaseApiResponseEnum.INTERNAL_SERVER_ERROR;
+import static com.example.carnation.common.response.enums.SmsApiResponseEnum.*;
 
 @Component
 public class SmsHelper {

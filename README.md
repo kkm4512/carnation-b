@@ -26,7 +26,18 @@
 ---
 
 # Tech
-- JavaSpring (3.3.1), Java (17), Mysql (9.2.0), Jpa (latest), Jwt (0.11.5), Git, Github, Docker, Docker-compose, Github-action
+- JavaSpring (3.3.1), Java (17), Mysql (9.2.0), Redis(7.4.1), Jpa (3.1.0), Jwt (0.11.5), Git(2.46.2), Github, Docker(27.4.0), Docker-compose(2.29.7), gradle(8.12.1) Github-action
 
-# Swagger URL
-https://1a6f-1-229-119-49.ngrok-free.app/docs
+# Swagger URL 
+- DEPLOY
+  - https://829b-1-229-119-49.ngrok-free.app/docs
+- LOCAL
+  - http://localhost:8080/docs
+
+# ERD Tool
+- https://excalidraw.com/
+
+# DEVELOPERS
+- KAKAO_DEVELOPERS=https://developers.kakao.com/
+- NAVER_DEVELOPERS=https://developers.naver.com/
+- GOOGLE_DEVELOPERS=https://console.cloud.google.com/

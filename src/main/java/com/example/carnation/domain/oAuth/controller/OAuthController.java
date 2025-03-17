@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCESS;
+import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SUCCESS;
 
 @RestController
 @RequestMapping("/api/v1/oAuth")

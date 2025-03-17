@@ -2,7 +2,6 @@ package com.example.carnation.security;
 
 import com.example.carnation.common.exception.UserException;
 import com.example.carnation.domain.user.constans.AuthProvider;
-import com.example.carnation.domain.user.constans.UserType;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.example.carnation.common.response.enums.UserApiResponse.NOT_LOGIN;
+import static com.example.carnation.common.response.enums.UserApiResponseEnum.NOT_LOGIN;
 import static com.example.carnation.security.JwtManager.AUTHORIZATION_HEADER;
 import static com.example.carnation.security.JwtManager.BEARER_PREFIX;
 
@@ -61,14 +60,12 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
                 String email = claims.get("email", String.class);
                 String nickname = claims.get("nickname", String.class);
                 String userRoleString = claims.get("userRole", String.class);
-                String userTypeString = claims.get("userType", String.class);
                 String authProviderString = claims.get("authProvider", String.class);
                 UserRole userRole = UserRole.valueOf(userRoleString);
-                UserType userType = UserType.valueOf(userTypeString);
                 AuthProvider authProvider = AuthProvider.valueOf(authProviderString);
 
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                    AuthUser authUser = new AuthUser(userId, email, nickname, userRole,userType,authProvider);
+                    AuthUser authUser = new AuthUser(userId, email, nickname, userRole,authProvider);
                     JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(authUser);
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);

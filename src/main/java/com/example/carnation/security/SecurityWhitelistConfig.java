@@ -26,9 +26,13 @@ public class SecurityWhitelistConfig {
                     "/docs",
                     "/api/v1/oAuth/**",
                     "/favicon.ico",
-                    "/socialLoginURL"
+                    "/socialLoginURL",
+                    "/api/v1/caregiver/**",
+                    "/api/v1/patient/**"
             ),
-            HttpMethod.OPTIONS, List.of("/**") // Preflight 요청 허용
+            HttpMethod.OPTIONS, List.of(
+                    "/**"
+            ) // Preflight 요청 허용
     );
 
 }

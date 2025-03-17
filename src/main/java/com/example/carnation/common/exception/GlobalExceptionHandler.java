@@ -15,7 +15,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.example.carnation.common.response.enums.BaseApiResponse.*;
+import static com.example.carnation.common.response.enums.BaseApiResponseEnum.*;
 
 @RestControllerAdvice
 @Slf4j(topic = "GlobalExceptionHandler")

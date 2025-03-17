@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import static com.example.carnation.common.response.enums.BaseApiResponse.INTERNAL_SERVER_ERROR;
-import static com.example.carnation.common.response.enums.RestTemplateApiResponse.*;
+import static com.example.carnation.common.response.enums.BaseApiResponseEnum.INTERNAL_SERVER_ERROR;
+import static com.example.carnation.common.response.enums.RestTemplateApiResponseEnum.*;
 
 @Configuration
 @Slf4j(topic = "RestTemplateConfig")

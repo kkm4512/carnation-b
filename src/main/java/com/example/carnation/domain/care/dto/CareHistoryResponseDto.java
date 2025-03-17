@@ -29,7 +29,7 @@ public class CareHistoryResponseDto {
     private LocalDateTime updatedAt;
 
     @Schema(description = "S3에 저장된 미디어 리스트")
-    private List<CareMediaDto> medias;
+    private List<CareMediaResponse> medias;
 
     public static CareHistoryResponseDto of(CareHistory entity) {
         return new CareHistoryResponseDto(
@@ -37,7 +37,7 @@ public class CareHistoryResponseDto {
                 entity.getText(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
-                CareMediaDto.of(entity.getMedias())
+                CareMediaResponse.of(entity.getMedias())
         );
     }
 }

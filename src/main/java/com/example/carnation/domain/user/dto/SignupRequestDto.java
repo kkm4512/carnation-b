@@ -1,6 +1,5 @@
 package com.example.carnation.domain.user.dto;
 
-import com.example.carnation.domain.user.constans.UserType;
 import com.example.carnation.security.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -53,6 +52,11 @@ public class SignupRequestDto {
     @Schema(description = "사용자 역할 (ROLE_USER, ROLE_ADMIN 등)", example = "ROLE_USER", nullable = true, defaultValue = "ROLE_USER")
     private UserRole userRole;
 
-    @Schema(description = "사용자 유형 (CAREGIVER, PATIENT)", example = "CAREGIVER", nullable = true, defaultValue = "CAREGIVER")
-    private UserType userType;
+    @Schema(description = "주민등록번호 (13자리)", example = "900101-2345678")
+    @NotBlank(message = "주민등록번호는 필수 입력 항목입니다.") // 빈 값 불가
+    @Pattern(
+            regexp = "^(\\d{6})-(\\d{7})$",
+            message = "주민등록번호 형식이 올바르지 않습니다. (예: 900101-2345678)"
+    ) // 6자리-7자리 숫자 형식 검증
+    private String residentRegistrationNumber;
 }

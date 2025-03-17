@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.carnation.common.response.enums.BaseApiResponse.SUCCESS;
-import static com.example.carnation.common.response.enums.OAuthApiResponse.OAUTH_NOT_FOUND_PROVIDER;
+import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SUCCESS;
+import static com.example.carnation.common.response.enums.OAuthApiResponseEnum.OAUTH_NOT_FOUND_PROVIDER;
 
 @RestController
 @Tag(name = "OAuth Login Redirect URL API")
@@ -24,7 +24,7 @@ public class OAuthRedirectController {
             summary = "OAuth 로그인 페이지 리다이렉트 URL 생성",
             description = "카카오, 네이버, 구글 로그인 페이지의 URL을 생성하여 반환합니다."
     )
-    @GetMapping("/socialLoginURL")
+    @GetMapping("/social-login-url")
     public ApiResponse<String> getSocialLoginURL(
             @RequestParam("name") OAuthProviderName oAuthProviderName
     ) {
