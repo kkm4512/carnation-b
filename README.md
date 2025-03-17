@@ -30,7 +30,7 @@
 
 # Swagger URL 
 - DEPLOY
-  - https://1a6f-1-229-119-49.ngrok-free.app/docs
+  - https://829b-1-229-119-49.ngrok-free.app/docs
 - LOCAL
   - http://localhost:8080/docs
 
