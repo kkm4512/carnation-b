@@ -2,7 +2,7 @@ package com.example.carnation.domain.oAuth.dto;
 
 import com.example.carnation.common.exception.OAuthException;
 import com.example.carnation.domain.oAuth.constans.OAuthProviderName;
-import com.example.carnation.init.OAuthProperties;
+import com.example.carnation.init.StaticProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,21 +48,21 @@ public class OAuthProviderDto {
             case KAKAO -> new OAuthProviderDto(KAKAO,
                     "https://kauth.kakao.com/oauth/token",
                     "https://kapi.kakao.com/v2/user/me",
-                    OAuthProperties.getRedirectUrl() + "?oAuthProviderName=" + oAuthProviderName.name(),
+                    StaticProperties.getRedirectUrl() + "?oAuthProviderName=" + oAuthProviderName.name(),
                     code
             );
 
             case NAVER -> new OAuthProviderDto(NAVER,
                     "https://nid.naver.com/oauth2.0/token",
                     "https://openapi.naver.com/v1/nid/me",
-                    OAuthProperties.getRedirectUrl() + "?oAuthProviderName=" + oAuthProviderName.name(),
+                    StaticProperties.getRedirectUrl() + "?oAuthProviderName=" + oAuthProviderName.name(),
                     code
             );
 
             case GOOGLE -> new OAuthProviderDto(GOOGLE,
                     "https://oauth2.googleapis.com/token",
                     "https://www.googleapis.com/oauth2/v3/userinfo",
-                    OAuthProperties.getRedirectUrl() + "?oAuthProviderName=" + oAuthProviderName.name(),
+                    StaticProperties.getRedirectUrl() + "?oAuthProviderName=" + oAuthProviderName.name(),
                     code
             );
 

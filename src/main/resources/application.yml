@@ -53,13 +53,25 @@ social:
     scope:
       - email
       - profile
-      -
+
 coolsms:
   api:
     key: ${COOLSMS_KEY}
     secret: ${COOLSMS_SECRET_KEY}
     fromNumber: ${COOLSMS_FROM_PHONE_NUMBER}
     url: ${COOLSMS_URL}
+
+payment:
+  kakao:
+    client-id: ${KAKAO_PAYMENT_CLIENT_ID}
+    secret: ${KAKAO_PAYMENT_SECRET}
+    secret-key: ${KAKAO_PAYMENT_SECRET_KEY}
+    secret-key-dev: ${KAKAO_PAYMENT_SECRET_KEY_DEV}
+  toss:
+    client-id: ${TOSS_PAYMENT_CLIENT_ID}
+    secret-key: ${TOSS_PAYMENT_SECRET_KEY}
+    security-key: ${TOSS_PAYMENT_SECURITY_KEY}
+
 
 
 

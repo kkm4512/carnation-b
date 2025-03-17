@@ -12,8 +12,8 @@ public class SecurityWhitelistConfig {
     // 특정 HTTP 메서드별 허용 경로
     public static final Map<HttpMethod, List<String>> PERMIT_METHODS = Map.of(
             HttpMethod.POST, List.of(
-                    "/api/v1/users/signup",
-                    "/api/v1/users/signin",
+                    "/api/v1/user/signup",
+                    "/api/v1/user/signin",
                     "/api/v1/token/**",
                     "/api/v1/auth/**"
             ),
@@ -26,7 +26,7 @@ public class SecurityWhitelistConfig {
                     "/docs",
                     "/api/v1/oAuth/**",
                     "/favicon.ico",
-                    "/socialLoginURL",
+                    "/social-login-url",
                     "/api/v1/caregiver/**",
                     "/api/v1/patient/**"
             ),
