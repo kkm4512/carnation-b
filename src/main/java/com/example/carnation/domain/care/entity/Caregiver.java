@@ -55,7 +55,7 @@ public class Caregiver {
     @Schema(description = "수정일시", example = "2024-03-01T10:00:00")
     private LocalDateTime updatedAt;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 

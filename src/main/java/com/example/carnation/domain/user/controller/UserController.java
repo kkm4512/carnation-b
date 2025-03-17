@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SUCCESS;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 @Tag(name = "User API", description = "사용자 회원가입 및 로그인 API") // 컨트롤러 전체에 대한 설명
 public class UserController {

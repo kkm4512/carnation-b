@@ -47,10 +47,12 @@ public class UserResponseDto {
                 user.getNickname(),
                 user.getEmail(),
                 user.getUserRole(),
-                PatientSimpleResponseDto.of(user.getPatient()),
-                CaregiverSimpleResponseDto.of(user.getCaregiver()),
+                (user.getPatient() != null) ? PatientSimpleResponseDto.of(user.getPatient()) : null,
+                (user.getCaregiver() != null) ? CaregiverSimpleResponseDto.of(user.getCaregiver()) : null,
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );
     }
+
+
 }
