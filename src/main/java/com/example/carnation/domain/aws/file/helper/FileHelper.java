@@ -1,4 +1,4 @@
-package com.example.carnation.domain.file.helper;
+package com.example.carnation.domain.aws.file.helper;
 
 import com.example.carnation.common.exception.FileException;
 import com.example.carnation.common.response.enums.FileApiResponseEnum;

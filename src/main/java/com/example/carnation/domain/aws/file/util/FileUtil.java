@@ -1,4 +1,4 @@
-package com.example.carnation.domain.file.util;
+package com.example.carnation.domain.aws.file.util;
 
 import org.springframework.web.multipart.MultipartFile;
 

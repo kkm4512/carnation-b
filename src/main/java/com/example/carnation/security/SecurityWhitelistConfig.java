@@ -27,8 +27,8 @@ public class SecurityWhitelistConfig {
                     "/api/v1/oAuth/**",
                     "/favicon.ico",
                     "/socialLoginURL",
-                    "/api/v1/care-matching/caregiver/available",
-                    "/api/v1/care-matching/patient/available"
+                    "/api/v1/caregiver/**",
+                    "/api/v1/patient/**"
             ),
             HttpMethod.OPTIONS, List.of(
                     "/**"

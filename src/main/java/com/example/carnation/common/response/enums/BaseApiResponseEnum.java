@@ -25,7 +25,6 @@ public enum BaseApiResponseEnum implements ApiResponseEnum {
 
     // 409
     CONFLICT(HttpStatus.CONFLICT,"중복값이 발생 하였습니다"),
-    SELF_CARE_ASSIGNMENT_NOT_ALLOWED(HttpStatus.CONFLICT, "자기 자신이, 자신의 것에게 접근 불가한 리소스 입니다"),
 
     // 500
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류가 발생했습니다, 관리자에게 문의 해주세요");

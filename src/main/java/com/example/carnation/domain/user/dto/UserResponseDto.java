@@ -1,5 +1,7 @@
 package com.example.carnation.domain.user.dto;
 
+import com.example.carnation.domain.care.dto.CaregiverSimpleResponseDto;
+import com.example.carnation.domain.care.dto.PatientSimpleResponseDto;
 import com.example.carnation.domain.user.entity.User;
 import com.example.carnation.security.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,6 +29,12 @@ public class UserResponseDto {
     @Schema(description = "사용자 역할 (ROLE_ADMIN, ROLE_USER 등)", example = "ROLE_USER")
     private UserRole userRole;
 
+    @Schema(description = "환자 정보 요약 응답 DTO")
+    private PatientSimpleResponseDto patientSimpleResponseDto;
+
+    @Schema(description = "간병인 정보 요약 응답 DTO")
+    private CaregiverSimpleResponseDto caregiverSimpleResponseDto;
+
     @Schema(description = "생성 날짜 (자동 입력)", example = "2024-03-01T10:00:00")
     private LocalDateTime createdAt;
 
@@ -39,6 +47,8 @@ public class UserResponseDto {
                 user.getNickname(),
                 user.getEmail(),
                 user.getUserRole(),
+                PatientSimpleResponseDto.of(user.getPatient()),
+                CaregiverSimpleResponseDto.of(user.getCaregiver()),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );

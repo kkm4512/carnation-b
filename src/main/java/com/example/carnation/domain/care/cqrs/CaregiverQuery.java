@@ -21,7 +21,7 @@ public class CaregiverQuery {
     }
 
     @Transactional(readOnly = true)
-    public Page<Caregiver> readPageAvailable(Pageable pageable) {
+    public Page<Caregiver> readPageByAvailable(Pageable pageable) {
         return repository.findAllByIsVisibleTrue(pageable);
     }
 

@@ -21,7 +21,7 @@ public class PatientQuery {
     }
 
     @Transactional(readOnly = true)
-    public Page<Patient> readPageAvailable(Pageable pageable) {
+    public Page<Patient> readPageByAvailable(Pageable pageable) {
         return repository.findAllByIsVisibleTrue(pageable);
     }
 
