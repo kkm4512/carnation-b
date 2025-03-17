@@ -4,7 +4,7 @@ import com.example.carnation.common.exception.RestTemplateException;
 import com.example.carnation.common.response.enums.RestTemplateApiResponseEnum;
 import com.example.carnation.domain.oAuth.dto.OAuthProviderDto;
 import com.example.carnation.domain.oAuth.dto.OAuthUserDto;
-import com.example.carnation.domain.oAuth.service.interfaces.SocialLoginStrategy;
+import com.example.carnation.domain.oAuth.service.interfaces.SocialLoginService;
 import com.example.carnation.domain.user.constans.AuthProvider;
 import com.example.carnation.domain.user.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,24 +27,22 @@ import java.util.Map;
 
 import static com.example.carnation.common.response.enums.RestTemplateApiResponseEnum.FAILED_TO_FETCH_SOCIAL_ACCESS_TOKEN;
 
-@Slf4j(topic = "NaverStrategy")
+@Slf4j(topic = "KakaoStrategy")
 @RequiredArgsConstructor
-public class NaverStrategy implements SocialLoginStrategy {
-    private final OAuthProviderDto oAuthProviderDto;
+public class KakaoLoginServiceImpl implements SocialLoginService {
+    private final OAuthProviderDto providerDto;
     private final String clientId;
-    private final String clientSecret;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+
 
     @Override
     public String getAccessToken(OAuthProviderDto dto) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", clientId);
-        params.add("client_secret", clientSecret);
         params.add("redirect_uri", dto.getRedirectUrl());
         params.add("code", dto.getCode());
-        params.add("client_secret", clientSecret);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -52,7 +50,7 @@ public class NaverStrategy implements SocialLoginStrategy {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
         Map<String, Object> response = restTemplate.exchange(
-                oAuthProviderDto.getTokenUrl(),
+                providerDto.getTokenUrl(),
                 HttpMethod.POST,
                 request,
                 new ParameterizedTypeReference<Map<String, Object>>() {}
@@ -65,7 +63,7 @@ public class NaverStrategy implements SocialLoginStrategy {
     }
 
     @Override
-    public User getUser(OAuthProviderDto dto) {
+    public User getUser(OAuthProviderDto oAuthProviderDto) {
         try {
             String url = oAuthProviderDto.getUserInfoUrl();
             HttpHeaders headers = new HttpHeaders();
@@ -79,29 +77,30 @@ public class NaverStrategy implements SocialLoginStrategy {
             }
 
             JsonNode jsonNode = objectMapper.readTree(responseBody);
-            JsonNode responseNode = jsonNode.get("response");
-            String email = responseNode.get("email").asText();
-            String nickname = responseNode.get("nickname").asText();
+            String email = jsonNode.get("kakao_account").get("email").asText();
+            String nickname = jsonNode.get("properties").get("nickname").asText();
             OAuthUserDto oAuthUserDto = OAuthUserDto.of(email, nickname);
-            return User.of(oAuthUserDto, AuthProvider.NAVER);
+            return User.of(oAuthUserDto, AuthProvider.KAKAO);
         } catch (HttpClientErrorException e) {
             log.error("OAuth API 호출 실패: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponseEnum.FAILED_TO_FETCH_SOCIAL_USER_INFO,e);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.FAILED_TO_FETCH_SOCIAL_USER_INFO);
         } catch (HttpServerErrorException e) {
             log.error("OAuth 제공자 서버 오류 발생: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponseEnum.OAUTH_PROVIDER_SERVER_ERROR,e);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.OAUTH_PROVIDER_SERVER_ERROR);
         } catch (JsonProcessingException e) {
             log.error("OAuth 응답 JSON 파싱 실패: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponseEnum.INVALID_SOCIAL_RESPONSE,e);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.INVALID_SOCIAL_RESPONSE);
         } catch (IllegalArgumentException e) {
             log.error("OAuth 응답 데이터 형식 오류: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponseEnum.INVALID_SOCIAL_USER_INFO,e);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.INVALID_SOCIAL_USER_INFO);
         } catch (RestTemplateException e) {
             log.error("RestTemplate 요청 오류: {}", e.getMessage());
             throw e; // 이미 정의된 RestTemplateException 그대로 던지기
         } catch (Exception e) {
             log.error("예상치 못한 오류 발생: {}", e.getMessage());
-            throw new RestTemplateException(RestTemplateApiResponseEnum.UNEXPECTED_ERROR,e);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.UNEXPECTED_ERROR);
         }
     }
+
+
 }

@@ -8,8 +8,6 @@ import com.example.carnation.domain.care.entity.CareMatching;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
 import com.example.carnation.domain.user.constans.AuthProvider;
-import com.example.carnation.domain.user.dto.SigninRequestDto;
-import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.domain.user.entity.User;
 import com.example.carnation.security.AuthUser;
 import com.example.carnation.security.UserRole;
@@ -59,21 +57,6 @@ public class CareMockTestInfo {
         return new User(ID_2, NICKNAME_2, EMAIL_2, PHONE_2, PASSWORD_2, ROLE, SSN_2, PROVIDER, NOW, NOW, null, null);
     }
 
-    public static SignupRequestDto getSignupRequestDto1() {
-        return new SignupRequestDto(EMAIL_1, PASSWORD_1, NICKNAME_1, PHONE_1, ROLE, SSN_1);
-    }
-
-    public static SignupRequestDto getSignupRequestDto2() {
-        return new SignupRequestDto(EMAIL_2, PASSWORD_2, NICKNAME_2, PHONE_2, ROLE, SSN_2);
-    }
-
-    public static SigninRequestDto getSigninRequestDto1() {
-        return new SigninRequestDto(EMAIL_1, PASSWORD_1);
-    }
-
-    public static SigninRequestDto getSigninRequestDto2() {
-        return new SigninRequestDto(EMAIL_2, PASSWORD_2);
-    }
 
     public static CaregiverRequestDto getCaregiverRequestDto1() {
         return new CaregiverRequestDto("이영희", 170.5, 65.3, true);
@@ -114,19 +97,19 @@ public class CareMockTestInfo {
 
     // ✅ CareMatchingRequestDto (매칭 요청 DTO)
     public static CareMatchingRequestDto getCareMatchingRequestDtoForCaregiver1() {
-        return new CareMatchingRequestDto(ID_1,UserType.CAREGIVER,NOW,NOW);
+        return new CareMatchingRequestDto(ID_1,UserType.CAREGIVER,NOW,NOW,10000);
     }
 
     public static CareMatchingRequestDto getCareMatchingRequestDtoForCaregiver2() {
-        return new CareMatchingRequestDto(ID_2,UserType.CAREGIVER,NOW,NOW);
+        return new CareMatchingRequestDto(ID_2,UserType.CAREGIVER,NOW,NOW,10000);
     }
 
     public static CareMatchingRequestDto getCareMatchingRequestDtoForPatient1() {
-        return new CareMatchingRequestDto(ID_1,UserType.PATIENT,NOW,NOW);
+        return new CareMatchingRequestDto(ID_1,UserType.PATIENT,NOW,NOW,10000);
     }
 
     public static CareMatchingRequestDto getCareMatchingRequestDtoForPatient2() {
-        return new CareMatchingRequestDto(ID_2,UserType.PATIENT,NOW,NOW);
+        return new CareMatchingRequestDto(ID_2,UserType.PATIENT,NOW,NOW,10000);
     }
 
     // ✅ CareMatching (매칭 엔티티)

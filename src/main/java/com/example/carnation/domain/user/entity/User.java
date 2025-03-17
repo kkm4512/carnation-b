@@ -6,6 +6,7 @@ import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
 import com.example.carnation.domain.oAuth.dto.OAuthUserDto;
 import com.example.carnation.domain.user.constans.AuthProvider;
+import com.example.carnation.domain.user.constans.BankType;
 import com.example.carnation.domain.user.dto.SignupRequestDto;
 import com.example.carnation.security.AuthUser;
 import com.example.carnation.security.UserRole;
@@ -45,7 +46,7 @@ public class User {
 
     /** 사용자 이메일 (고유값, 필수) */
     @Schema(description = "사용자 이메일 (고유값, 필수)", example = "nayoyn440@naerv.com")
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
     /** 📌 사용자의 휴대폰 번호 */
@@ -53,7 +54,7 @@ public class User {
             description = "사용자의 휴대폰 번호 (고유값, 필수 입력)",
             example = "01012345678"
     )
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String phoneNumber;
 
     /** 비밀번호 (해시 암호화 저장) */
@@ -66,7 +67,7 @@ public class User {
     @Column(nullable = false)
     private UserRole userRole;
 
-    @Column(nullable = false, unique = true, length = 14)
+    @Column(unique = true, length = 14)
     @Schema(description = "주민등록번호 (14자리)", example = "850101-2345678")
     private String residentRegistrationNumber;
 
@@ -100,6 +101,11 @@ public class User {
     @Schema(description = "유저 - 간병인 매핑 (UserPatient)", example = "1")
     private Caregiver caregiver;
 
+    /** 💰 사용자 계좌 정보 */
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_wallet_id", unique = true)
+    private UserWallet userWallet;
+
     // AuthUser -> User
     public User(Long id, String nickname, String email, UserRole userRole) {
         this.id = id;
@@ -108,8 +114,24 @@ public class User {
         this.userRole = userRole != null ? userRole : UserRole.ROLE_USER; // 기본값 적용
     }
 
+    // User Test
+    public User(Long id, String nickname, String email, String phoneNumber, String password, UserRole userRole, String residentRegistrationNumber, AuthProvider authProvider, LocalDateTime createdAt, LocalDateTime updatedAt, Patient patient, Caregiver caregiver) {
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.userRole = userRole;
+        this.residentRegistrationNumber = residentRegistrationNumber;
+        this.authProvider = authProvider;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.patient = patient;
+        this.caregiver = caregiver;
+    }
+
     // 일반 회원가입
-    public User(String nickname, String email, String password, String phoneNumber, UserRole userRole, String residentRegistrationNumber) {
+    public User(String nickname, String email, String password, String phoneNumber, UserRole userRole, String residentRegistrationNumber, BankType bank, String accountNumber) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
@@ -117,6 +139,7 @@ public class User {
         this.userRole = userRole != null ? userRole : UserRole.ROLE_USER; // 기본값 적용
         this.authProvider = AuthProvider.GENERAL;
         this.residentRegistrationNumber = residentRegistrationNumber;
+        this.userWallet = UserWallet.of(this,bank,accountNumber);;
     }
 
     // 소셜 회원가입
@@ -125,8 +148,10 @@ public class User {
         this.nickname = nickname;
         this.userRole = UserRole.ROLE_USER; // 기본값 적용
         this.authProvider = authProvider;
+        this.userWallet = UserWallet.of(this);
     }
 
+    // AuthUser -> User
     public static User of(AuthUser authUser){
         String roleName = authUser.getAuthorities()
                 .stream()
@@ -143,7 +168,7 @@ public class User {
         );
     }
 
-    // 소셜 회원가입
+    // 소셜 회원가입 - of
     public static User of(OAuthUserDto dto, AuthProvider authProvider){
         return new User(
                 dto.getEmail(),
@@ -152,7 +177,7 @@ public class User {
         );
     }
 
-    // 일반 회원가입
+    // 일반 회원가입 - of
     public static User of(SignupRequestDto dto, String encodedPassword){
         return new User(
             dto.getNickname(),
@@ -160,7 +185,9 @@ public class User {
             encodedPassword,
             dto.getPhoneNumber(),
             dto.getUserRole(),
-            dto.getResidentRegistrationNumber()
+            dto.getResidentRegistrationNumber(),
+            dto.getBank(),
+            dto.getAccountNumber()
         );
     }
 

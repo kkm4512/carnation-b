@@ -56,7 +56,7 @@ public class Patient {
     @Schema(description = "수정일시", example = "2024-03-02T15:30:00")
     private LocalDateTime updatedAt;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "user_id", unique = true)
     @Schema(description = "환자와 연결된 사용자 ID", example = "5")
     private User user;

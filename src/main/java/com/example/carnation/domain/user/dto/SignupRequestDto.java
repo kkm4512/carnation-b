@@ -1,11 +1,9 @@
 package com.example.carnation.domain.user.dto;
 
+import com.example.carnation.domain.user.constans.BankType;
 import com.example.carnation.security.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,4 +57,14 @@ public class SignupRequestDto {
             message = "주민등록번호 형식이 올바르지 않습니다. (예: 900101-2345678)"
     ) // 6자리-7자리 숫자 형식 검증
     private String residentRegistrationNumber;
+
+    /** 사용자의 은행 */
+    @Schema(description = "사용자의 은행", example = "KEB_HANA")
+    @NotNull(message = "은행은 필수 입력 항목입니다.")  // ✅ Enum에는 @NotNull 사용!
+    private BankType bank;
+
+    /** 사용자의 계좌번호 */
+    @Schema(description = "사용자의 계좌번호", example = "123-4567-8910")
+    private String accountNumber;
+
 }

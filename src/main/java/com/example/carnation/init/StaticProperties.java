@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OAuthProperties {
+public class StaticProperties {
 
     @Value("${social.redirect.url}")
     private String redirectUrl;

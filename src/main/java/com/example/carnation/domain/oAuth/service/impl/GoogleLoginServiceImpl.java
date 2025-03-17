@@ -4,7 +4,7 @@ import com.example.carnation.common.exception.RestTemplateException;
 import com.example.carnation.common.response.enums.RestTemplateApiResponseEnum;
 import com.example.carnation.domain.oAuth.dto.OAuthProviderDto;
 import com.example.carnation.domain.oAuth.dto.OAuthUserDto;
-import com.example.carnation.domain.oAuth.service.interfaces.SocialLoginStrategy;
+import com.example.carnation.domain.oAuth.service.interfaces.SocialLoginService;
 import com.example.carnation.domain.user.constans.AuthProvider;
 import com.example.carnation.domain.user.entity.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -29,7 +29,7 @@ import static com.example.carnation.common.response.enums.RestTemplateApiRespons
 
 @Slf4j(topic = "GoogleStrategy")
 @RequiredArgsConstructor
-public class GoogleStrategy implements SocialLoginStrategy {
+public class GoogleLoginServiceImpl implements SocialLoginService {
     private final OAuthProviderDto oAuthProviderDto;
     private final String clientId;
     private final String clientSecret;
