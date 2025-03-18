@@ -1,15 +1,16 @@
 server:
-  port: ${SERVER_LOCAL_PORT}
+  port: ${LOCAL_PORT}
+  url: ${LOCAL_URL}
 
 swagger:
-  server-url: ${SERVER_LOCAL_URL}
+  server-url: ${LOCAL_URL}
 # DB config
 spring:
   config:
     import: optional:file:.env[.properties]
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_LOCAL_HOST}:${MYSQL_LOCAL_PORT}/${MYSQL_DB_NAME}?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://${LOCAL_HOST}:${MYSQL_LOCAL_PORT}/${MYSQL_DB_NAME}?serverTimezone=Asia/Seoul
     username: ${MYSQL_NAME}
     password: ${MYSQL_PASSWORD}
   # DB update
@@ -25,12 +26,13 @@ spring:
 
   data:
     redis:
-      host: ${REDIS_HOST_LOCAL}
+      host: ${LOCAL_HOST}
       port: ${REDIS_PORT_LOCAL}
 
 
 social:
   redirect:
     url: ${SOCIAL_REDIRECT_URL_LOCAL}
+
 
 

@@ -1,6 +1,6 @@
 package com.example.carnation.domain.care.service;
 
-import com.example.carnation.domain.care.CareMockTestInfo;
+import com.example.carnation.domain.care.MockCareTestInfo;
 import com.example.carnation.common.dto.constans.SortByEnum;
 import com.example.carnation.domain.care.cqrs.CaregiverQuery;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
@@ -23,11 +23,12 @@ import org.springframework.data.domain.*;
 
 import java.util.List;
 
+import static com.example.carnation.domain.user.MockUserTestInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CaregiverServiceTest {
+class CaregiverServiceUnitTest {
 
     @InjectMocks
     private CaregiverService caregiverService; // 테스트 대상
@@ -50,19 +51,19 @@ class CaregiverServiceTest {
 
     @BeforeEach
     void setUp() {
-        authUser1 = CareMockTestInfo.getAuthUser1();
-        user1 = CareMockTestInfo.getUser1(); // User 객체 생성
+        authUser1 = getAuthUser1();
+        user1 = getUser1(); // User 객체 생성
 
         // Patient 및 Caregiver 객체 생성 후, User에 설정
-        Patient patient1 = CareMockTestInfo.getPatient1();
-        Caregiver caregiver1 = CareMockTestInfo.getCaregiver1();
+        Patient patient1 = MockCareTestInfo.getPatient1();
+        Caregiver caregiver1 = MockCareTestInfo.getCaregiver1();
         user1.updatePatient(patient1);
         user1.updateCareGiver(caregiver1);
-        caregiverRequestDto = CareMockTestInfo.getCaregiverRequestDto1();
+        caregiverRequestDto = MockCareTestInfo.getCaregiverRequestDto1();
 
         pageable = PageRequest.of(0, 10, Sort.by(SortByEnum.CREATED_AT.getDescription()).ascending());
-        this.caregiver1 = CareMockTestInfo.getCaregiver1();
-        caregiver2 = CareMockTestInfo.getCaregiver2();
+        this.caregiver1 = MockCareTestInfo.getCaregiver1();
+        caregiver2 = MockCareTestInfo.getCaregiver2();
     }
 
     @Test

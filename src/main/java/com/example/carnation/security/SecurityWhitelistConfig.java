@@ -26,9 +26,10 @@ public class SecurityWhitelistConfig {
                     "/docs",
                     "/api/v1/oAuth/**",
                     "/favicon.ico",
-                    "/social-login-url",
+                    "/api/v1/social-login-url",
                     "/api/v1/caregiver/**",
-                    "/api/v1/patient/**"
+                    "/api/v1/patient/**",
+                    "/api/v1/payment/kakao/callback/**"
             ),
             HttpMethod.OPTIONS, List.of(
                     "/**"
