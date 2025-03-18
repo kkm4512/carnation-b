@@ -1,8 +1,9 @@
 server:
-  port: ${SERVER_DEPLOY_PORT}
+  port: ${DEPLOY_PORT}
+  url: ${DEPLOY_URL}
 
 swagger:
-  server-url: ${SERVER_DEPLOY_URL}
+  server-url: ${DEPLOY_URL}
 
 # DB config
 spring:

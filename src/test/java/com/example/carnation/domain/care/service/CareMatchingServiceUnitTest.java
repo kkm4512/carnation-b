@@ -1,6 +1,6 @@
 package com.example.carnation.domain.care.service;
 
-import com.example.carnation.domain.care.CareMockTestInfo;
+import com.example.carnation.domain.care.MockCareTestInfo;
 import com.example.carnation.domain.care.cqrs.CareMatchingCommand;
 import com.example.carnation.domain.care.cqrs.CareMatchingQuery;
 import com.example.carnation.domain.care.cqrs.CaregiverQuery;
@@ -24,11 +24,12 @@ import org.springframework.data.domain.*;
 
 import java.util.List;
 
+import static com.example.carnation.domain.user.MockUserTestInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CareMatchingServiceTest {
+class CareMatchingServiceUnitTest {
 
     @InjectMocks
     private CareMatchingService careMatchingService; // 테스트 대상
@@ -66,24 +67,24 @@ class CareMatchingServiceTest {
 
     @BeforeEach
     void setUp() {
-        authUser1 = CareMockTestInfo.getAuthUser1();
-        authUser2 = CareMockTestInfo.getAuthUser2();
-        user1 = CareMockTestInfo.getUser1();
-        user2 = CareMockTestInfo.getUser2();
-        caregiver1 = CareMockTestInfo.getCaregiver1();
-        patient1 = CareMockTestInfo.getPatient1();
-        caregiver2 = CareMockTestInfo.getCaregiver2();
-        patient2 = CareMockTestInfo.getPatient2();
+        authUser1 = getAuthUser1();
+        authUser2 = getAuthUser2();
+        user1 = getUser1();
+        user2 = getUser2();
+        caregiver1 = MockCareTestInfo.getCaregiver1();
+        patient1 = MockCareTestInfo.getPatient1();
+        caregiver2 = MockCareTestInfo.getCaregiver2();
+        patient2 = MockCareTestInfo.getPatient2();
 
         pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
 
-        requestDtoPatient1 = CareMockTestInfo.getCareMatchingRequestDtoForPatient1();
-        requestDtoPatient2 = CareMockTestInfo.getCareMatchingRequestDtoForPatient2();
-        requestDtoCaregiver1 = CareMockTestInfo.getCareMatchingRequestDtoForCaregiver1();
-        requestDtoCaregiver2 = CareMockTestInfo.getCareMatchingRequestDtoForCaregiver2();
+        requestDtoPatient1 = MockCareTestInfo.getCareMatchingRequestDtoForPatient1();
+        requestDtoPatient2 = MockCareTestInfo.getCareMatchingRequestDtoForPatient2();
+        requestDtoCaregiver1 = MockCareTestInfo.getCareMatchingRequestDtoForCaregiver1();
+        requestDtoCaregiver2 = MockCareTestInfo.getCareMatchingRequestDtoForCaregiver2();
 
-        careMatching1 = CareMockTestInfo.getCareMatching1();
-        careMatching2 = CareMockTestInfo.getCareMatching2();
+        careMatching1 = MockCareTestInfo.getCareMatching1();
+        careMatching2 = MockCareTestInfo.getCareMatching2();
 
         user1.updatePatient(patient1);
         user1.updateCareGiver(caregiver1);
