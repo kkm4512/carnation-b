@@ -29,7 +29,7 @@ public class UserWalletController {
      */
     @PostMapping("/transfer")
     @SecurityRequirement(name = "JWT")
-    @Operation(summary = "카네이션 내부 자신이 타인에게 송금 보냄", description = "로그인한 사용자가 다른 사용자에게 금액을 송금하는 API")
+    @Operation(summary = "카네이션 내부 (카네이션 가상 계좌) 자신 -> 카네이션 내부 (카네이션 가상 계좌) 타인에게 송금", description = "로그인한 사용자가 다른 사용자에게 금액을 송금하는 API")
     public ApiResponse<Void> transfer(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody UserTransferRequestDto dto
@@ -43,7 +43,7 @@ public class UserWalletController {
      */
     @GetMapping("/balance")
     @SecurityRequirement(name = "JWT")
-    @Operation(summary = "카네이션 내부 자신의 잔액 조회", description = "로그인한 사용자의 현재 잔액을 조회하는 API")
+    @Operation(summary = "카네이션 내부 자신의 잔액 조회")
     public ApiResponse<Integer> getBalance(
             @AuthenticationPrincipal AuthUser authUser
     ) {
@@ -56,7 +56,7 @@ public class UserWalletController {
      */
     @PostMapping("/addBalance")
     @SecurityRequirement(name = "JWT")
-    @Operation(summary = "카네이션 외부 (사용자의 실제계좌) -> 카네이션 내부 (카네이션 가상계좌)", description = "로그인한 사용자가 자신의 실제 외부 계좌에서 자신의 내부 계좌 (카네이션 내브) 계좌입금 API")
+    @Operation(summary = "카네이션 외부 (사용자의 실제계좌) -> 카네이션 내부 (카네이션 가상계좌)")
     public ApiResponse<Void> addBalance(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody UserDepositRequestDto dto
@@ -70,7 +70,7 @@ public class UserWalletController {
      */
     @PostMapping("/minusBalance")
     @SecurityRequirement(name = "JWT")
-    @Operation(summary = "카네이션 내부 (카네이션 가상계좌) -> 카네이션 외부 (사용자의 실제계좌)", description = "로그인한 사용자가 자신의 계좌(카네이션 내부)에서 자신의 실제 외부 계좌출금 API")
+    @Operation(summary = "카네이션 내부 (카네이션 가상계좌) -> 카네이션 외부 (사용자의 실제계좌)")
     public ApiResponse<Void> minusBalance(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody UserWithdrawRequestDto dto

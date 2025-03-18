@@ -17,6 +17,47 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Docker 및 Docker Compose 설치
+        run: |
+          # 설치 확인
+          
+          echo "🐳 Docker 및 Docker Compose 설치 시작..."
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          
+          # Docker Compose 설치
+          DOCKER_COMPOSE_VERSION="2.17.2"
+          sudo curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          
+          # 설치 확인
+          docker --version
+          docker-compose --version
+        shell: bash
+
+      - name: env 파일 생성
+        run: |
+          echo "${{ secrets.ENV }}" > .env
+        shell: bash
+
+      - name: 기존 Docker 컨테이너 및 모든 볼륨 삭제
+        run: |
+          echo "🛑 모든 Docker 컨테이너 중지 및 삭제..."
+          docker stop $(docker ps -aq) || true
+          docker rm $(docker ps -aq) || true
+          
+          echo "🗑️ 사용하지 않는 Docker 볼륨 삭제..."
+          docker volume prune -f
+          
+          echo "🗑️ 모든 Docker 볼륨 삭제..."
+          docker volume rm $(docker volume ls -q) || true
+          
+          echo "✅ Docker 정리 완료!"
+
+      - name: Docker Compose 실행
+        run: |
+          docker-compose up -d
+
       - name: 빌드 및 테스트 코드 돌리는중 ...
         run: |
           chmod +x ./gradlew

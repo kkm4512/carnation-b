@@ -5,6 +5,7 @@ import com.example.carnation.common.util.Validator;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
 import com.example.carnation.domain.oAuth.dto.OAuthUserDto;
+import com.example.carnation.domain.payment.kakao.entity.KakaoPaymentReady;
 import com.example.carnation.domain.user.constans.AuthProvider;
 import com.example.carnation.domain.user.constans.BankType;
 import com.example.carnation.domain.user.dto.SignupRequestDto;
@@ -22,6 +23,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.carnation.common.response.enums.UserApiResponseEnum.EXISTING_SOCIAL_ACCOUNT;
 import static com.example.carnation.common.response.enums.UserApiResponseEnum.NOT_ME;
@@ -106,6 +109,9 @@ public class User {
     @JoinColumn(name = "user_wallet_id", unique = true)
     private UserWallet userWallet;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<KakaoPaymentReady> kakaoPaymentReadys = new ArrayList<>();
+
     // AuthUser -> User
     public User(Long id, String nickname, String email, UserRole userRole) {
         this.id = id;
@@ -115,7 +121,7 @@ public class User {
     }
 
     // User Test
-    public User(Long id, String nickname, String email, String phoneNumber, String password, UserRole userRole, String residentRegistrationNumber, AuthProvider authProvider, LocalDateTime createdAt, LocalDateTime updatedAt, Patient patient, Caregiver caregiver) {
+    public User(Long id, String nickname, String email, String phoneNumber, String password, UserRole userRole, String residentRegistrationNumber, AuthProvider authProvider, LocalDateTime createdAt, LocalDateTime updatedAt, Patient patient, Caregiver caregiver, BankType bank, String accountNumber) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -128,6 +134,7 @@ public class User {
         this.updatedAt = updatedAt;
         this.patient = patient;
         this.caregiver = caregiver;
+        this.userWallet = UserWallet.of(this,bank,accountNumber);
     }
 
     // 일반 회원가입
@@ -139,7 +146,7 @@ public class User {
         this.userRole = userRole != null ? userRole : UserRole.ROLE_USER; // 기본값 적용
         this.authProvider = AuthProvider.GENERAL;
         this.residentRegistrationNumber = residentRegistrationNumber;
-        this.userWallet = UserWallet.of(this,bank,accountNumber);;
+        this.userWallet = UserWallet.of(this,bank,accountNumber);
     }
 
     // 소셜 회원가입

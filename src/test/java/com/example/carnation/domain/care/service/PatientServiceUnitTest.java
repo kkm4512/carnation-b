@@ -1,6 +1,6 @@
 package com.example.carnation.domain.care.service;
 
-import com.example.carnation.domain.care.CareMockTestInfo;
+import com.example.carnation.domain.care.MockCareTestInfo;
 import com.example.carnation.common.dto.constans.SortByEnum;
 import com.example.carnation.domain.care.cqrs.PatientQuery;
 import com.example.carnation.domain.care.dto.PatientRequestDto;
@@ -21,11 +21,12 @@ import org.springframework.data.domain.*;
 
 import java.util.List;
 
+import static com.example.carnation.domain.user.MockUserTestInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PatientServiceTest {
+class PatientServiceUnitTest {
 
     @InjectMocks
     private PatientService patientService; // 테스트 대상
@@ -48,13 +49,13 @@ class PatientServiceTest {
 
     @BeforeEach
     void setUp() {
-        authUser = CareMockTestInfo.getAuthUser1();
-        user = CareMockTestInfo.getUser1();
+        authUser = getAuthUser1();
+        user = getUser1();
 
         // 환자 및 요청 DTO 생성
-        patient1 = CareMockTestInfo.getPatient1();
-        patient2 = CareMockTestInfo.getPatient2();
-        patientRequestDto = CareMockTestInfo.getPatientRequestDto1();
+        patient1 = MockCareTestInfo.getPatient1();
+        patient2 = MockCareTestInfo.getPatient2();
+        patientRequestDto = MockCareTestInfo.getPatientRequestDto1();
 
         // Pageable 설정
         pageable = PageRequest.of(0, 10, Sort.by(SortByEnum.CREATED_AT.getDescription()).ascending());
