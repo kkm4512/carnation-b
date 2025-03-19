@@ -1,66 +1,55 @@
 package com.example.carnation.domain.payment.kakao.service;
 
-import com.example.carnation.domain.payment.interfaces.PaymentService;
+import com.example.carnation.domain.payment.kakao.constans.KakaoPaymentStatus;
 import com.example.carnation.domain.payment.kakao.cqrs.KakaoPaymentCommand;
 import com.example.carnation.domain.payment.kakao.cqrs.KakaoPaymentQuery;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentApprovalResponseDto;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyResponseDto;
 import com.example.carnation.domain.payment.kakao.entity.KakaoPaymentReady;
-import com.example.carnation.domain.user.cqrs.UserQuery;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.payment.kakao.helper.KakaoPaymentHelper;
+import com.example.carnation.domain.user.common.cqrs.UserQuery;
+import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.security.AuthUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class KakaoPaymentService implements PaymentService {
+public class KakaoPaymentService {
     private final KakaoPaymentCommand kakaoPaymentCommand;
     private final KakaoPaymentQuery kakaoPaymentQuery;
     private final UserQuery userQuery;
     private final RestTemplate restTemplate;
+    private final KakaoPaymentHelper kakaoPaymentHelper;
     private final String KAKAO_READY_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
     private final String KAKAO_APPROVE_URL = "https://open-api.kakaopay.com/online/v1/payment/approve";
-
-
-    @Value("${payment.kakao.secret-key-dev}")
-    private String kakaoPaymentSecretKey;
-
-    @Value("${server.url}")
-    private String serverUrl;
 
     /**
      * 카카오페이 결제 준비 (ready)
      */
+    @Transactional
     public KakaoPaymentReadyResponseDto ready(AuthUser authUser, KakaoPaymentReadyRequestDto reqDto) {
         try {
             User user = userQuery.readById(authUser.getUserId());
-            // HTTP 요청 헤더
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "SECRET_KEY " + kakaoPaymentSecretKey);
-            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpHeaders headers = kakaoPaymentHelper.getHeadersByKakaoPayment();
             KakaoPaymentReady kakaoPaymentReady = KakaoPaymentReady.of(user,reqDto);
             KakaoPaymentReady savedKakaoPaymentReady = kakaoPaymentCommand.create(kakaoPaymentReady);
-            Map<String, String> params = getParamsByKakaoPaymentReady(savedKakaoPaymentReady);
+            Map<String, String> params = kakaoPaymentHelper.getParamsByKakaoPaymentReady(savedKakaoPaymentReady);
             HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
 
-            // 요청 데이터 로깅
             log.info("📢 카카오페이 결제 요청 시작");
             log.info("🔹 요청 데이터: {}", params);
 
-            // API 요청
             KakaoPaymentReadyResponseDto resDto = restTemplate.exchange(KAKAO_READY_URL, HttpMethod.POST, entity, KakaoPaymentReadyResponseDto.class).getBody();
             savedKakaoPaymentReady.updateTid(resDto.getTid());
             savedKakaoPaymentReady.updateCreatedAt(resDto.getCreatedAt());
@@ -82,17 +71,14 @@ public class KakaoPaymentService implements PaymentService {
     /**
      * 카카오페이 결제 승인 (approve)
      */
-    public KakaoPaymentApprovalResponseDto approval(Long kakaoPaymentReadyId,String pgToken) {
+    @Transactional
+    public KakaoPaymentStatus approval(Long kakaoPaymentReadyId,String pgToken) {
         try {
             KakaoPaymentReady kakaoPaymentReady = kakaoPaymentQuery.readById(kakaoPaymentReadyId);
             kakaoPaymentReady.updatePgToken(pgToken);
             final RestTemplate restTemplate = new RestTemplate();
-            Map<String, String> params = getParamsByKakaoPaymentApproval(kakaoPaymentReady);
-
-            // HTTP 요청 헤더
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", "SECRET_KEY " + kakaoPaymentSecretKey);
-            headers.setContentType(MediaType.APPLICATION_JSON);
+            Map<String, String> params = kakaoPaymentHelper.getParamsByKakaoPaymentApproval(kakaoPaymentReady);
+            HttpHeaders headers = kakaoPaymentHelper.getHeadersByKakaoPayment();
             HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
 
             log.info("📢 카카오페이 결제 승인 요청 시작");
@@ -109,48 +95,31 @@ public class KakaoPaymentService implements PaymentService {
             log.info("🔹 카드 매입사: {}", response.getCard_info().getKakaopayPurchaseCorp());
             log.info("🔹 카드 발급사: {}", response.getCard_info().getKakaopayIssuerCorp());
             log.info("🔹 카드 타입: {}", response.getCard_info().getCardType());
-            return response;
+
+            kakaoPaymentReady.updateStatus(KakaoPaymentStatus.APPROVED);
+            kakaoPaymentCommand.create(kakaoPaymentReady);
+            return KakaoPaymentStatus.APPROVED;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
-
     }
 
-    private Map<String, String> getParamsByKakaoPaymentReady(KakaoPaymentReady entity) {
-        Map<String, String> params = new HashMap<>();
-        params.put("cid", entity.getCid());
-        params.put("partner_order_id", entity.getPartnerOrderId());
-        params.put("partner_user_id", entity.getPartnerUserId());
-        params.put("item_name", entity.getItemName());
-        params.put("quantity", String.valueOf(entity.getQuantity()));
-        params.put("total_amount", String.valueOf(entity.getTotalAmount()));
-        params.put("tax_free_amount", String.valueOf(entity.getTaxFreeAmount()));
-        params.put("approval_url", serverUrl + "/api/v1/payment/kakao/callback/approval?kakao_payment_ready_id=" + entity.getId());
-        params.put("cancel_url", serverUrl +  "/api/v1/payment/kakao/callback/cancel");
-        params.put("fail_url", serverUrl +  "/api/v1/payment/kakao/callback/fail");
-
-        if (entity.getCidSecret() != null) params.put("cid_secret", entity.getCidSecret());
-        if (entity.getItemCode() != null) params.put("item_code", entity.getItemCode());
-        if (entity.getVatAmount() != null) params.put("vat_amount", String.valueOf(entity.getVatAmount()));
-        if (entity.getGreenDeposit() != null) params.put("green_deposit", String.valueOf(entity.getGreenDeposit()));
-        if (entity.getPaymentMethodType() != null) params.put("payment_method_type", entity.getPaymentMethodType().name());
-        if (entity.getInstallMonth() != null) params.put("install_month", String.valueOf(entity.getInstallMonth()));
-        if (entity.getUseShareInstallment() != null) params.put("use_share_installment", entity.getUseShareInstallment());
-        return params;
+    @Transactional
+    public KakaoPaymentStatus cancel(Long kakaoPaymentReadyId) {
+        KakaoPaymentReady kakaoPaymentReady = kakaoPaymentQuery.readById(kakaoPaymentReadyId);
+        kakaoPaymentReady.updateStatus(KakaoPaymentStatus.CANCEL);
+        kakaoPaymentCommand.create(kakaoPaymentReady);
+        return KakaoPaymentStatus.CANCEL;
     }
 
 
-    private Map<String, String> getParamsByKakaoPaymentApproval(KakaoPaymentReady entity) {
-        Map<String, String> params = new HashMap<>();
-        params.put("cid", entity.getCid());
-        params.put("tid", entity.getTid());
-        params.put("partner_order_id", entity.getPartnerOrderId());
-        params.put("partner_user_id", entity.getPartnerUserId());
-        params.put("pg_token", entity.getPgToken());
-        if (entity.getCidSecret() != null) params.put("cid_secret", entity.getCidSecret());
-        if (entity.getTotalAmount() != null) params.put("total_amount", String.valueOf(entity.getTotalAmount()));
-        return params;
+    @Transactional
+    public KakaoPaymentStatus fail(Long kakaoPaymentReadyId) {
+        KakaoPaymentReady kakaoPaymentReady = kakaoPaymentQuery.readById(kakaoPaymentReadyId);
+        kakaoPaymentReady.updateStatus(KakaoPaymentStatus.FAIL);
+        kakaoPaymentCommand.create(kakaoPaymentReady);
+        return KakaoPaymentStatus.FAIL;
     }
 
 

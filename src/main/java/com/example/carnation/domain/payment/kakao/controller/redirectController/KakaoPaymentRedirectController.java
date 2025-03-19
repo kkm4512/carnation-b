@@ -1,7 +1,8 @@
 package com.example.carnation.domain.payment.kakao.controller.redirectController;
 
 import com.example.carnation.common.response.ApiResponse;
-import com.example.carnation.domain.payment.interfaces.PaymentService;
+import com.example.carnation.domain.payment.kakao.constans.KakaoPaymentStatus;
+import com.example.carnation.domain.payment.kakao.service.KakaoPaymentService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,23 +19,25 @@ import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SU
 @Slf4j
 @Hidden
 public class KakaoPaymentRedirectController {
-    private final PaymentService paymentService;
+    private final KakaoPaymentService kakaoPaymentService;
 
     @GetMapping("/approval")
-    public ApiResponse<Void> approval(
+    public ApiResponse<KakaoPaymentStatus> approval(
             @RequestParam("pg_token") String pgToken,
             @RequestParam("kakao_payment_ready_id") String kakaoPaymentReadyId
     ) {
-        paymentService.approval(Long.valueOf(kakaoPaymentReadyId),pgToken);
-        return ApiResponse.of(SUCCESS);
+        KakaoPaymentStatus response = kakaoPaymentService.approval(Long.valueOf(kakaoPaymentReadyId), pgToken);
+        return ApiResponse.of(SUCCESS,response);
     }
 
     @GetMapping("/cancel")
-    public void cancel() {
-        log.info("cancel Callback");
+    public ApiResponse<KakaoPaymentStatus> cancel(@RequestParam("kakao_payment_ready_id") String kakaoPaymentReadyId) {
+        KakaoPaymentStatus response = kakaoPaymentService.cancel(Long.valueOf(kakaoPaymentReadyId));
+        return ApiResponse.of(SUCCESS,response);
     }
     @GetMapping("/fail")
-    public void fail() {
-        log.info("fail Callback");
+    public ApiResponse<KakaoPaymentStatus> fail(@RequestParam("kakao_payment_ready_id") String kakaoPaymentReadyId) {
+        KakaoPaymentStatus response = kakaoPaymentService.fail(Long.valueOf(kakaoPaymentReadyId));
+        return ApiResponse.of(SUCCESS,response);
     }
 }

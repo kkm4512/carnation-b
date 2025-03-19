@@ -6,7 +6,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.sql.SQLException;
 
 import static com.example.carnation.common.response.enums.BaseApiResponseEnum.*;
 
@@ -50,11 +52,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-    // 데이터 무결성 위반 예외 처리 (예: Unique Key 위반)
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApiResponse<String>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        ApiResponse<String> apiResponse = new ApiResponse<>(CONFLICT.getHttpStatus(), CONFLICT.getMessage(), ex.getMessage());
-        return ResponseEntity.badRequest().body(apiResponse);
+    // SQL 관련 예외 처리 (DataIntegrityViolationException 포함)
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<ApiResponse<String>> handleSQLException(Exception ex) {
+        ApiResponse<String> apiResponse = new ApiResponse<>(
+                INTERNAL_SERVER_ERROR.getHttpStatus(),
+                "데이터베이스 처리 중 오류가 발생했습니다.",
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
     }
 
     // 엔티티가 존재하지 않을 때 예외 처리
