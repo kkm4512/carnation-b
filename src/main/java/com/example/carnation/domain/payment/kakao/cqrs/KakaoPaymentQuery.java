@@ -1,7 +1,7 @@
 package com.example.carnation.domain.payment.kakao.cqrs;
 
 import com.example.carnation.common.exception.KakaoPaymentException;
-import com.example.carnation.domain.payment.kakao.entity.KakaoPaymentReady;
+import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
 import com.example.carnation.domain.payment.kakao.repository.KakaoPaymentReadyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class KakaoPaymentQuery {
     private final KakaoPaymentReadyRepository repository;
 
     @Transactional(readOnly = true)
-    public KakaoPaymentReady readById(Long id) {
+    public KakaoPayment readById(Long id) {
         return repository.findById(id).orElseThrow(() -> new KakaoPaymentException(KAKAO_PAYMENT_NOT_FOUND));
     }
 

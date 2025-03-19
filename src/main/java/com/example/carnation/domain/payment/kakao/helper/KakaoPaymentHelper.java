@@ -1,6 +1,6 @@
 package com.example.carnation.domain.payment.kakao.helper;
 
-import com.example.carnation.domain.payment.kakao.entity.KakaoPaymentReady;
+import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +28,7 @@ public class KakaoPaymentHelper {
         return headers;
     }
 
-    public Map<String, String> getParamsByKakaoPaymentReady(KakaoPaymentReady entity) {
+    public Map<String, String> getParamsByKakaoPaymentReady(KakaoPayment entity) {
         Map<String, String> params = new HashMap<>();
         params.put("cid", entity.getCid());
         params.put("partner_order_id", entity.getPartnerOrderId());
@@ -52,7 +52,7 @@ public class KakaoPaymentHelper {
     }
 
 
-    public Map<String, String> getParamsByKakaoPaymentApproval(KakaoPaymentReady entity) {
+    public Map<String, String> getParamsByKakaoPaymentApproval(KakaoPayment entity) {
         Map<String, String> params = new HashMap<>();
         params.put("cid", entity.getCid());
         params.put("tid", entity.getTid());

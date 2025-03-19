@@ -4,7 +4,8 @@ import com.example.carnation.common.exception.UserException;
 import com.example.carnation.common.util.Validator;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
-import com.example.carnation.domain.payment.kakao.entity.KakaoPaymentReady;
+import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
+import com.example.carnation.domain.product.entity.Product;
 import com.example.carnation.domain.user.auth.dto.SignupRequestDto;
 import com.example.carnation.domain.user.common.constans.AuthProvider;
 import com.example.carnation.domain.user.oAuth.dto.OAuthUserDto;
@@ -111,7 +112,10 @@ public class User {
     private Wallet userWallet;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<KakaoPaymentReady> kakaoPaymentReadys = new ArrayList<>();
+    private List<KakaoPayment> kakaoPaymentReadys = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
 
     // AuthUser -> User
     public User(Long id, String nickname, String email, UserRole userRole) {
