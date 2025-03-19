@@ -2,7 +2,7 @@ package com.example.carnation.domain.payment;
 
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyResponseDto;
-import com.example.carnation.domain.payment.kakao.entity.KakaoPaymentReady;
+import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
 import com.example.carnation.domain.user.MockUserTestInfo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -55,8 +55,8 @@ public class MockPaymentInfo {
         );
     }
 
-    public static KakaoPaymentReady getKakaoPaymentReady1() {
-        return KakaoPaymentReady.of(
+    public static KakaoPayment getKakaoPaymentReady1() {
+        return KakaoPayment.of(
                 MockUserTestInfo.getUser1(),
                 getKakaoPaymentReadyRequestDto1()
         );
@@ -69,7 +69,7 @@ public class MockPaymentInfo {
         return headers;
     }
 
-    public static Map<String, String> getParamsByKakaoPaymentReady1(KakaoPaymentReady entity) {
+    public static Map<String, String> getParamsByKakaoPaymentReady1(KakaoPayment entity) {
         Map<String, String> params = new HashMap<>();
         params.put("cid", entity.getCid());
         params.put("partner_order_id", entity.getPartnerOrderId());
@@ -93,7 +93,7 @@ public class MockPaymentInfo {
     }
 
 
-    public static Map<String, String> getParamsByKakaoPaymentApproval1(KakaoPaymentReady entity) {
+    public static Map<String, String> getParamsByKakaoPaymentApproval1(KakaoPayment entity) {
         Map<String, String> params = new HashMap<>();
         params.put("cid", entity.getCid());
         params.put("tid", entity.getTid());

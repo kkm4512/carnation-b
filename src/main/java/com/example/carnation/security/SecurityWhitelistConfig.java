@@ -25,7 +25,8 @@ public class SecurityWhitelistConfig {
                     "/api/v1/user/oAuth/*",
                     "/api/v1/caregiver/**",
                     "/api/v1/patient/**",
-                    "/api/v1/payment/kakao/callback/**"
+                    "/api/v1/payment/kakao/callback/**",
+                    "/api/v1/product/**"
             ),
             HttpMethod.OPTIONS, List.of(
                     "/**"

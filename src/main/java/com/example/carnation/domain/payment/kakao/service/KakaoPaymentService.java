@@ -4,10 +4,11 @@ import com.example.carnation.domain.payment.kakao.constans.KakaoPaymentStatus;
 import com.example.carnation.domain.payment.kakao.cqrs.KakaoPaymentCommand;
 import com.example.carnation.domain.payment.kakao.cqrs.KakaoPaymentQuery;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentApprovalResponseDto;
-import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyResponseDto;
-import com.example.carnation.domain.payment.kakao.entity.KakaoPaymentReady;
+import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
 import com.example.carnation.domain.payment.kakao.helper.KakaoPaymentHelper;
+import com.example.carnation.domain.product.cars.ProductQuery;
+import com.example.carnation.domain.product.entity.Product;
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
 import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.security.AuthUser;
@@ -30,6 +31,7 @@ public class KakaoPaymentService {
     private final KakaoPaymentQuery kakaoPaymentQuery;
     private final UserQuery userQuery;
     private final RestTemplate restTemplate;
+    private final ProductQuery productQuery;
     private final KakaoPaymentHelper kakaoPaymentHelper;
     private final String KAKAO_READY_URL = "https://open-api.kakaopay.com/online/v1/payment/ready";
     private final String KAKAO_APPROVE_URL = "https://open-api.kakaopay.com/online/v1/payment/approve";
@@ -38,12 +40,13 @@ public class KakaoPaymentService {
      * 카카오페이 결제 준비 (ready)
      */
     @Transactional
-    public KakaoPaymentReadyResponseDto ready(AuthUser authUser, KakaoPaymentReadyRequestDto reqDto) {
+    public KakaoPaymentReadyResponseDto ready(final AuthUser authUser, final Long productId) {
         try {
+            Product product = productQuery.readById(productId);
             User user = userQuery.readById(authUser.getUserId());
             HttpHeaders headers = kakaoPaymentHelper.getHeadersByKakaoPayment();
-            KakaoPaymentReady kakaoPaymentReady = KakaoPaymentReady.of(user,reqDto);
-            KakaoPaymentReady savedKakaoPaymentReady = kakaoPaymentCommand.create(kakaoPaymentReady);
+            KakaoPayment kakaoPaymentReady = KakaoPayment.of(user,product);
+            KakaoPayment savedKakaoPaymentReady = kakaoPaymentCommand.create(kakaoPaymentReady);
             Map<String, String> params = kakaoPaymentHelper.getParamsByKakaoPaymentReady(savedKakaoPaymentReady);
             HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
 
@@ -52,7 +55,6 @@ public class KakaoPaymentService {
 
             KakaoPaymentReadyResponseDto resDto = restTemplate.exchange(KAKAO_READY_URL, HttpMethod.POST, entity, KakaoPaymentReadyResponseDto.class).getBody();
             savedKakaoPaymentReady.updateTid(resDto.getTid());
-            savedKakaoPaymentReady.updateCreatedAt(resDto.getCreatedAt());
             kakaoPaymentCommand.create(savedKakaoPaymentReady);
 
             log.info("✅ 카카오페이 결제 준비 완료");
@@ -72,9 +74,9 @@ public class KakaoPaymentService {
      * 카카오페이 결제 승인 (approve)
      */
     @Transactional
-    public KakaoPaymentStatus approval(Long kakaoPaymentReadyId,String pgToken) {
+    public KakaoPaymentStatus approval(final Long kakaoPaymentReadyId,final String pgToken) {
         try {
-            KakaoPaymentReady kakaoPaymentReady = kakaoPaymentQuery.readById(kakaoPaymentReadyId);
+            KakaoPayment kakaoPaymentReady = kakaoPaymentQuery.readById(kakaoPaymentReadyId);
             kakaoPaymentReady.updatePgToken(pgToken);
             final RestTemplate restTemplate = new RestTemplate();
             Map<String, String> params = kakaoPaymentHelper.getParamsByKakaoPaymentApproval(kakaoPaymentReady);
@@ -95,9 +97,7 @@ public class KakaoPaymentService {
             log.info("🔹 카드 매입사: {}", response.getCard_info().getKakaopayPurchaseCorp());
             log.info("🔹 카드 발급사: {}", response.getCard_info().getKakaopayIssuerCorp());
             log.info("🔹 카드 타입: {}", response.getCard_info().getCardType());
-
             kakaoPaymentReady.updateStatus(KakaoPaymentStatus.APPROVED);
-            kakaoPaymentCommand.create(kakaoPaymentReady);
             return KakaoPaymentStatus.APPROVED;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -106,19 +106,17 @@ public class KakaoPaymentService {
     }
 
     @Transactional
-    public KakaoPaymentStatus cancel(Long kakaoPaymentReadyId) {
-        KakaoPaymentReady kakaoPaymentReady = kakaoPaymentQuery.readById(kakaoPaymentReadyId);
+    public KakaoPaymentStatus cancel(final Long kakaoPaymentReadyId) {
+        KakaoPayment kakaoPaymentReady = kakaoPaymentQuery.readById(kakaoPaymentReadyId);
         kakaoPaymentReady.updateStatus(KakaoPaymentStatus.CANCEL);
-        kakaoPaymentCommand.create(kakaoPaymentReady);
         return KakaoPaymentStatus.CANCEL;
     }
 
 
     @Transactional
-    public KakaoPaymentStatus fail(Long kakaoPaymentReadyId) {
-        KakaoPaymentReady kakaoPaymentReady = kakaoPaymentQuery.readById(kakaoPaymentReadyId);
+    public KakaoPaymentStatus fail(final Long kakaoPaymentReadyId) {
+        KakaoPayment kakaoPaymentReady = kakaoPaymentQuery.readById(kakaoPaymentReadyId);
         kakaoPaymentReady.updateStatus(KakaoPaymentStatus.FAIL);
-        kakaoPaymentCommand.create(kakaoPaymentReady);
         return KakaoPaymentStatus.FAIL;
     }
 

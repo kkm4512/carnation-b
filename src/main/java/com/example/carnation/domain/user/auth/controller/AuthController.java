@@ -20,7 +20,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SU
 @RestController
 @RequestMapping("/api/v1/user/auth")
 @RequiredArgsConstructor
-@Tag(name = "User/Auth API", description = "사용자 인증 관련 API")
+@Tag(name = "Auth API", description = "사용자 인증 관련 API")
 public class AuthController {
     private final AuthService authService;
 
