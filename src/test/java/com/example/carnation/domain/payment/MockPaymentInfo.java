@@ -3,7 +3,8 @@ package com.example.carnation.domain.payment;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyResponseDto;
 import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
-import com.example.carnation.domain.user.MockUserTestInfo;
+import com.example.carnation.domain.product.MockProductInfo;
+import com.example.carnation.domain.user.MockUserInfo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -18,7 +19,6 @@ public class MockPaymentInfo {
      */
     public static KakaoPaymentReadyRequestDto getKakaoPaymentReadyRequestDto1() {
         return new KakaoPaymentReadyRequestDto(
-                "TC0ONETIME", // 가맹점 코드
                 "mock_order_123456", // 가맹점 주문번호
                 "mock_user_98765", // 가맹점 회원 ID
                 "테스트 상품", // 상품명
@@ -30,7 +30,6 @@ public class MockPaymentInfo {
 
     public static KakaoPaymentReadyRequestDto getKakaoPaymentReadyRequestRequiredDtoFail1() {
         return new KakaoPaymentReadyRequestDto(
-                "TC0ONETIME", // 가맹점 코드
                 "mock_order_123456", // 가맹점 주문번호
                 "mock_user_98765", // 가맹점 회원 ID
                 "테스트 상품", // 상품명
@@ -57,8 +56,8 @@ public class MockPaymentInfo {
 
     public static KakaoPayment getKakaoPaymentReady1() {
         return KakaoPayment.of(
-                MockUserTestInfo.getUser1(),
-                getKakaoPaymentReadyRequestDto1()
+                MockUserInfo.getUser1(),
+                MockProductInfo.getProduct1()
         );
     }
 

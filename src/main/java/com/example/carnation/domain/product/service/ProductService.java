@@ -2,6 +2,7 @@ package com.example.carnation.domain.product.service;
 
 import com.example.carnation.domain.product.cars.ProductCommand;
 import com.example.carnation.domain.product.cars.ProductQuery;
+import com.example.carnation.domain.product.dto.ProductRequestDto;
 import com.example.carnation.domain.product.dto.ProductResponseDto;
 import com.example.carnation.domain.product.entity.Product;
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
@@ -19,7 +20,7 @@ public class ProductService {
     private final ProductQuery productQuery;
     private final UserQuery userQuery;
 
-    public ProductResponseDto generate(final AuthUser authUser, final ProductResponseDto dto) {
+    public ProductResponseDto generate(final AuthUser authUser, final ProductRequestDto dto) {
         User user = userQuery.readById(authUser.getUserId());
         Product product = Product.of(user,dto);
         Product savedProduct = productCommand.create(product);

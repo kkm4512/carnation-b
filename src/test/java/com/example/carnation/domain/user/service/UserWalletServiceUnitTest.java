@@ -1,6 +1,6 @@
 package com.example.carnation.domain.user.service;
 
-import com.example.carnation.domain.user.MockUserTestInfo;
+import com.example.carnation.domain.user.MockUserInfo;
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
 import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.domain.user.wallet.dto.DepositRequestDto;
@@ -33,8 +33,8 @@ class UserWalletServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        user1 = MockUserTestInfo.getUser1();
-        user2 = MockUserTestInfo.getUser2();
+        user1 = MockUserInfo.getUser1();
+        user2 = MockUserInfo.getUser2();
         user1.getUserWallet().deposit(10000);
         user2.getUserWallet().deposit(10000);
     }
@@ -42,7 +42,7 @@ class UserWalletServiceUnitTest {
     @Test
     @DisplayName("카네이션 내부 (사용자 계좌) -> 카네이션 내부 (다른 사용자 계좌) / 송금")
     void test1() {
-        AuthUser authUser = MockUserTestInfo.getAuthUser1();
+        AuthUser authUser = MockUserInfo.getAuthUser1();
         TransferRequestDto dto = new TransferRequestDto(3000, user2.getId());
 
         when(userQuery.readById(authUser.getUserId())).thenReturn(user1);
@@ -57,7 +57,7 @@ class UserWalletServiceUnitTest {
     @Test
     @DisplayName("카네이션 내부 (사용자 계좌) / 잔액조회")
     void test2() {
-        AuthUser authUser = MockUserTestInfo.getAuthUser1();
+        AuthUser authUser = MockUserInfo.getAuthUser1();
 
         when(userQuery.readById(authUser.getUserId())).thenReturn(user1);
 
@@ -69,7 +69,7 @@ class UserWalletServiceUnitTest {
     @Test
     @DisplayName("카네이션 외부 (실제 사용자 계좌) -> 카네이션 내부 (사용자 계좌) / 입금")
     void test3() {
-        AuthUser authUser = MockUserTestInfo.getAuthUser1();
+        AuthUser authUser = MockUserInfo.getAuthUser1();
         DepositRequestDto dto = new DepositRequestDto(5000);
 
         when(userQuery.readById(authUser.getUserId())).thenReturn(user1);
@@ -82,7 +82,7 @@ class UserWalletServiceUnitTest {
     @Test
     @DisplayName("카네이션 내부 (사용자 계좌) -> 카네이션 외부 (실제 사용자 계좌) / 출금")
     void test4() {
-        AuthUser authUser = MockUserTestInfo.getAuthUser1();
+        AuthUser authUser = MockUserInfo.getAuthUser1();
         WithdrawRequestDto dto = new WithdrawRequestDto(4000);
 
         when(userQuery.readById(authUser.getUserId())).thenReturn(user1);

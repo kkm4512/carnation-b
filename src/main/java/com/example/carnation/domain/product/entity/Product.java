@@ -1,6 +1,6 @@
 package com.example.carnation.domain.product.entity;
 
-import com.example.carnation.domain.product.dto.ProductResponseDto;
+import com.example.carnation.domain.product.dto.ProductRequestDto;
 import com.example.carnation.domain.user.common.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -81,7 +81,7 @@ public class Product {
         this.user = user;
     }
 
-    public static Product of(User user, ProductResponseDto dto) {
+    public static Product of(User user, ProductRequestDto dto) {
         return new Product(
                 user,
                 dto.getName(),
