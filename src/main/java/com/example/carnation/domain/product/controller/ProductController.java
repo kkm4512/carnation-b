@@ -2,6 +2,7 @@ package com.example.carnation.domain.product.controller;
 
 import com.example.carnation.common.dto.PageSearchDto;
 import com.example.carnation.common.response.ApiResponse;
+import com.example.carnation.domain.product.dto.ProductRequestDto;
 import com.example.carnation.domain.product.dto.ProductResponseDto;
 import com.example.carnation.domain.product.service.ProductService;
 import com.example.carnation.security.AuthUser;
@@ -32,7 +33,7 @@ public class ProductController {
     @SecurityRequirement(name = "JWT")
     public ApiResponse<ProductResponseDto> generateProduct(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody ProductResponseDto dto
+            @Valid @RequestBody ProductRequestDto dto
     ) {
         ProductResponseDto response = productService.generate(authUser,dto);
         return ApiResponse.of(SUCCESS,response);
