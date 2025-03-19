@@ -7,7 +7,7 @@ import com.example.carnation.domain.care.dto.PatientRequestDto;
 import com.example.carnation.domain.care.entity.CareMatching;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.common.entity.User;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 

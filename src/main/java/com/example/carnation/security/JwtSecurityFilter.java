@@ -1,7 +1,7 @@
 package com.example.carnation.security;
 
 import com.example.carnation.common.exception.UserException;
-import com.example.carnation.domain.user.constans.AuthProvider;
+import com.example.carnation.domain.user.common.constans.AuthProvider;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

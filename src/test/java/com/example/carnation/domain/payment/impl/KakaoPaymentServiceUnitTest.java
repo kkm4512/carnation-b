@@ -5,9 +5,10 @@ import com.example.carnation.domain.payment.kakao.cqrs.KakaoPaymentCommand;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyResponseDto;
 import com.example.carnation.domain.payment.kakao.entity.KakaoPaymentReady;
+import com.example.carnation.domain.payment.kakao.helper.KakaoPaymentHelper;
 import com.example.carnation.domain.payment.kakao.service.KakaoPaymentService;
 import com.example.carnation.domain.user.MockUserTestInfo;
-import com.example.carnation.domain.user.cqrs.UserQuery;
+import com.example.carnation.domain.user.common.cqrs.UserQuery;
 import com.example.carnation.security.AuthUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,9 @@ class KakaoPaymentServiceUnitTest {
     private KakaoPaymentCommand kakaoPaymentCommand;
 
     @Mock
+    private KakaoPaymentHelper kakaoPaymentHelper;
+
+    @Mock
     private UserQuery userQuery;
 
     @Test
@@ -46,6 +50,8 @@ class KakaoPaymentServiceUnitTest {
         KakaoPaymentReadyResponseDto mockResponse = MockPaymentInfo.getKakaoPaymentReadyResponse1();
         KakaoPaymentReady mockKakaoPayment = MockPaymentInfo.getKakaoPaymentReady1();
         given(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(KakaoPaymentReadyResponseDto.class))).willReturn(ResponseEntity.ok(mockResponse));
+        given(kakaoPaymentHelper.getHeadersByKakaoPayment()).willReturn(MockPaymentInfo.getHeadersByKakaoPayment());
+        given(kakaoPaymentHelper.getParamsByKakaoPaymentReady(any())).willReturn(MockPaymentInfo.getParamsByKakaoPaymentReady1(mockKakaoPayment));
         given(kakaoPaymentCommand.create(any())).willReturn(mockKakaoPayment);
         given(userQuery.readById(authUser.getUserId())).willReturn(MockUserTestInfo.getUser1());
 

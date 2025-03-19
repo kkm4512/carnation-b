@@ -1,8 +1,8 @@
 package com.example.carnation.domain.user;
 
-import com.example.carnation.domain.user.constans.AuthProvider;
-import com.example.carnation.domain.user.constans.BankType;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.common.constans.AuthProvider;
+import com.example.carnation.domain.user.wallet.constans.BankType;
+import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.security.AuthUser;
 import com.example.carnation.security.UserRole;
 

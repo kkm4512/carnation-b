@@ -68,7 +68,7 @@ public class KakaoPaymentReadyRequestDto {
     private Integer greenDeposit;
 
     @Schema(description = "사용 허가할 결제 수단 (옵션, 기본값: 모든 결제 수단 허용)", example = "CARD", nullable = true)
-    private KakaoPaymentMethodType paymentMethodType;
+    private KakaoPaymentMethodType paymentMethod;
 
     @Schema(description = "카드 할부 개월 (옵션, 0~12)", example = "0", nullable = true)
     @Min(value = 0, message = "카드 할부 개월(installMonth)은 최소 0개월 이상이어야 합니다.")

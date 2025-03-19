@@ -14,7 +14,7 @@ import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.aws.file.helper.FileHelper;
 import com.example.carnation.domain.aws.file.util.FileUtil;
 import com.example.carnation.domain.aws.file.validation.FileValidation;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.security.AuthUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
