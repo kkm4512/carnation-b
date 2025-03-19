@@ -83,11 +83,4 @@ public class GlobalExceptionHandler {
         ApiResponse<String> apiResponse = new ApiResponse<>(FAIL.getHttpStatus(), FAIL.getMessage(), ex.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
-
-    // 기타 예외 처리 (포괄적인 예외 캐치)
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<String>> handleException(Exception e) {
-        ApiResponse<String> apiResponse = ApiResponse.of(INTERNAL_SERVER_ERROR,e.getMessage());
-        return ResponseEntity.status(apiResponse.getCode()).body(apiResponse);
-    }
 }

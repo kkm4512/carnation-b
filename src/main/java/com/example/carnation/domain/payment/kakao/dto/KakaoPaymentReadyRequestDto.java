@@ -16,11 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class KakaoPaymentReadyRequestDto {
 
-    @Schema(description = "가맹점 코드 (10자)", example = "TC0ONETIME")
-    @NotBlank(message = "가맹점 코드(cid)는 필수 입력값입니다.")
-    @Size(max = 10, message = "가맹점 코드(cid)는 최대 10자까지 입력 가능합니다.")
-    private String cid;
-
     @Schema(description = "가맹점 코드 인증키 (24자, 옵션)", example = "your_cid_secret", nullable = true)
     @Size(max = 24, message = "가맹점 코드 인증키(cidSecret)는 최대 24자까지 입력 가능합니다.")
     private String cidSecret;
@@ -80,8 +75,7 @@ public class KakaoPaymentReadyRequestDto {
     private String useShareInstallment;
 
     // ✅ 필수값만 포함하는 생성자
-    public KakaoPaymentReadyRequestDto(String cid, String partnerOrderId, String partnerUserId, String itemName, Integer quantity, Integer totalAmount, Integer taxFreeAmount) {
-        this.cid = cid;
+    public KakaoPaymentReadyRequestDto(String partnerOrderId, String partnerUserId, String itemName, Integer quantity, Integer totalAmount, Integer taxFreeAmount) {
         this.partnerOrderId = partnerOrderId;
         this.partnerUserId = partnerUserId;
         this.itemName = itemName;

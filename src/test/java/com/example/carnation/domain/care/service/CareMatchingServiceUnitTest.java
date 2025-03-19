@@ -24,7 +24,7 @@ import org.springframework.data.domain.*;
 
 import java.util.List;
 
-import static com.example.carnation.domain.user.MockUserTestInfo.*;
+import static com.example.carnation.domain.user.MockUserInfo.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 

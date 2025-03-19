@@ -19,7 +19,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SU
 @RestController
 @RequestMapping("/api/v1/user/wallet")
 @RequiredArgsConstructor
-@Tag(name = "UserWallet API", description = "카네이션 시스템 내부 사용자 결제 관련 API")
+@Tag(name = "Wallet API", description = "카네이션 시스템 내부 결제 관련 API")
 public class WalletController {
 
     private final WalletService userWalletService;

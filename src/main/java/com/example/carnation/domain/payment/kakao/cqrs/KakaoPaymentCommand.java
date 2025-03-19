@@ -1,6 +1,6 @@
 package com.example.carnation.domain.payment.kakao.cqrs;
 
-import com.example.carnation.domain.payment.kakao.entity.KakaoPaymentReady;
+import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
 import com.example.carnation.domain.payment.kakao.repository.KakaoPaymentReadyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ public class KakaoPaymentCommand {
     private final KakaoPaymentReadyRepository repository;
 
     @Transactional
-    public KakaoPaymentReady create(KakaoPaymentReady entity) {
+    public KakaoPayment create(KakaoPayment entity) {
         return repository.save(entity);
     }
 }

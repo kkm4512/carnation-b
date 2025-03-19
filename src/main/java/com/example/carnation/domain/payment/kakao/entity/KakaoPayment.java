@@ -2,13 +2,10 @@ package com.example.carnation.domain.payment.kakao.entity;
 
 import com.example.carnation.domain.payment.kakao.constans.KakaoPaymentMethodType;
 import com.example.carnation.domain.payment.kakao.constans.KakaoPaymentStatus;
-import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
+import com.example.carnation.domain.product.entity.Product;
 import com.example.carnation.domain.user.common.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -16,8 +13,9 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 @Table(name = "kakao_payment_ready")
-public class KakaoPaymentReady {
+public class KakaoPayment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,45 +82,18 @@ public class KakaoPaymentReady {
     @JoinColumn(name = "user_id", nullable = false)  // 외래 키 설정
     private User user;
 
-    public KakaoPaymentReady(User user, Long id, String cid, String cidSecret, String partnerOrderId, String partnerUserId, String itemName, String itemCode, Integer quantity, Integer totalAmount, Integer taxFreeAmount, Integer vatAmount, Integer greenDeposit, KakaoPaymentMethodType paymentMethodType, Integer installMonth, String useShareInstallment) {
-        this.id = id;
-        this.cid = cid;
-        this.cidSecret = cidSecret;
-        this.partnerOrderId = partnerOrderId;
-        this.partnerUserId = partnerUserId;
-        this.itemName = itemName;
-        this.itemCode = itemCode;
-        this.quantity = quantity;
-        this.totalAmount = totalAmount;
-        this.taxFreeAmount = taxFreeAmount;
-        this.vatAmount = vatAmount;
-        this.greenDeposit = greenDeposit;
-        this.paymentMethod = paymentMethodType;
-        this.installMonth = installMonth;
-        this.useShareInstallment = useShareInstallment;
-        this.user = user;
-        this.paymentStatus = KakaoPaymentStatus.PENDING;
-    }
-
-    public static KakaoPaymentReady of(User user, KakaoPaymentReadyRequestDto req) {
-        return new KakaoPaymentReady(
-                user,
-                null, // id (자동 생성)
-                req.getCid(),
-                req.getCidSecret(),
-                req.getPartnerOrderId(),
-                req.getPartnerUserId(),
-                req.getItemName(),
-                req.getItemCode(),
-                req.getQuantity(),
-                req.getTotalAmount(),
-                req.getTaxFreeAmount(),
-                req.getVatAmount(),
-                req.getGreenDeposit(),
-                req.getPaymentMethod(), // Enum -> String 변환
-                req.getInstallMonth(),
-                req.getUseShareInstallment()
-        );
+    public static KakaoPayment of(User user, Product entity) {
+        return KakaoPayment.builder()
+                .user(user)
+                .cid("TC0ONETIME") // 우리 가맹점 코드를 적어야함
+                .partnerOrderId(String.valueOf(entity.getId()))
+                .partnerUserId(String.valueOf(entity.getUser().getId()))
+                .itemName(entity.getName())
+                .quantity(entity.getQuantity())
+                .totalAmount(entity.getPrice())
+                .taxFreeAmount(0)
+                .paymentStatus(KakaoPaymentStatus.PENDING)
+                .build();
     }
 
     public void updatePgToken(String pgToken) {

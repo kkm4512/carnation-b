@@ -8,7 +8,7 @@ import com.example.carnation.security.UserRole;
 
 import java.time.LocalDateTime;
 
-public class MockUserTestInfo {
+public class MockUserInfo {
 
     // 공통된 테스트 데이터 상수 선언
     private static final Long ID_1 = 1L;

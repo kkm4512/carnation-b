@@ -1,19 +1,17 @@
 package com.example.carnation.domain.payment.kakao.controller;
 
 import com.example.carnation.common.response.ApiResponse;
-import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyResponseDto;
 import com.example.carnation.domain.payment.kakao.service.KakaoPaymentService;
 import com.example.carnation.security.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,12 +27,12 @@ public class KakaoPaymentController {
 
     @Operation(summary = "카카오페이 결제 준비", description = "사용자가 결제 준비 요청을 보내면, 카카오페이 결제 프로세스를 시작합니다.")
     @SecurityRequirement(name = "JWT")
-    @PostMapping(value = "/ready")
+    @PostMapping(value = "/ready/{productId}")
     public ApiResponse<KakaoPaymentReadyResponseDto> ready(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody KakaoPaymentReadyRequestDto dto
+            @PathVariable Long productId
     ) {
-        KakaoPaymentReadyResponseDto response = kakaoPaymentService.ready(authUser, dto);
+        KakaoPaymentReadyResponseDto response = kakaoPaymentService.ready(authUser, productId);
         return ApiResponse.of(SUCCESS,response);
     }
 }

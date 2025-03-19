@@ -16,7 +16,7 @@ import java.io.FileInputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.carnation.domain.user.MockUserTestInfo.*;
+import static com.example.carnation.domain.user.MockUserInfo.*;
 
 public class MockCareTestInfo {
     private static final String ROOT_DUMP_URL = "src/test/java/com/example/carnation/domain/dump";

@@ -23,8 +23,8 @@ import org.springframework.data.domain.*;
 
 import java.util.List;
 
-import static com.example.carnation.domain.user.MockUserTestInfo.getAuthUser1;
-import static com.example.carnation.domain.user.MockUserTestInfo.getUser1;
+import static com.example.carnation.domain.user.MockUserInfo.getAuthUser1;
+import static com.example.carnation.domain.user.MockUserInfo.getUser1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
