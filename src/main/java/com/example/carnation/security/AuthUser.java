@@ -1,7 +1,7 @@
 package com.example.carnation.security;
 
-import com.example.carnation.domain.user.constans.AuthProvider;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.common.constans.AuthProvider;
+import com.example.carnation.domain.user.common.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

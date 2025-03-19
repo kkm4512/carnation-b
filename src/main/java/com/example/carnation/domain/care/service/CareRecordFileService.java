@@ -3,7 +3,7 @@ package com.example.carnation.domain.care.service;
 import com.example.carnation.domain.care.cqrs.CareMatchingQuery;
 import com.example.carnation.domain.care.entity.CareMatching;
 import com.example.carnation.domain.care.entity.Caregiver;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.security.AuthUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

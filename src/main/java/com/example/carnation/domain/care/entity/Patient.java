@@ -4,7 +4,7 @@ import com.example.carnation.common.exception.CareException;
 import com.example.carnation.common.response.enums.BaseApiResponseEnum;
 import com.example.carnation.common.util.Validator;
 import com.example.carnation.domain.care.dto.PatientRequestDto;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.common.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

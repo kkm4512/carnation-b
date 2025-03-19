@@ -1,7 +1,7 @@
 package com.example.carnation.security;
 
-import com.example.carnation.domain.user.constans.AuthProvider;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.common.constans.AuthProvider;
+import com.example.carnation.domain.user.common.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

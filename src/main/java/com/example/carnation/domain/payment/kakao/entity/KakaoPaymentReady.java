@@ -1,8 +1,9 @@
 package com.example.carnation.domain.payment.kakao.entity;
 
 import com.example.carnation.domain.payment.kakao.constans.KakaoPaymentMethodType;
+import com.example.carnation.domain.payment.kakao.constans.KakaoPaymentStatus;
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.common.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -57,7 +58,7 @@ public class KakaoPaymentReady {
     private Integer greenDeposit;  // 컵 보증금 (옵션)
 
     @Enumerated(EnumType.STRING)
-    private KakaoPaymentMethodType paymentMethodType;  // 결제 수단 (CARD / MONEY)
+    private KakaoPaymentMethodType paymentMethod;  // 결제 수단 (CARD / MONEY)
 
     @Column
     private Integer installMonth;  // 할부 개월
@@ -71,6 +72,9 @@ public class KakaoPaymentReady {
 
     @Column
     private String pgToken;
+
+    @Enumerated(EnumType.STRING)
+    private KakaoPaymentStatus paymentStatus;  // 결제 상태
 
     @Column
     private LocalDateTime createdAt;  // 결제 준비 요청 시간
@@ -93,10 +97,11 @@ public class KakaoPaymentReady {
         this.taxFreeAmount = taxFreeAmount;
         this.vatAmount = vatAmount;
         this.greenDeposit = greenDeposit;
-        this.paymentMethodType = paymentMethodType;
+        this.paymentMethod = paymentMethodType;
         this.installMonth = installMonth;
         this.useShareInstallment = useShareInstallment;
         this.user = user;
+        this.paymentStatus = KakaoPaymentStatus.PENDING;
     }
 
     public static KakaoPaymentReady of(User user, KakaoPaymentReadyRequestDto req) {
@@ -114,7 +119,7 @@ public class KakaoPaymentReady {
                 req.getTaxFreeAmount(),
                 req.getVatAmount(),
                 req.getGreenDeposit(),
-                req.getPaymentMethodType(), // Enum -> String 변환
+                req.getPaymentMethod(), // Enum -> String 변환
                 req.getInstallMonth(),
                 req.getUseShareInstallment()
         );
@@ -133,4 +138,7 @@ public class KakaoPaymentReady {
     }
 
 
+    public void updateStatus(KakaoPaymentStatus kakaoPaymentStatus) {
+        this.paymentStatus = kakaoPaymentStatus;
+    }
 }

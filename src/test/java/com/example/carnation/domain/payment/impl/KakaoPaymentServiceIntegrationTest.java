@@ -5,8 +5,8 @@ import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDt
 import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyResponseDto;
 import com.example.carnation.domain.payment.kakao.service.KakaoPaymentService;
 import com.example.carnation.domain.user.MockUserTestInfo;
-import com.example.carnation.domain.user.cqrs.UserCommand;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.common.cqrs.UserCommand;
+import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.security.AuthUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

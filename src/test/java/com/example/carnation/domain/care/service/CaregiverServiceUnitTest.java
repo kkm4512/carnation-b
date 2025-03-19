@@ -1,16 +1,16 @@
 package com.example.carnation.domain.care.service;
 
-import com.example.carnation.domain.care.MockCareTestInfo;
 import com.example.carnation.common.dto.constans.SortByEnum;
+import com.example.carnation.domain.care.MockCareTestInfo;
 import com.example.carnation.domain.care.cqrs.CaregiverQuery;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.care.dto.CaregiverSimpleResponseDto;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
-import com.example.carnation.domain.user.cqrs.UserCommand;
-import com.example.carnation.domain.user.cqrs.UserQuery;
-import com.example.carnation.domain.user.dto.UserResponseDto;
-import com.example.carnation.domain.user.entity.User;
+import com.example.carnation.domain.user.auth.dto.UserResponseDto;
+import com.example.carnation.domain.user.common.cqrs.UserCommand;
+import com.example.carnation.domain.user.common.cqrs.UserQuery;
+import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.security.AuthUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,8 @@ import org.springframework.data.domain.*;
 
 import java.util.List;
 
-import static com.example.carnation.domain.user.MockUserTestInfo.*;
+import static com.example.carnation.domain.user.MockUserTestInfo.getAuthUser1;
+import static com.example.carnation.domain.user.MockUserTestInfo.getUser1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
