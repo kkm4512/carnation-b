@@ -34,7 +34,12 @@
 - LOCAL
   - http://localhost:8080/docs
 
-# ERD Tool
+# ERD
+
+## System ERD
+![image](https://github.com/user-attachments/assets/aac1e6d9-7396-4e7e-bc53-715131784c41)
+
+## TOOL
 - https://excalidraw.com/
 
 # DEVELOPERS
