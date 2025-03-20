@@ -28,7 +28,7 @@ public class KakaoPaymentHelper {
         return headers;
     }
 
-    public Map<String, String> getParamsByKakaoPaymentReady(KakaoPayment entity) {
+    public Map<String, String> getParamsByKakaoPayment(KakaoPayment entity) {
         Map<String, String> params = new HashMap<>();
         params.put("cid", entity.getCid());
         params.put("partner_order_id", entity.getPartnerOrderId());
@@ -37,9 +37,9 @@ public class KakaoPaymentHelper {
         params.put("quantity", String.valueOf(entity.getQuantity()));
         params.put("total_amount", String.valueOf(entity.getTotalAmount()));
         params.put("tax_free_amount", String.valueOf(entity.getTaxFreeAmount()));
-        params.put("approval_url", serverUrl + "/api/v1/payment/kakao/callback/approval?kakao_payment_ready_id=" + entity.getId());
-        params.put("cancel_url", serverUrl +  "/api/v1/payment/kakao/callback/cancel?kakao_payment_ready_id=" + entity.getId());
-        params.put("fail_url", serverUrl +  "/api/v1/payment/kakao/callback/fail?kakao_payment_ready_id=" + entity.getId());
+        params.put("approval_url", serverUrl + "/api/v1/payment/kakao/callback/approval?kakao_payment_id=" + entity.getId());
+        params.put("cancel_url", serverUrl +  "/api/v1/payment/kakao/callback/cancel?kakao_payment_id=" + entity.getId());
+        params.put("fail_url", serverUrl +  "/api/v1/payment/kakao/callback/fail?kakao_payment_id=" + entity.getId());
 
         if (entity.getCidSecret() != null) params.put("cid_secret", entity.getCidSecret());
         if (entity.getItemCode() != null) params.put("item_code", entity.getItemCode());

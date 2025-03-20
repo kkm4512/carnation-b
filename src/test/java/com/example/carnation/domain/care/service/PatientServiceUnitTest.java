@@ -1,8 +1,9 @@
 package com.example.carnation.domain.care.service;
 
-import com.example.carnation.domain.care.MockCareTestInfo;
 import com.example.carnation.common.dto.constans.SortByEnum;
+import com.example.carnation.domain.care.MockCareTestInfo;
 import com.example.carnation.domain.care.cqrs.PatientQuery;
+import com.example.carnation.domain.care.dto.PatientIsMatchSearchDto;
 import com.example.carnation.domain.care.dto.PatientRequestDto;
 import com.example.carnation.domain.care.dto.PatientSimpleResponseDto;
 import com.example.carnation.domain.care.entity.Patient;
@@ -21,7 +22,8 @@ import org.springframework.data.domain.*;
 
 import java.util.List;
 
-import static com.example.carnation.domain.user.MockUserInfo.*;
+import static com.example.carnation.domain.user.MockUserInfo.getAuthUser1;
+import static com.example.carnation.domain.user.MockUserInfo.getUser1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
@@ -46,6 +48,7 @@ class PatientServiceUnitTest {
     private Pageable pageable;
     private Patient patient1;
     private Patient patient2;
+    private final PatientIsMatchSearchDto dto = new PatientIsMatchSearchDto(true);
 
     @BeforeEach
     void setUp() {
@@ -58,7 +61,7 @@ class PatientServiceUnitTest {
         patientRequestDto = MockCareTestInfo.getPatientRequestDto1();
 
         // Pageable 설정
-        pageable = PageRequest.of(0, 10, Sort.by(SortByEnum.CREATED_AT.getDescription()).ascending());
+        pageable = PageRequest.of(0, 10, Sort.by(SortByEnum.CREATED_AT.getDescription()).descending());
     }
 
     @Test
@@ -69,7 +72,7 @@ class PatientServiceUnitTest {
         given(userCommand.create(any(User.class))).willReturn(user);
 
         // When
-        patientService.create(authUser, patientRequestDto);
+        patientService.generate(authUser, patientRequestDto);
 
         // Then
         assertThat(user.getPatient()).isNotNull();
@@ -87,10 +90,10 @@ class PatientServiceUnitTest {
         List<Patient> patientList = List.of(patient1, patient2);
         Page<Patient> patientPage = new PageImpl<>(patientList, pageable, patientList.size());
 
-        given(patientQuery.readPageByAvailable(pageable)).willReturn(patientPage);
+        given(patientQuery.readPageByAvailable(dto,pageable)).willReturn(patientPage);
 
         // When
-        Page<PatientSimpleResponseDto> result = patientService.findPageByAvailable(pageable);
+        Page<PatientSimpleResponseDto> result = patientService.findPageByAvailable(dto);
 
         // Then
         assertThat(result).isNotNull();
@@ -99,7 +102,7 @@ class PatientServiceUnitTest {
         assertThat(result.getContent().get(1).getName()).isEqualTo(patient2.getName());
 
         // Verify
-        then(patientQuery).should().readPageByAvailable(pageable);
+        then(patientQuery).should().readPageByAvailable(dto,pageable);
     }
 
     @Test
@@ -108,16 +111,16 @@ class PatientServiceUnitTest {
         // Given
         Page<Patient> emptyPage = Page.empty();
 
-        given(patientQuery.readPageByAvailable(pageable)).willReturn(emptyPage);
+        given(patientQuery.readPageByAvailable(dto,pageable)).willReturn(emptyPage);
 
         // When
-        Page<PatientSimpleResponseDto> result = patientService.findPageByAvailable(pageable);
+        Page<PatientSimpleResponseDto> result = patientService.findPageByAvailable(dto);
 
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getContent()).isEmpty();
 
         // Verify
-        then(patientQuery).should().readPageByAvailable(pageable);
+        then(patientQuery).should().readPageByAvailable(dto,pageable);
     }
 }

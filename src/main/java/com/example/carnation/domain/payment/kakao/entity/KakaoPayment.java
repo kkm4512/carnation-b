@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@Table(name = "kakao_payment_ready")
 public class KakaoPayment {
 
     @Id

@@ -2,6 +2,7 @@ package com.example.carnation.domain.care.cqrs;
 
 import com.example.carnation.common.exception.CareException;
 import com.example.carnation.common.response.enums.CareApiResponseEnum;
+import com.example.carnation.domain.care.dto.PatientIsMatchSearchDto;
 import com.example.carnation.domain.care.entity.Patient;
 import com.example.carnation.domain.care.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class PatientQuery {
     }
 
     @Transactional(readOnly = true)
-    public Page<Patient> readPageByAvailable(Pageable pageable) {
-        return repository.findAllByIsVisibleTrue(pageable);
+    public Page<Patient> readPageByAvailable(PatientIsMatchSearchDto dto,Pageable pageable) {
+        return repository.findAllByIsVisibleTrue(dto.getIsMatch(), pageable);
     }
 
     public Patient readById(Long id) {

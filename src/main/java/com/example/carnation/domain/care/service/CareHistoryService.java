@@ -91,11 +91,11 @@ public class CareHistoryService {
      * 현재 로그인한 사용자와, 요청한 간병 매칭 데이터의 사용자가 같은지 확인
      * 같다면, 해당 간병 매칭속, 간병인이 작성한 모든 데이터 반환
      */
-    public Page<CareHistoryResponseDto> findPageMe(final AuthUser authUser, final Long careMatchingId, final Pageable pageable) {
+    public Page<CareHistoryResponseDto> findPage(final AuthUser authUser, final Long careMatchingId, final Pageable pageable) {
         User user = User.of(authUser);
         CareMatching careMatching = careMatchingQuery.readById(careMatchingId);
         Caregiver caregiver = careMatching.getCaregiver();
-        caregiver.isMe(user);
+        user.isMe(caregiver.getUser());
         Page<CareHistory> responses = careHistoryQuery.readPageByMe(caregiver, pageable);
         return responses.map(CareHistoryResponseDto::of);
     }

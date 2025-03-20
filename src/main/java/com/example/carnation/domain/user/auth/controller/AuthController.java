@@ -43,7 +43,9 @@ public class AuthController {
      */
     @Operation(summary = "로그아웃", description = "현재 사용자의 Refresh Token을 삭제합니다")
     @PostMapping("/signout")
-    public ApiResponse<Void> signout(@AuthenticationPrincipal AuthUser authUser) {
+    public ApiResponse<Void> signout(
+            @AuthenticationPrincipal AuthUser authUser
+    ) {
         authService.signout(authUser);
         return ApiResponse.of(SUCCESS);
     }

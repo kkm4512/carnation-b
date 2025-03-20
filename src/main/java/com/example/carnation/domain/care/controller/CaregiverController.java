@@ -1,7 +1,7 @@
 package com.example.carnation.domain.care.controller;
 
-import com.example.carnation.common.dto.PageSearchDto;
 import com.example.carnation.common.response.ApiResponse;
+import com.example.carnation.domain.care.dto.CaregiverIsMatchSearchDto;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.care.dto.CaregiverSimpleResponseDto;
 import com.example.carnation.domain.care.service.CaregiverService;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +27,7 @@ public class CaregiverController {
 
     private final CaregiverService caregiverService;
 
-    @PostMapping
+    @PostMapping("/me")
     @SecurityRequirement(name = "JWT")
     @Operation(
             summary = "간병인 정보 등록",
@@ -42,16 +41,30 @@ public class CaregiverController {
         return ApiResponse.of(SUCCESS);
     }
 
+    @PutMapping("/me")
+    @SecurityRequirement(name = "JWT")
+    @Operation(
+            summary = "간병인의 매칭 상태 변경",
+            description = "현재 로그인한 간병인의 매칭 가능 상태(isMatch)를 변경합니다."
+    )
+    public ApiResponse<Void> modifyIsVisible(
+            @AuthenticationPrincipal AuthUser authUser,
+            @RequestParam Boolean IsVisible
+    ) {
+        caregiverService.modifyIsVisible(authUser, IsVisible);
+        return ApiResponse.of(SUCCESS);
+    }
+
+
     @GetMapping("/available")
     @Operation(
-            summary = "매칭 가능한 간병인 목록 조회",
-            description = "매칭 가능한 간병인 목록들을 페이지네이션으로 조회합니다."
+            summary = "매칭 목록에 나오길 희망하는 간병인 조회",
+            description = "매칭 목록에 나오길 희망하는 간병인 목록들을 페이지네이션으로 조회합니다."
     )
     public ApiResponse<Page<CaregiverSimpleResponseDto>> findPageByAvailable(
-            @ModelAttribute @Valid PageSearchDto pageSearchDto
+            @ModelAttribute @Valid CaregiverIsMatchSearchDto dto
     ){
-        Pageable pageable = PageSearchDto.of(pageSearchDto);
-        Page<CaregiverSimpleResponseDto> response = caregiverService.findPageByAvailable(pageable);
+        Page<CaregiverSimpleResponseDto> response = caregiverService.findPageByAvailable(dto);
         return ApiResponse.of(SUCCESS, response);
     }
 }

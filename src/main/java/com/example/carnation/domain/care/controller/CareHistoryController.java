@@ -8,7 +8,6 @@ import com.example.carnation.domain.care.dto.CareHistoryResponseDto;
 import com.example.carnation.domain.care.service.CareHistoryService;
 import com.example.carnation.security.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -33,7 +32,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SU
 public class CareHistoryController {
     private final CareHistoryService careHistoryService;
 
-    @PostMapping(value = "/{careMatchingId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/me/{careMatchingId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "JWT")
     @Operation(
             summary = "간병 기록 등록",
@@ -54,19 +53,18 @@ public class CareHistoryController {
 
 
 
-    @GetMapping(value = "/{careMatchingId}")
+    @GetMapping(value = "/me/{careMatchingId}")
     @SecurityRequirement(name = "JWT")
     @Operation(
             summary = "특정 간병 매칭에 대한, 자신의 모든 간병인 히스토리를 조회합니다."
     )
-    public ApiResponse<Page<CareHistoryResponseDto>> findPageMe(
+    public ApiResponse<Page<CareHistoryResponseDto>> findPage(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long careMatchingId,
-            @Parameter(description = "페이징 처리에 필요한 page(페이지 번호), size(페이지 크기), sort(정렬 방식), sortBy(정렬 기준 필드)")
             @ModelAttribute @Valid PageSearchDto pageSearchDto
     ) {
         Pageable pageable = PageSearchDto.of(pageSearchDto);
-        Page<CareHistoryResponseDto> response = careHistoryService.findPageMe(authUser, careMatchingId, pageable);
+        Page<CareHistoryResponseDto> response = careHistoryService.findPage(authUser,careMatchingId, pageable);
         return ApiResponse.of(SUCCESS,response);
     }
 }
