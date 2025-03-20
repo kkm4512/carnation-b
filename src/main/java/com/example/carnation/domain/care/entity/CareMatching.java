@@ -1,7 +1,6 @@
 package com.example.carnation.domain.care.entity;
 
-import com.example.carnation.common.exception.CareException;
-import com.example.carnation.common.response.enums.CareApiResponseEnum;
+import com.example.carnation.domain.care.constans.CareMatchingStatus;
 import com.example.carnation.domain.care.dto.CareMatchingRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -30,8 +29,13 @@ public class CareMatching {
     private Long id;
 
     @Column(nullable = false)
-    @Schema(description = "간병 매칭 상태", example = "false")
-    private Boolean isMatch;
+    @Schema(description = "간병 매칭 상태", example = "PENDING")
+    @Enumerated(EnumType.STRING)
+    private CareMatchingStatus matchStatus;
+
+    @Column(nullable = false)
+    @Schema(description = "간병인 -> 환자 Or 환자 -> 간병인에게 청구할 비용", example = "10000")
+    private Integer amount;
 
     @CreatedDate
     @Column(updatable = false)
@@ -43,15 +47,13 @@ public class CareMatching {
     @Schema(description = "간병 매칭 수정 시간", example = "2024-03-02T15:30:00")
     private LocalDateTime updatedAt;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "patient_id", nullable = false)
-    @Schema(description = "간병 매칭 환자 (Patient)", example = "1")
-    private Patient patient;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "caregiver_id", nullable = false)
-    @Schema(description = "간병 매칭 간병인 (Caregiver)", example = "1")
     private Caregiver caregiver;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
 
     @Schema(description = "CareMatching에서 간병인이 작성한 간병 기록들")
     @OneToMany(mappedBy = "careMatching", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -66,10 +68,11 @@ public class CareMatching {
     private LocalDateTime endDateTime;
 
     // careMatching이 처음 생성되는 생성자
-    public CareMatching(Patient patient, Caregiver caregiver, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        this.isMatch = true;
-        this.patient = patient;
+    public CareMatching(Patient patient, Caregiver caregiver, Integer totalAmount, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.caregiver = caregiver;
+        this.patient = patient;
+        this.matchStatus = CareMatchingStatus.PENDING;
+        this.amount = totalAmount;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }
@@ -78,9 +81,14 @@ public class CareMatching {
         return new CareMatching(
                 patient,
                 caregiver,
+                dto.getTotalAmount(),
                 dto.getStartDateTime(),
                 dto.getEndDateTime()
         );
+    }
+
+    public void updateStatus(CareMatchingStatus matchingStatus) {
+        this.matchStatus = matchingStatus;
     }
 
 }

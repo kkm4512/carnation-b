@@ -1,5 +1,6 @@
 package com.example.carnation.domain.care.dto;
 
+import com.example.carnation.domain.care.constans.CareMatchingStatus;
 import com.example.carnation.domain.care.entity.CareMatching;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -13,9 +14,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(description = "간병 매칭 응답 DTO") // DTO 전
-public class CareMatchingResponse {
+public class CareMatchingSimpleResponse {
     @Schema(description = "간병 매칭 ID", example = "1")
     private Long id;
+
+    @Schema(description = "간병 매칭 상태", example = "PENDING")
+    private CareMatchingStatus matchStatus;
 
     @Schema(description = "간병 매칭 생성 시간", example = "2024-03-01T10:00:00")
     private LocalDateTime createdAt;
@@ -29,9 +33,10 @@ public class CareMatchingResponse {
     @Schema(description = "간병 매칭 간병인 (Caregiver)", example = "1")
     private CaregiverSimpleResponseDto caregiverSimpleResponseDto;
 
-    public static CareMatchingResponse of(CareMatching entity) {
-        return new CareMatchingResponse(
+    public static CareMatchingSimpleResponse of(CareMatching entity) {
+        return new CareMatchingSimpleResponse(
                 entity.getId(),
+                entity.getMatchStatus(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt(),
                 PatientSimpleResponseDto.of(entity.getPatient()),

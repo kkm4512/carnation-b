@@ -1,15 +1,19 @@
 package com.example.carnation.domain.care.service;
 
 import com.example.carnation.domain.care.MockCareTestInfo;
+import com.example.carnation.domain.care.constans.CareMatchingStatus;
 import com.example.carnation.domain.care.cqrs.CareMatchingCommand;
 import com.example.carnation.domain.care.cqrs.CareMatchingQuery;
 import com.example.carnation.domain.care.cqrs.CaregiverQuery;
 import com.example.carnation.domain.care.cqrs.PatientQuery;
+import com.example.carnation.domain.care.dto.CareMatchingDetailResponse;
 import com.example.carnation.domain.care.dto.CareMatchingRequestDto;
-import com.example.carnation.domain.care.dto.CareMatchingResponse;
+import com.example.carnation.domain.care.dto.CareMatchingSimpleResponse;
+import com.example.carnation.domain.care.dto.CareMatchingStatusSearchDto;
 import com.example.carnation.domain.care.entity.CareMatching;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
+import com.example.carnation.domain.care.helper.CareHelper;
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
 import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.security.AuthUser;
@@ -49,6 +53,9 @@ class CareMatchingServiceUnitTest {
     @Mock
     private UserQuery userQuery;
 
+    @Mock
+    private CareHelper careHelper;
+
     private AuthUser authUser1;
     private AuthUser authUser2;
     private User user1;
@@ -64,6 +71,7 @@ class CareMatchingServiceUnitTest {
     private CareMatching careMatching1;
     private CareMatching careMatching2;
     private Pageable pageable;
+    private final CareMatchingStatusSearchDto dto = new CareMatchingStatusSearchDto(CareMatchingStatus.MATCHING);
 
     @BeforeEach
     void setUp() {
@@ -76,7 +84,7 @@ class CareMatchingServiceUnitTest {
         caregiver2 = MockCareTestInfo.getCaregiver2();
         patient2 = MockCareTestInfo.getPatient2();
 
-        pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 
         requestDtoPatient1 = MockCareTestInfo.getCareMatchingRequestDtoForPatient1();
         requestDtoPatient2 = MockCareTestInfo.getCareMatchingRequestDtoForPatient2();
@@ -97,13 +105,15 @@ class CareMatchingServiceUnitTest {
     void test1() {
         // Given
         given(userQuery.readById(authUser1.getUserId())).willReturn(user1);
-        given(patientQuery.readById(user1.getPatient().getId())).willReturn(patient1);
+        given(careHelper.isUserPatient(user1)).willReturn(true);
+
         given(caregiverQuery.readById(requestDtoCaregiver2.getTargetId())).willReturn(caregiver2);
+
         given(careMatchingQuery.existsByActiveUserInCareMatching(patient1, caregiver2)).willReturn(false);
         given(careMatchingCommand.create(any(CareMatching.class))).willReturn(careMatching1);
 
         // When
-        CareMatchingResponse result = careMatchingService.generate(authUser1, requestDtoCaregiver2);
+        CareMatchingDetailResponse result = careMatchingService.generate(authUser1, requestDtoCaregiver2);
 
         // Then
         assertThat(result).isNotNull();
@@ -112,7 +122,6 @@ class CareMatchingServiceUnitTest {
 
         // Verify
         then(userQuery).should().readById(authUser1.getUserId());
-        then(patientQuery).should().readById(patient1.getId());
         then(caregiverQuery).should().readById(requestDtoCaregiver2.getTargetId());
         then(careMatchingQuery).should().existsByActiveUserInCareMatching(patient1, caregiver2);
         then(careMatchingCommand).should().create(any(CareMatching.class));
@@ -127,10 +136,10 @@ class CareMatchingServiceUnitTest {
         List<CareMatching> matchingList = List.of(careMatching1, careMatching2);
         Page<CareMatching> careMatchingPage = new PageImpl<>(matchingList, pageable, matchingList.size());
 
-        given(careMatchingQuery.readPageByCaregiver(user1.getCaregiver(), pageable)).willReturn(careMatchingPage);
+        given(careMatchingQuery.readPageByCaregiver(user1.getCaregiver(), pageable, dto)).willReturn(careMatchingPage);
 
         // When
-        Page<CareMatchingResponse> result = careMatchingService.findPageByCaregiver(authUser1, pageable);
+        Page<CareMatchingSimpleResponse> result = careMatchingService.findPageByCaregiver(authUser1, dto);
 
         // Then
         assertThat(result).isNotNull();
@@ -140,7 +149,7 @@ class CareMatchingServiceUnitTest {
 
         // Verify
         then(userQuery).should().readById(authUser1.getUserId());
-        then(careMatchingQuery).should().readPageByCaregiver(user1.getCaregiver(), pageable);
+        then(careMatchingQuery).should().readPageByCaregiver(user1.getCaregiver(), pageable, dto);
     }
 
     @Test
@@ -152,10 +161,10 @@ class CareMatchingServiceUnitTest {
         List<CareMatching> matchingList = List.of(careMatching1, careMatching2);
         Page<CareMatching> careMatchingPage = new PageImpl<>(matchingList, pageable, matchingList.size());
 
-        given(careMatchingQuery.readPageByPatient(user2.getPatient(), pageable)).willReturn(careMatchingPage);
+        given(careMatchingQuery.readPageByPatient(user2.getPatient(), pageable, dto)).willReturn(careMatchingPage);
 
         // When
-        Page<CareMatchingResponse> result = careMatchingService.findPageByPatient(authUser2, pageable);
+        Page<CareMatchingSimpleResponse> result = careMatchingService.findPageByPatient(authUser2, dto);
 
         // Then
         assertThat(result).isNotNull();

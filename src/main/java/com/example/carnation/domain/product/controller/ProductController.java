@@ -40,7 +40,7 @@ public class ProductController {
     }
 
     @GetMapping
-    @Operation(summary = "상품 페이지네이션 조회", description = "등록되있는 헬스케어 상품을 반환합니다")
+    @Operation(summary = "모든 상품 페이지네이션 조회", description = "등록되있는 헬스케어 상품을 반환합니다")
     public ApiResponse<Page<ProductResponseDto>> findPage(
             @ModelAttribute @Valid PageSearchDto pageSearchDto
     ){

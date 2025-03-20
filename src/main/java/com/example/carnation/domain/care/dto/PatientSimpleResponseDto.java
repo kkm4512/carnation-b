@@ -30,6 +30,9 @@ public class PatientSimpleResponseDto {
     @Schema(description = "환자 공개 여부 (매칭 시스템에서 노출 여부)", example = "true")
     private Boolean isVisible;
 
+    @Schema(description = "간병 매칭 가능 상태", example = "true")
+    private Boolean isMatch;
+
     @Schema(description = "생성일시", example = "2024-03-01T10:00:00")
     private LocalDateTime createdAt;
 
@@ -43,6 +46,7 @@ public class PatientSimpleResponseDto {
                 entity.getLocation(),
                 entity.getDiagnosis(),
                 entity.getIsVisible(),
+                entity.getIsMatch(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );

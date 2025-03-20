@@ -18,10 +18,10 @@ public class WalletService {
     private final UserQuery userQuery;
 
     @Transactional
-    public void transfer(final AuthUser authUser, final TransferRequestDto dto) {
-        UserValidate.validateSelfTransferNotAllowed(authUser.getUserId(),dto.getTargetId());
-        User user = userQuery.readById(authUser.getUserId());
-        Wallet userWallet1 = user.getUserWallet();
+    public void transfer(final User user, final TransferRequestDto dto) {
+        UserValidate.validateSelfTransferNotAllowed(user.getId(),dto.getTargetId());
+        User user1 = userQuery.readById(user.getId());
+        Wallet userWallet1 = user1.getUserWallet();
         userWallet1.withdraw(dto.getAmount());
 
         User user2 = userQuery.readById(dto.getTargetId());

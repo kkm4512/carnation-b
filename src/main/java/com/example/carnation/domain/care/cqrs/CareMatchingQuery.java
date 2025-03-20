@@ -1,6 +1,7 @@
 package com.example.carnation.domain.care.cqrs;
 
 import com.example.carnation.common.exception.CareException;
+import com.example.carnation.domain.care.dto.CareMatchingStatusSearchDto;
 import com.example.carnation.domain.care.entity.CareMatching;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
@@ -33,13 +34,13 @@ public class CareMatchingQuery {
     }
 
     @Transactional(readOnly = true)
-    public Page<CareMatching> readPageByCaregiver(Caregiver caregiver, Pageable pageable) {
-        return repository.findAllByCaregiver(caregiver, pageable);
+    public Page<CareMatching> readPageByCaregiver(Caregiver caregiver, Pageable pageable, CareMatchingStatusSearchDto dto) {
+        return repository.findAllByCaregiver(caregiver,dto.getMatchStatus(), pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<CareMatching> readPageByPatient(Patient patient, Pageable pageable) {
-        return repository.findAllByPatient(patient, pageable);
+    public Page<CareMatching> readPageByPatient(Patient patient, Pageable pageable, CareMatchingStatusSearchDto dto) {
+        return repository.findAllByPatient(patient, dto.getMatchStatus(), pageable);
     }
 
     @Transactional(readOnly = true)
@@ -48,19 +49,18 @@ public class CareMatchingQuery {
     }
 
     /**
-     * 특정 사용자(Patient 또는 Caregiver)가 이미 활성화된 매칭(CareMatching)에 존재하는지 확인합니다.
+     * 특정 사용자가 (환자 또는 간병인) 기존의 **비활성화된 매칭 (CANCEL, END 상태)** 에 존재하는지 확인합니다.
      *
-     * - `isMatch = true`인 매칭만 검사 (매칭이 종료된 경우는 무시)
-     * - 사용자가 `patient` 또는 `caregiver`로 이미 존재하는 경우, 새로운 매칭을 방지
-     * - 즉, 한 사용자가 동시에 **환자와 간병인 역할을 가질 수 없도록 제한**
+     * 🔹 **검사 조건**
+     * - `matchStatus`가 `'CANCEL'` 또는 `'END'`인 매칭만 조회 → 즉, 종료된 매칭만 검사.
+     * - `:patientId` 또는 `:caregiverId`가 `CareMatching`의 `patient.id` 또는 `caregiver.id` 중 하나와 일치하는지 확인.
+     * - 해당 사용자가 기존 매칭에 속해 있는지 확인하여, 이후 새로운 매칭을 제한할 수 있음.
      *
-     * 예제:
-     * 1. (1,2)가 존재할 때, (3,1) 추가 시 차단 (1번 사용자가 환자/간병인 역할을 바꿔가며 중복 매칭되는 것 방지)
-     * 2. (1,2)와 (2,3)가 각각 존재할 때, (3,1) 추가 시 차단 (환자/간병인 관계 순서가 달라도 중복 차단)
+     * 🔹 **예제 시나리오**
+     * 1️⃣ (1,2) 매칭이 **종료됨** → (1,3) 새로운 매칭 가능 ✅
+     * 2️⃣ (1,2) 매칭이 **취소됨** → (1,3) 새로운 매칭 가능 ✅
+     * 3️⃣ (1,2) 매칭이 **진행 중** → (1,3) 매칭 제한 🚫 (이 쿼리는 진행 중인 매칭을 검사하지 않음)
      *
-     * @param patient 새롭게 매칭하려는 환자의
-     * @param caregiver 새롭게 매칭하려는 간병인
-     * @return 이미 활성화된 매칭이 존재하면 true, 없으면 false
      */
     public Boolean existsByActiveUserInCareMatching(Patient patient, Caregiver caregiver) {
         return repository.existsByActiveUserInCareMatching(patient.getUser().getId(),caregiver.getUser().getId());

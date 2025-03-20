@@ -16,6 +16,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -45,6 +47,10 @@ public class Caregiver {
     @Schema(description = "간병인 공개 여부 (매칭 시스템에서 노출 여부)", example = "true")
     private Boolean isVisible;
 
+    @Column(nullable = false)
+    @Schema(description = "간병 매칭 가능 상태", example = "true")
+    private Boolean isMatch;
+
     @CreatedDate
     @Column(updatable = false)
     @Schema(description = "생성일시", example = "2024-03-01T10:00:00")
@@ -59,7 +65,12 @@ public class Caregiver {
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
+    @OneToMany(mappedBy = "caregiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CareMatching> careMatchings = new ArrayList<>();
+
+    // 첫 생성시
     public Caregiver(User user, String name, Double height, Double weight, Boolean isVisible) {
+        this.isMatch = true;
         this.user = user;
         this.name = name;
         this.height = height;
@@ -83,5 +94,13 @@ public class Caregiver {
                 user.getId(),
                 new CareException(BaseApiResponseEnum.RESOURCE_NOT_OWNED)
         );
+    }
+
+    public void updateIsMatch(Boolean isMatch) {
+        this.isMatch = isMatch;
+    }
+
+    public void updateIsVisible(Boolean isVisible) {
+        this.isVisible = isVisible;
     }
 }

@@ -24,19 +24,19 @@ public class KakaoPaymentRedirectController {
     @GetMapping("/approval")
     public ApiResponse<KakaoPaymentStatus> approval(
             @RequestParam("pg_token") String pgToken,
-            @RequestParam("kakao_payment_ready_id") String kakaoPaymentReadyId
+            @RequestParam("kakao_payment_id") String kakaoPaymentReadyId
     ) {
         KakaoPaymentStatus response = kakaoPaymentService.approval(Long.valueOf(kakaoPaymentReadyId), pgToken);
         return ApiResponse.of(SUCCESS,response);
     }
 
     @GetMapping("/cancel")
-    public ApiResponse<KakaoPaymentStatus> cancel(@RequestParam("kakao_payment_ready_id") String kakaoPaymentReadyId) {
+    public ApiResponse<KakaoPaymentStatus> cancel(@RequestParam("kakao_payment_id") String kakaoPaymentReadyId) {
         KakaoPaymentStatus response = kakaoPaymentService.cancel(Long.valueOf(kakaoPaymentReadyId));
         return ApiResponse.of(SUCCESS,response);
     }
     @GetMapping("/fail")
-    public ApiResponse<KakaoPaymentStatus> fail(@RequestParam("kakao_payment_ready_id") String kakaoPaymentReadyId) {
+    public ApiResponse<KakaoPaymentStatus> fail(@RequestParam("kakao_payment_id") String kakaoPaymentReadyId) {
         KakaoPaymentStatus response = kakaoPaymentService.fail(Long.valueOf(kakaoPaymentReadyId));
         return ApiResponse.of(SUCCESS,response);
     }

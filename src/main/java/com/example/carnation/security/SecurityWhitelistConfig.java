@@ -26,7 +26,8 @@ public class SecurityWhitelistConfig {
                     "/api/v1/caregiver/**",
                     "/api/v1/patient/**",
                     "/api/v1/payment/kakao/callback/**",
-                    "/api/v1/product/**"
+                    "/api/v1/product/**",
+                    "/api/v1/care-matching/*"
             ),
             HttpMethod.OPTIONS, List.of(
                     "/**"
