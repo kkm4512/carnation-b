@@ -1,6 +1,7 @@
 package com.example.carnation.domain.user.wallet.controller;
 
 import com.example.carnation.common.response.ApiResponse;
+import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.domain.user.wallet.dto.DepositRequestDto;
 import com.example.carnation.domain.user.wallet.dto.TransferRequestDto;
 import com.example.carnation.domain.user.wallet.dto.WithdrawRequestDto;
@@ -34,14 +35,15 @@ public class WalletController {
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody TransferRequestDto dto
     ) {
-        userWalletService.transfer(authUser,dto);
+        User user = User.of(authUser);
+        userWalletService.transfer(user,dto);
         return ApiResponse.of(SUCCESS);
     }
 
     /**
      * 잔액 조회 API
      */
-    @GetMapping("/balance")
+    @GetMapping("/me/balance")
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "카네이션 내부 자신의 잔액 조회")
     public ApiResponse<Integer> getBalance(
@@ -54,7 +56,7 @@ public class WalletController {
     /**
      * 🔹 잔액 입금 API
      */
-    @PostMapping("/addBalance")
+    @PutMapping("/me/addBalance")
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "카네이션 외부 (사용자의 실제계좌) -> 카네이션 내부 (카네이션 가상계좌)")
     public ApiResponse<Void> addBalance(
@@ -68,7 +70,7 @@ public class WalletController {
     /**
      * 🔹 잔액 출금 API
      */
-    @PostMapping("/minusBalance")
+    @PutMapping("/me/minusBalance")
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "카네이션 내부 (카네이션 가상계좌) -> 카네이션 외부 (사용자의 실제계좌)")
     public ApiResponse<Void> minusBalance(

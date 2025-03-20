@@ -33,6 +33,9 @@ public class CaregiverSimpleResponseDto {
     @Schema(description = "간병인 매칭 공개 여부 (true: 공개, false: 비공개)", example = "true", requiredMode = Schema.RequiredMode.REQUIRED)
     private Boolean isVisible;
 
+    @Schema(description = "간병 매칭 가능 상태", example = "true")
+    private Boolean isMatch;
+
     @Schema(description = "생성일시", example = "2024-03-01T10:00:00", nullable = true)
     private LocalDateTime createdAt;
 
@@ -46,6 +49,7 @@ public class CaregiverSimpleResponseDto {
                 entity.getHeight(),
                 entity.getWeight(),
                 entity.getIsVisible(),
+                entity.getIsMatch(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );

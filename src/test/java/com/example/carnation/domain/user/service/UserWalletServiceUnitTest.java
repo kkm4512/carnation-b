@@ -48,7 +48,7 @@ class UserWalletServiceUnitTest {
         when(userQuery.readById(authUser.getUserId())).thenReturn(user1);
         when(userQuery.readById(dto.getTargetId())).thenReturn(user2);
 
-        userWalletService.transfer(authUser, dto);
+        userWalletService.transfer(MockUserInfo.getUser1(), dto);
 
         assertEquals(7000, user1.getUserWallet().getBalance());
         assertEquals(13000, user2.getUserWallet().getBalance());

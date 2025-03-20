@@ -57,7 +57,7 @@ class KakaoPaymentServiceUnitTest {
         given(productQuery.readById(1L)).willReturn(MockProductInfo.getProduct1());
         given(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(KakaoPaymentReadyResponseDto.class))).willReturn(ResponseEntity.ok(mockResponse));
         given(kakaoPaymentHelper.getHeadersByKakaoPayment()).willReturn(MockPaymentInfo.getHeadersByKakaoPayment());
-        given(kakaoPaymentHelper.getParamsByKakaoPaymentReady(any())).willReturn(MockPaymentInfo.getParamsByKakaoPaymentReady1(mockKakaoPayment));
+        given(kakaoPaymentHelper.getParamsByKakaoPayment(any())).willReturn(MockPaymentInfo.getParamsByKakaoPaymentReady1(mockKakaoPayment));
         given(kakaoPaymentCommand.create(any())).willReturn(mockKakaoPayment);
         given(userQuery.readById(authUser.getUserId())).willReturn(MockUserInfo.getUser1());
 

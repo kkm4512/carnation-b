@@ -45,17 +45,17 @@ public class KakaoPaymentService {
             Product product = productQuery.readById(productId);
             User user = userQuery.readById(authUser.getUserId());
             HttpHeaders headers = kakaoPaymentHelper.getHeadersByKakaoPayment();
-            KakaoPayment kakaoPaymentReady = KakaoPayment.of(user,product);
-            KakaoPayment savedKakaoPaymentReady = kakaoPaymentCommand.create(kakaoPaymentReady);
-            Map<String, String> params = kakaoPaymentHelper.getParamsByKakaoPaymentReady(savedKakaoPaymentReady);
+            KakaoPayment kakaoPayment = KakaoPayment.of(user,product);
+            KakaoPayment savedKakaoPayment = kakaoPaymentCommand.create(kakaoPayment);
+            Map<String, String> params = kakaoPaymentHelper.getParamsByKakaoPayment(savedKakaoPayment);
             HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
 
             log.info("📢 카카오페이 결제 요청 시작");
             log.info("🔹 요청 데이터: {}", params);
 
             KakaoPaymentReadyResponseDto resDto = restTemplate.exchange(KAKAO_READY_URL, HttpMethod.POST, entity, KakaoPaymentReadyResponseDto.class).getBody();
-            savedKakaoPaymentReady.updateTid(resDto.getTid());
-            kakaoPaymentCommand.create(savedKakaoPaymentReady);
+            savedKakaoPayment.updateTid(resDto.getTid());
+            kakaoPaymentCommand.create(savedKakaoPayment);
 
             log.info("✅ 카카오페이 결제 준비 완료");
             log.info("🔹 결제 고유 번호(TID): {}", resDto.getTid());

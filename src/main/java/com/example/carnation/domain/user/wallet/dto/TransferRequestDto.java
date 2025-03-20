@@ -1,5 +1,7 @@
 package com.example.carnation.domain.user.wallet.dto;
 
+import com.example.carnation.domain.care.entity.CareMatching;
+import com.example.carnation.domain.user.common.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -20,4 +22,11 @@ public class TransferRequestDto {
     @Schema(description = "송금 대상 ID", example = "12345")
     @NotNull(message = "대상 ID는 필수 입력 항목입니다.")
     private Long targetId;
+
+    public static TransferRequestDto of(CareMatching entity, User user) {
+        return new TransferRequestDto(
+                entity.getAmount(),
+                user.getId()
+        );
+    }
 }

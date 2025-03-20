@@ -16,6 +16,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -46,6 +47,10 @@ public class Patient {
     @Schema(description = "환자 공개 여부 (매칭 시스템에서 노출 여부)", example = "true")
     private Boolean isVisible;
 
+    @Column(nullable = false)
+    @Schema(description = "간병 매칭 가능 상태", example = "true")
+    private Boolean isMatch;
+
     @CreatedDate
     @Column(updatable = false)
     @Schema(description = "생성일시", example = "2024-03-01T10:00:00")
@@ -61,7 +66,12 @@ public class Patient {
     @Schema(description = "환자와 연결된 사용자 ID", example = "5")
     private User user;
 
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CareMatching> careMatchings;
+
+    // 첫 생성시
     public Patient(User user, String name, String location, String diagnosis, Boolean isVisible) {
+        this.isMatch = true;
         this.user = user;
         this.name = name;
         this.location = location;
@@ -85,5 +95,13 @@ public class Patient {
                 user.getId(),
                 new CareException(BaseApiResponseEnum.RESOURCE_NOT_OWNED)
         );
+    }
+
+    public void updateIsMatch(Boolean isMatch) {
+        this.isMatch = isMatch;
+    }
+
+    public void updateIsVisible(Boolean isVisible) {
+        this.isVisible = isVisible;
     }
 }
