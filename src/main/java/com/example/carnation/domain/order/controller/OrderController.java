@@ -8,6 +8,7 @@ import com.example.carnation.domain.order.service.OrderService;
 import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentResponseDto;
 import com.example.carnation.security.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
+    @SecurityRequirement(name = "JWT")
     @Operation(summary = "주문 생성", description = "특정 상품(Product)에 대한 주문을 생성합니다.")
     public ApiResponse<KakaoPaymentResponseDto> generate(
             @AuthenticationPrincipal AuthUser authUser,
@@ -42,6 +44,7 @@ public class OrderController {
             summary = "내 주문 목록 조회",
             description = "로그인한 사용자의 주문 목록을 페이지 형태로 조회합니다. 결제 수단, 결제 여부로 필터링할 수 있습니다."
     )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/me")
     public ApiResponse<Page<OrderSimpleResponseDto>> findPageMe(
             @AuthenticationPrincipal AuthUser authUser,
