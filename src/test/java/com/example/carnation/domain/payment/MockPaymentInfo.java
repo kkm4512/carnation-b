@@ -1,9 +1,9 @@
 package com.example.carnation.domain.payment;
 
-import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
-import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyResponseDto;
-import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
-import com.example.carnation.domain.product.MockProductInfo;
+import com.example.carnation.domain.order.MockOrderInfo;
+import com.example.carnation.domain.payment.common.entity.Payment;
+import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentRequestDto;
+import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentResponseDto;
 import com.example.carnation.domain.user.MockUserInfo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,8 +17,8 @@ public class MockPaymentInfo {
     /**
      * 필수값만 포함된 Mock 결제 정보 생성
      */
-    public static KakaoPaymentReadyRequestDto getKakaoPaymentReadyRequestDto1() {
-        return new KakaoPaymentReadyRequestDto(
+    public static KakaoPaymentRequestDto getKakaoPaymentReadyRequestDto1() {
+        return new KakaoPaymentRequestDto(
                 "mock_order_123456", // 가맹점 주문번호
                 "mock_user_98765", // 가맹점 회원 ID
                 "테스트 상품", // 상품명
@@ -28,8 +28,8 @@ public class MockPaymentInfo {
         );
     }
 
-    public static KakaoPaymentReadyRequestDto getKakaoPaymentReadyRequestRequiredDtoFail1() {
-        return new KakaoPaymentReadyRequestDto(
+    public static KakaoPaymentRequestDto getKakaoPaymentReadyRequestRequiredDtoFail1() {
+        return new KakaoPaymentRequestDto(
                 "mock_order_123456", // 가맹점 주문번호
                 "mock_user_98765", // 가맹점 회원 ID
                 "테스트 상품", // 상품명
@@ -42,8 +42,8 @@ public class MockPaymentInfo {
     /**
      * 카카오페이 결제 준비 API 응답 (필수값 + 선택값 포함)
      */
-    public static KakaoPaymentReadyResponseDto getKakaoPaymentReadyResponse1() {
-        return new KakaoPaymentReadyResponseDto(
+    public static KakaoPaymentResponseDto getKakaoPaymentReadyResponse1() {
+        return new KakaoPaymentResponseDto(
                 "T09876543210987654321", // 결제 고유 번호
                 "https://mock.kakaopay.com/redirect/app", // 모바일 앱 리디렉트 URL
                 "https://mock.kakaopay.com/redirect/mobile", // 모바일 웹 리디렉트 URL
@@ -54,10 +54,10 @@ public class MockPaymentInfo {
         );
     }
 
-    public static KakaoPayment getKakaoPaymentReady1() {
-        return KakaoPayment.of(
+    public static Payment getPayment1() {
+        return Payment.of(
                 MockUserInfo.getUser1(),
-                MockProductInfo.getProduct1()
+                MockOrderInfo.getOrder1()
         );
     }
 
@@ -68,7 +68,7 @@ public class MockPaymentInfo {
         return headers;
     }
 
-    public static Map<String, String> getParamsByKakaoPaymentReady1(KakaoPayment entity) {
+    public static Map<String, String> getParamsByKakaoPaymentReady1(Payment entity) {
         Map<String, String> params = new HashMap<>();
         params.put("cid", entity.getCid());
         params.put("partner_order_id", entity.getPartnerOrderId());
@@ -92,7 +92,7 @@ public class MockPaymentInfo {
     }
 
 
-    public static Map<String, String> getParamsByKakaoPaymentApproval1(KakaoPayment entity) {
+    public static Map<String, String> getParamsByKakaoPaymentApproval1(Payment entity) {
         Map<String, String> params = new HashMap<>();
         params.put("cid", entity.getCid());
         params.put("tid", entity.getTid());

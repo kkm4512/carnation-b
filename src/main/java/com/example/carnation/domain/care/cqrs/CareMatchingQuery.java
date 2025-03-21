@@ -34,12 +34,12 @@ public class CareMatchingQuery {
     }
 
     @Transactional(readOnly = true)
-    public Page<CareMatching> readPageByCaregiver(Caregiver caregiver, Pageable pageable, CareMatchingStatusSearchDto dto) {
+    public Page<CareMatching> readPageMeByCaregiver(Caregiver caregiver, Pageable pageable, CareMatchingStatusSearchDto dto) {
         return repository.findAllByCaregiver(caregiver,dto.getMatchStatus(), pageable);
     }
 
     @Transactional(readOnly = true)
-    public Page<CareMatching> readPageByPatient(Patient patient, Pageable pageable, CareMatchingStatusSearchDto dto) {
+    public Page<CareMatching> readPageMeByPatient(Patient patient, Pageable pageable, CareMatchingStatusSearchDto dto) {
         return repository.findAllByPatient(patient, dto.getMatchStatus(), pageable);
     }
 

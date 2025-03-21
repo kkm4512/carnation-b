@@ -1,14 +1,15 @@
 package com.example.carnation.domain.payment.service;
 
+import com.example.carnation.domain.order.MockOrderInfo;
 import com.example.carnation.domain.payment.MockPaymentInfo;
-import com.example.carnation.domain.payment.kakao.cqrs.KakaoPaymentCommand;
-import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyRequestDto;
-import com.example.carnation.domain.payment.kakao.dto.KakaoPaymentReadyResponseDto;
-import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
-import com.example.carnation.domain.payment.kakao.helper.KakaoPaymentHelper;
-import com.example.carnation.domain.payment.kakao.service.KakaoPaymentService;
+import com.example.carnation.domain.payment.impl.kakao.cqrs.PaymentCommand;
+import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentRequestDto;
+import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentResponseDto;
+import com.example.carnation.domain.payment.common.entity.Payment;
+import com.example.carnation.domain.payment.impl.kakao.helper.KakaoPaymentHelper;
+import com.example.carnation.domain.payment.impl.kakao.service.KakaoPaymentService;
 import com.example.carnation.domain.product.MockProductInfo;
-import com.example.carnation.domain.product.cars.ProductQuery;
+import com.example.carnation.domain.product.cqrs.ProductQuery;
 import com.example.carnation.domain.user.MockUserInfo;
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
 import com.example.carnation.security.AuthUser;
@@ -35,7 +36,7 @@ class KakaoPaymentServiceUnitTest {
     private RestTemplate restTemplate;
 
     @Mock
-    private KakaoPaymentCommand kakaoPaymentCommand;
+    private PaymentCommand paymentCommand;
 
     @Mock
     private KakaoPaymentHelper kakaoPaymentHelper;
@@ -46,23 +47,21 @@ class KakaoPaymentServiceUnitTest {
     @Mock
     private ProductQuery productQuery;
 
+
     @Test
     @DisplayName("카카오 페이먼트 결제 준비 테스트")
     void test1() {
         // given
         AuthUser authUser = MockUserInfo.getAuthUser1();
-        KakaoPaymentReadyRequestDto dto = MockPaymentInfo.getKakaoPaymentReadyRequestDto1();
-        KakaoPaymentReadyResponseDto mockResponse = MockPaymentInfo.getKakaoPaymentReadyResponse1();
-        KakaoPayment mockKakaoPayment = MockPaymentInfo.getKakaoPaymentReady1();
-        given(productQuery.readById(1L)).willReturn(MockProductInfo.getProduct1());
-        given(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(KakaoPaymentReadyResponseDto.class))).willReturn(ResponseEntity.ok(mockResponse));
+        KakaoPaymentResponseDto mockResponse = MockPaymentInfo.getKakaoPaymentReadyResponse1();
+        Payment mockPayment = MockPaymentInfo.getPayment1();
+        given(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(KakaoPaymentResponseDto.class))).willReturn(ResponseEntity.ok(mockResponse));
         given(kakaoPaymentHelper.getHeadersByKakaoPayment()).willReturn(MockPaymentInfo.getHeadersByKakaoPayment());
-        given(kakaoPaymentHelper.getParamsByKakaoPayment(any())).willReturn(MockPaymentInfo.getParamsByKakaoPaymentReady1(mockKakaoPayment));
-        given(kakaoPaymentCommand.create(any())).willReturn(mockKakaoPayment);
-        given(userQuery.readById(authUser.getUserId())).willReturn(MockUserInfo.getUser1());
+        given(kakaoPaymentHelper.getParamsByKakaoPayment(any())).willReturn(MockPaymentInfo.getParamsByKakaoPaymentReady1(mockPayment));
+        given(paymentCommand.create(any())).willReturn(mockPayment);
 
         // when
-        KakaoPaymentReadyResponseDto response = kakaoPaymentService.ready(authUser,1L);
+        KakaoPaymentResponseDto response = kakaoPaymentService.ready(MockUserInfo.getUser1(), MockOrderInfo.getOrder1());
 
         // then
         assertThat(response).isNotNull();

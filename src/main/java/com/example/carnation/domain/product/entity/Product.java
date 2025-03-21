@@ -1,5 +1,8 @@
 package com.example.carnation.domain.product.entity;
 
+import com.example.carnation.common.exception.ProductException;
+import com.example.carnation.common.response.enums.ProductApiResponseEnum;
+import com.example.carnation.domain.order.entity.Order;
 import com.example.carnation.domain.product.dto.ProductRequestDto;
 import com.example.carnation.domain.user.common.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +16,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -70,6 +75,9 @@ public class Product {
     @JoinColumn(name = "user_id", nullable = false)  // 외래 키 설정
     private User user;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
+
     public Product(User user, String name, String description, Integer price, Integer quantity, String category, String brand) {
         this.name = name;
         this.description = description;
@@ -92,5 +100,29 @@ public class Product {
                 dto.getBrand()
         );
     }
+
+    /**
+     * 상품 재고를 차감하는 메서드
+     * @param quantity 차감할 수량
+     * @throws IllegalArgumentException 재고가 부족할 경우
+     */
+    public void decreaseStock(int quantity) {
+        if (quantity <= 0) {
+            throw new ProductException(ProductApiResponseEnum.STOCK_CONFLICT);
+        }
+
+        if (this.quantity < quantity) {
+            throw new ProductException(ProductApiResponseEnum.INSUFFICIENT_STOCK);
+        }
+
+        this.quantity -= quantity;
+
+        if (this.quantity == 0) {
+            this.isAvailable = false;
+        }
+    }
+
+
+
 
 }

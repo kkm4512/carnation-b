@@ -2,7 +2,6 @@ package com.example.carnation.domain.user.wallet.service;
 
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
 import com.example.carnation.domain.user.common.entity.User;
-import com.example.carnation.domain.user.common.validate.UserValidate;
 import com.example.carnation.domain.user.wallet.dto.DepositRequestDto;
 import com.example.carnation.domain.user.wallet.dto.TransferRequestDto;
 import com.example.carnation.domain.user.wallet.dto.WithdrawRequestDto;
@@ -19,12 +18,13 @@ public class WalletService {
 
     @Transactional
     public void transfer(final User user, final TransferRequestDto dto) {
-        UserValidate.validateSelfTransferNotAllowed(user.getId(),dto.getTargetId());
         User user1 = userQuery.readById(user.getId());
+        User user2 = userQuery.readById(dto.getTargetId());
+        user1.isMe(user2);
+
         Wallet userWallet1 = user1.getUserWallet();
         userWallet1.withdraw(dto.getAmount());
 
-        User user2 = userQuery.readById(dto.getTargetId());
         Wallet userWallet2 = user2.getUserWallet();
         userWallet2.deposit(dto.getAmount());
     }

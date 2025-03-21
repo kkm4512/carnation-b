@@ -1,7 +1,7 @@
 package com.example.carnation.domain.product.service;
 
-import com.example.carnation.domain.product.cars.ProductCommand;
-import com.example.carnation.domain.product.cars.ProductQuery;
+import com.example.carnation.domain.product.cqrs.ProductCommand;
+import com.example.carnation.domain.product.cqrs.ProductQuery;
 import com.example.carnation.domain.product.dto.ProductRequestDto;
 import com.example.carnation.domain.product.dto.ProductResponseDto;
 import com.example.carnation.domain.product.entity.Product;

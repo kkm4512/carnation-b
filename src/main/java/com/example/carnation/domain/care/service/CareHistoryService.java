@@ -95,7 +95,7 @@ public class CareHistoryService {
         User user = User.of(authUser);
         CareMatching careMatching = careMatchingQuery.readById(careMatchingId);
         Caregiver caregiver = careMatching.getCaregiver();
-        user.isMe(caregiver.getUser());
+        user.isNotMe(caregiver.getUser());
         Page<CareHistory> responses = careHistoryQuery.readPageByMe(caregiver, pageable);
         return responses.map(CareHistoryResponseDto::of);
     }

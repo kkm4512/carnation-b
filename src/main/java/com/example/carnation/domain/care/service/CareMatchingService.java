@@ -64,18 +64,18 @@ public class CareMatchingService {
 
 
     // 로그인해 있는 유저의 간병인으로 매칭되있는것들을 가져옴
-    public Page<CareMatchingSimpleResponse> findPageByCaregiver(final AuthUser authUser, final CareMatchingStatusSearchDto dto) {
+    public Page<CareMatchingSimpleResponse> findPageMeByCaregiver(final AuthUser authUser, final CareMatchingStatusSearchDto dto) {
         Pageable pageable = PageSearchDto.of(dto);
         User user = userQuery.readById(authUser.getUserId());
-        Page<CareMatching> responses = careMatchingQuery.readPageByCaregiver(user.getCaregiver(),pageable,dto);
+        Page<CareMatching> responses = careMatchingQuery.readPageMeByCaregiver(user.getCaregiver(),pageable,dto);
         return responses.map(CareMatchingSimpleResponse::of);
     }
 
     // 로그인해 있는 유저의 환자로 매칭되있는것들을 가져옴
-    public Page<CareMatchingSimpleResponse> findPageByPatient(final AuthUser authUser, final CareMatchingStatusSearchDto dto) {
+    public Page<CareMatchingSimpleResponse> findPageMeByPatient(final AuthUser authUser, final CareMatchingStatusSearchDto dto) {
         Pageable pageable = PageSearchDto.of(dto);
         User user = userQuery.readById(authUser.getUserId());
-        Page<CareMatching> responses = careMatchingQuery.readPageByPatient(user.getPatient(),pageable, dto);
+        Page<CareMatching> responses = careMatchingQuery.readPageMeByPatient(user.getPatient(),pageable, dto);
         return responses.map(CareMatchingSimpleResponse::of);
     }
 

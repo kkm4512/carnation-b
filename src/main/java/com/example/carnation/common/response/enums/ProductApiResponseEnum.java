@@ -20,6 +20,7 @@ public enum ProductApiResponseEnum implements ApiResponseEnum {
     // 409 Conflict (중복 요청, 충돌)
     DUPLICATE_PRODUCT_NAME(HttpStatus.CONFLICT, "이미 동일한 상품명이 존재합니다."),
     STOCK_CONFLICT(HttpStatus.CONFLICT, "재고가 부족하여 주문을 처리할 수 없습니다."),
+    INSUFFICIENT_STOCK(HttpStatus.CONFLICT, "요청 수량이 재고보다 많습니다."), // ✅ 추가
 
     // 410 Gone (만료된 리소스)
     EXPIRED_VERIFICATION_CODE(HttpStatus.GONE, "인증 코드가 만료되었습니다. 다시 요청해주세요."),

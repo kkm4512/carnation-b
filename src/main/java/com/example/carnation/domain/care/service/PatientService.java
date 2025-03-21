@@ -50,7 +50,7 @@ public class PatientService {
     public void modifyIsVisible(AuthUser authUser, Boolean IsVisible) {
         User user = userQuery.readById(authUser.getUserId());
         Patient patient = user.getPatient();
-        user.isMe(patient.getUser());
+        user.isNotMe(patient.getUser());
         if (user.getCaregiver() != null && user.getCaregiver().getIsVisible().equals(Boolean.TRUE)) {
             throw new CareException(CareApiResponseEnum.DUPLICATE_JOB_POSTING_AS_CAREGIVER);
         }
