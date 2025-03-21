@@ -4,7 +4,6 @@ import com.example.carnation.common.exception.UserException;
 import com.example.carnation.common.util.Validator;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
-import com.example.carnation.domain.payment.kakao.entity.KakaoPayment;
 import com.example.carnation.domain.product.entity.Product;
 import com.example.carnation.domain.user.auth.dto.SignupRequestDto;
 import com.example.carnation.domain.user.common.constans.AuthProvider;
@@ -28,8 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.carnation.common.response.enums.UserApiResponseEnum.EXISTING_SOCIAL_ACCOUNT;
-import static com.example.carnation.common.response.enums.UserApiResponseEnum.NOT_ME;
+import static com.example.carnation.common.response.enums.UserApiResponseEnum.*;
 
 @Entity
 @Getter
@@ -110,9 +108,6 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_wallet_id", unique = true)
     private Wallet userWallet;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<KakaoPayment> kakaoPaymentReadys = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
@@ -203,11 +198,19 @@ public class User {
         );
     }
 
-    public void isMe(User user) {
-        Validator.validateNotNullAndEqual(
+    public void isNotMe(User user) {
+        Validator.validateNotNullAndNotEqual(
             this.id,
             user.getId(),
             new UserException(NOT_ME)
+        );
+    }
+
+    public void isMe(User user) {
+        Validator.validateNotNullAndEqual(
+                this.id,
+                user.getId(),
+                new UserException(INVALID_SELF_OPERATION)
         );
     }
 

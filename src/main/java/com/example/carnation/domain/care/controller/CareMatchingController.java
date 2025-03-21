@@ -71,7 +71,7 @@ public class CareMatchingController {
             @AuthenticationPrincipal AuthUser authUser,
             @ModelAttribute @Valid CareMatchingStatusSearchDto dto
     ) {
-        Page<CareMatchingSimpleResponse> response = careMatchingService.findPageByCaregiver(authUser, dto);
+        Page<CareMatchingSimpleResponse> response = careMatchingService.findPageMeByCaregiver(authUser, dto);
         return ApiResponse.of(SUCCESS, response);
     }
 
@@ -82,7 +82,7 @@ public class CareMatchingController {
             @AuthenticationPrincipal AuthUser authUser,
             @ModelAttribute @Valid CareMatchingStatusSearchDto dto
     ) {
-        Page<CareMatchingSimpleResponse> response = careMatchingService.findPageByPatient(authUser, dto);
+        Page<CareMatchingSimpleResponse> response = careMatchingService.findPageMeByPatient(authUser, dto);
         return ApiResponse.of(SUCCESS, response);
     }
 

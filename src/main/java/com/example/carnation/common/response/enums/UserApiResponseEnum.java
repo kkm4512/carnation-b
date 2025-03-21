@@ -29,7 +29,7 @@ public enum UserApiResponseEnum implements ApiResponseEnum {
     // 409
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이메일이 중복 되었습니다"),
     EXISTING_SOCIAL_ACCOUNT(HttpStatus.CONFLICT, "이미 소셜 계정으로 가입된 사용자입니다. 소셜 로그인을 이용해 주세요."),
-    SELF_TRANSFER_NOT_ALLOWED(HttpStatus.CONFLICT, "자기 자신에게 송금 할 수 없습니다"),
+    INVALID_SELF_OPERATION(HttpStatus.CONFLICT, "본인에 대한 잘못된 작업 요청입니다"),
     ;
 
     private final HttpStatus httpStatus;
