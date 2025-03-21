@@ -90,7 +90,7 @@ public class Patient {
     }
 
     public void isMe(User user){
-        Validator.validateNotNullAndEqual(
+        Validator.validateNotNullAndNotEqual(
                 this.getUser().getId(),
                 user.getId(),
                 new CareException(BaseApiResponseEnum.RESOURCE_NOT_OWNED)
