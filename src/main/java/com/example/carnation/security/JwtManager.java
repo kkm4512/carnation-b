@@ -78,13 +78,13 @@ public class JwtManager {
         }
     }
 
-    public void validateRefreshToken(String refreshToken) {
+    public void validateToken(String token) {
         try {
             // 토큰을 Claims로 변환 (유효성 검증 포함)
             Jwts.parserBuilder()
                     .setSigningKey(key) // 서명 키 설정
                     .build()
-                    .parseClaimsJws(refreshToken) // 토큰 파싱 및 검증
+                    .parseClaimsJws(token) // 토큰 파싱 및 검증
                     .getBody();
         } catch (SecurityException | MalformedJwtException | IllegalArgumentException e) {
             throw new UserException(JWT_INVALID, e);

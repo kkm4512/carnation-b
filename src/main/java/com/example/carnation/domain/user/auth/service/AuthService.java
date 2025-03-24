@@ -1,5 +1,6 @@
 package com.example.carnation.domain.user.auth.service;
 
+import com.example.carnation.annotation.RotateToken;
 import com.example.carnation.annotation.SaveRefreshToken;
 import com.example.carnation.annotation.SaveVerificationCode;
 import com.example.carnation.common.exception.UserException;
@@ -78,9 +79,9 @@ public class AuthService {
         verificationHelper.validateVerificationCode(expectedVerificationCode, actualVerificationCode, dto.getPhoneNumber());
     }
 
-    @SaveRefreshToken
-    public TokenDto refreshAccessToken(final TokenRefreshRequestDto dto) {
-        jwtManager.validateRefreshToken(dto.getRefreshToken());
+    @RotateToken
+    public TokenDto refreshToken(final TokenRefreshRequestDto dto) {
+        jwtManager.validateToken(dto.getRefreshToken());
         Long userId = Long.valueOf(jwtManager.toClaims(dto.getRefreshToken()).getSubject());
         String refreshToken = redisService.getRefreshToken(userId);
         jwtManager.compare(dto.getRefreshToken(),refreshToken);

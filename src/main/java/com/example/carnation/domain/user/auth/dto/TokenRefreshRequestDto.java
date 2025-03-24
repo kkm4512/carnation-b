@@ -14,6 +14,10 @@ import lombok.NoArgsConstructor;
 public class TokenRefreshRequestDto {
 
     @NotBlank
+    @Schema(description = "기존에 발급받은 Acceess Token", example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiZXhwIjoxNzQyNDczNDg4LCJpYXQiOjE3NDE4Njg2ODh9.6W0X_HuAyVlxH-71ghzLEcGHjG-Qzff1YeQuQYkUsgk")
+    private String accessToken;
+
+    @NotBlank
     @Schema(description = "기존에 발급받은 Refresh Token", example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiZXhwIjoxNzQyNDczNDg4LCJpYXQiOjE3NDE4Njg2ODh9.6W0X_HuAyVlxH-71ghzLEcGHjG-Qzff1YeQuQYkUsgk")
     private String refreshToken;
 }
