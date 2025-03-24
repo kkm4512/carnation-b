@@ -78,17 +78,19 @@ public class AuthService {
         verificationHelper.validateVerificationCode(expectedVerificationCode, actualVerificationCode, dto.getPhoneNumber());
     }
 
+    @SaveRefreshToken
     public TokenDto refreshAccessToken(final TokenRefreshRequestDto dto) {
         jwtManager.validateRefreshToken(dto.getRefreshToken());
         Long userId = Long.valueOf(jwtManager.toClaims(dto.getRefreshToken()).getSubject());
         String refreshToken = redisService.getRefreshToken(userId);
         jwtManager.compare(dto.getRefreshToken(),refreshToken);
         User user = userQuery.readById(userId);
-        String accessToken = jwtManager.generateAccessToken(JwtDto.of(user));
+        String newAccessToken = jwtManager.generateAccessToken(JwtDto.of(user));
+        String newRefreshToken = jwtManager.generateRefreshToken(JwtDto.of(user));
         return TokenDto.of(
                 user.getId(),
-                accessToken,
-                refreshToken
+                newAccessToken,
+                newRefreshToken
         );
     }
 
