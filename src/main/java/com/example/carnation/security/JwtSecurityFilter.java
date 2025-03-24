@@ -1,6 +1,8 @@
 package com.example.carnation.security;
 
 import com.example.carnation.common.exception.UserException;
+import com.example.carnation.common.response.enums.UserApiResponseEnum;
+import com.example.carnation.common.service.RedisService;
 import com.example.carnation.domain.user.common.constans.AuthProvider;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -30,6 +32,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
 
     private final JwtManager jm;
     private static final AntPathMatcher pathMatcher = new AntPathMatcher();
+    private final RedisService redisService;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -51,12 +54,17 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpRequest, @NonNull HttpServletResponse httpResponse, @NonNull FilterChain chain) throws ServletException, IOException {
         String jwt = httpRequest.getHeader(AUTHORIZATION_HEADER);
-
         try {
             if (jwt != null) {
                 jwt = jwt.replace(BEARER_PREFIX, "");
                 Claims claims = jm.toClaims(jwt);
                 Long userId = Long.parseLong(claims.getSubject());
+                String blackAccessToken = redisService.getBlackAccessToken(userId);
+                // black List에 있음
+                if (jwt.equals(blackAccessToken)) {
+                    throw new UserException(UserApiResponseEnum.INVALID_ACCESS_TOKEN);
+                }
+
                 String email = claims.get("email", String.class);
                 String nickname = claims.get("nickname", String.class);
                 String userRoleString = claims.get("userRole", String.class);

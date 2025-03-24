@@ -84,12 +84,12 @@ public class AuthController {
     }
 
     /**
-     * Refresh Token을 이용하여 Access Token 갱신
+     * Token 갱신
      */
-    @Operation(summary = "토큰 갱신", description = "만료된 Access Token을 Refresh Token을 사용하여 새롭게 갱신합니다.")
+    @Operation(summary = "토큰 갱신")
     @PostMapping("/refresh")
-    public ApiResponse<TokenDto> refreshAccessToken(@RequestBody @Valid TokenRefreshRequestDto dto) {
-        TokenDto response = authService.refreshAccessToken(dto);
+    public ApiResponse<TokenDto> refreshToken(@RequestBody @Valid TokenRefreshRequestDto dto) {
+        TokenDto response = authService.refreshToken(dto);
         return ApiResponse.of(SUCCESS, response);
     }
 }

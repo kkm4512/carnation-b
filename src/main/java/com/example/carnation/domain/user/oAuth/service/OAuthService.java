@@ -1,6 +1,6 @@
 package com.example.carnation.domain.user.oAuth.service;
 
-import com.example.carnation.annotation.SaveRefreshToken;
+import com.example.carnation.annotation.RotateToken;
 import com.example.carnation.domain.user.auth.helper.TokenHelper;
 import com.example.carnation.domain.user.common.cqrs.UserCommand;
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
@@ -23,7 +23,7 @@ public class OAuthService {
     private final UserCommand userCommand;
     private final TokenHelper tokenHelper;
 
-    @SaveRefreshToken
+    @RotateToken
     public TokenDto socialLogin(final OAuthProviderNameType oAuthProviderName, final String code) {
         OAuthProviderDto oAuthProviderDto = OAuthProviderDto.of(oAuthProviderName,code);
         SocialLoginService socialLoginService = factory.getLoginService(oAuthProviderDto);
