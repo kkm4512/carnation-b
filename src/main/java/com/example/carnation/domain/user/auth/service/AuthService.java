@@ -80,9 +80,10 @@ public class AuthService {
 
     public TokenDto refreshAccessToken(final TokenRefreshRequestDto dto) {
         jwtManager.validateRefreshToken(dto.getRefreshToken());
-        String refreshToken = redisService.getRefreshToken(dto.getUserId());
+        Long userId = Long.valueOf(jwtManager.toClaims(dto.getRefreshToken()).getSubject());
+        String refreshToken = redisService.getRefreshToken(userId);
         jwtManager.compare(dto.getRefreshToken(),refreshToken);
-        User user = userQuery.readById(dto.getUserId());
+        User user = userQuery.readById(userId);
         String accessToken = jwtManager.generateAccessToken(JwtDto.of(user));
         return TokenDto.of(
                 user.getId(),
