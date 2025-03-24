@@ -18,6 +18,7 @@ public enum UserApiResponseEnum implements ApiResponseEnum {
     JWT_NOT_SIGNATURED(HttpStatus.UNAUTHORIZED, "서명되지 않은 JWT입니다"),
     NOT_LOGIN(HttpStatus.UNAUTHORIZED,"로그인후 이용해 주세요"),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 Refresh Token입니다."),
+    INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 Access Token입니다."),
 
     // 403
     NOT_ME(HttpStatus.FORBIDDEN,"권한이 존재 하지 않습니다"),
