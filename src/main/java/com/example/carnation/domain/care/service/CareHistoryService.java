@@ -39,11 +39,11 @@ public class CareHistoryService {
     private static final String AWS_BASE_URL =  "https://carnation-b-bucket.s3.ap-northeast-2.amazonaws.com";
 
 
-    public CareHistory generate(final AuthUser authUser, final Long careMatchingId, final CareHistoryRequestDto careHistoryRequestDto, final CareHistoryFilesRequestDto careHistoryFilesRequestDto) {
+    public CareHistory generate(final AuthUser authUser, final CareHistoryRequestDto careHistoryRequestDto, final CareHistoryFilesRequestDto careHistoryFilesRequestDto) {
         User user = User.of(authUser);
-        CareMatching careMatching = careMatchingQuery.readById(careMatchingId);
+        CareMatching careMatching = careMatchingQuery.readById(careHistoryRequestDto.getCareMatchingId());
         Caregiver caregiver = careMatching.getCaregiver();
-        caregiver.isMe(user);
+        user.validateIsMe(caregiver.getUser());
         FileValidation.countImagesFiles(careHistoryFilesRequestDto.getImageFiles());
         FileValidation.countVideoFiles(careHistoryFilesRequestDto.getVideoFiles());
         List<MultipartFile> multipartFiles = FileUtil.toList(careHistoryFilesRequestDto.getImageFiles(), careHistoryFilesRequestDto.getVideoFiles());
@@ -95,7 +95,7 @@ public class CareHistoryService {
         User user = User.of(authUser);
         CareMatching careMatching = careMatchingQuery.readById(careMatchingId);
         Caregiver caregiver = careMatching.getCaregiver();
-        user.isNotMe(caregiver.getUser());
+        user.validateIsNotMe(caregiver.getUser());
         Page<CareHistory> responses = careHistoryQuery.readPageByMe(caregiver, pageable);
         return responses.map(CareHistoryResponseDto::of);
     }

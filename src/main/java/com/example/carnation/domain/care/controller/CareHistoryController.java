@@ -32,7 +32,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SU
 public class CareHistoryController {
     private final CareHistoryService careHistoryService;
 
-    @PostMapping(value = "/me/{careMatchingId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @SecurityRequirement(name = "JWT")
     @Operation(
             summary = "간병 기록 등록",
@@ -40,13 +40,12 @@ public class CareHistoryController {
     )
     public ApiResponse<Void> generate(
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long careMatchingId,
             @RequestPart(value = "careHistoryRequestDto") @Valid CareHistoryRequestDto careHistoryRequestDto,
             @RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
             @RequestPart(value = "videoFiles", required = false) List<MultipartFile> videoFiles
     ) {
         CareHistoryFilesRequestDto careHistoryFilesRequestDto = CareHistoryFilesRequestDto.of(imageFiles, videoFiles);
-        careHistoryService.generate(authUser, careMatchingId, careHistoryRequestDto, careHistoryFilesRequestDto);
+        careHistoryService.generate(authUser, careHistoryRequestDto, careHistoryFilesRequestDto);
         return ApiResponse.of(SUCCESS);
     }
 

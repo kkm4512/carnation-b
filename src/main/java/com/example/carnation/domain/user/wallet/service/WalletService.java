@@ -20,7 +20,7 @@ public class WalletService {
     public void transfer(final User user, final TransferRequestDto dto) {
         User user1 = userQuery.readById(user.getId());
         User user2 = userQuery.readById(dto.getTargetId());
-        user1.isMe(user2);
+        user1.validateIsMe(user2);
 
         Wallet userWallet1 = user1.getUserWallet();
         userWallet1.withdraw(dto.getAmount());
