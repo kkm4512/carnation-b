@@ -25,8 +25,6 @@ jobs:
           OPENAI_API_MODEL: "gpt-4o"
           exclude: "**/*.json, **/*.md"
 
-          # 테스트 입니다, AI를 위한
-
 
 
 
