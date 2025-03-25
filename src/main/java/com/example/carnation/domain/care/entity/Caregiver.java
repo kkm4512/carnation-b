@@ -1,8 +1,5 @@
 package com.example.carnation.domain.care.entity;
 
-import com.example.carnation.common.exception.CareException;
-import com.example.carnation.common.response.enums.BaseApiResponseEnum;
-import com.example.carnation.common.util.Validator;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.user.common.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -85,14 +82,6 @@ public class Caregiver {
                 dto.getHeight(),
                 dto.getWeight(),
                 dto.getIsVisible()
-        );
-    }
-
-    public void isMe(User user){
-        Validator.validateNotNullAndNotEqual(
-                this.getUser().getId(),
-                user.getId(),
-                new CareException(BaseApiResponseEnum.RESOURCE_NOT_OWNED)
         );
     }
 

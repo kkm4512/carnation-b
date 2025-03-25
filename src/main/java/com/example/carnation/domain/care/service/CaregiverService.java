@@ -1,13 +1,12 @@
 package com.example.carnation.domain.care.service;
 
 import com.example.carnation.common.dto.PageSearchDto;
-import com.example.carnation.common.exception.CareException;
-import com.example.carnation.common.response.enums.CareApiResponseEnum;
 import com.example.carnation.domain.care.cqrs.CaregiverQuery;
 import com.example.carnation.domain.care.dto.CaregiverIsMatchSearchDto;
 import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.care.dto.CaregiverSimpleResponseDto;
 import com.example.carnation.domain.care.entity.Caregiver;
+import com.example.carnation.domain.care.validate.CareValidate;
 import com.example.carnation.domain.user.auth.dto.UserResponseDto;
 import com.example.carnation.domain.user.common.cqrs.UserCommand;
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
@@ -35,10 +34,7 @@ public class CaregiverService {
         User user = userQuery.readById(authUser.getUserId());
         Caregiver caregiver = Caregiver.of(user, dto);
         user.updateCareGiver(caregiver);
-        // 간병인의 자격으로 구인공고에 올리려고하는데, 이미 환자의 자격으로 구인공고 올린것이 존재한다면
-        if (user.getPatient() != null && user.getPatient().getIsVisible().equals(Boolean.TRUE) && dto.getIsVisible().equals(Boolean.TRUE)) {
-            throw new CareException(CareApiResponseEnum.DUPLICATE_JOB_POSTING_AS_PATIENT);
-        }
+        CareValidate.validateCaregiverRegisterConflict(user,dto.getIsVisible());
         User saveUser = userCommand.create(user);
         return UserResponseDto.of(saveUser);
     }
@@ -53,10 +49,8 @@ public class CaregiverService {
     public void modifyIsVisible(AuthUser authUser, Boolean IsVisible) {
         User user = userQuery.readById(authUser.getUserId());
         Caregiver caregiver = user.getCaregiver();
-        user.isNotMe(caregiver.getUser());
-        if (user.getPatient() != null && user.getPatient().getIsVisible().equals(Boolean.TRUE)) {
-            throw new CareException(CareApiResponseEnum.DUPLICATE_JOB_POSTING_AS_PATIENT);
-        }
+        user.validateIsNotMe(caregiver.getUser());
+        CareValidate.validateCaregiverRegisterConflict(user,IsVisible);
         caregiver.updateIsVisible(IsVisible);
     }
 }

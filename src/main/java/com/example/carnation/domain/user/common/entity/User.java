@@ -198,7 +198,9 @@ public class User {
         );
     }
 
-    public void isNotMe(User user) {
+    // 동일한 User가 아니라면 예외처리
+    // 타인의 리소스에 접근할때 비교하기위해 사용
+    public void validateIsNotMe(User user) {
         Validator.validateNotNullAndNotEqual(
             this.id,
             user.getId(),
@@ -206,7 +208,9 @@ public class User {
         );
     }
 
-    public void isMe(User user) {
+    // 동일한 User 라면 예외처리
+    // 자신의 리소스에 자신이 접근하려고할떄 사용
+    public void validateIsMe(User user) {
         Validator.validateNotNullAndEqual(
                 this.id,
                 user.getId(),

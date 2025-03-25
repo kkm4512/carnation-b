@@ -34,7 +34,7 @@ public class OrderService {
     public KakaoPaymentResponseDto generate(AuthUser authUser, OrderRequestDto dto) {
         User user = userQuery.readById(authUser.getUserId());
         Product product = productQuery.readById(dto.getProductId());
-        user.isMe(product.getUser());
+        user.validateIsMe(product.getUser());
         product.decreaseStock(dto.getQuantity());
         Order order = Order.of(product, dto);
         Order savedOrder = orderCommand.create(order);

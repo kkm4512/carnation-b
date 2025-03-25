@@ -38,7 +38,7 @@ public class AuthService {
     private final VerificationHelper verificationHelper;
 
     @Transactional
-    public UserResponseDto signUp(final SignupRequestDto dto) {
+    public UserResponseDto signup(final SignupRequestDto dto) {
         Boolean flag = userQuery.existsByEmail(dto.getEmail());
         // 중복된 이메일이 없을 경우
         if (!flag) {
