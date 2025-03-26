@@ -1,5 +1,7 @@
 package com.example.carnation.domain.payment.impl.kakao.service;
 
+import com.example.carnation.common.exception.RestTemplateException;
+import com.example.carnation.common.response.enums.RestTemplateApiResponseEnum;
 import com.example.carnation.domain.order.cqrs.OrderQuery;
 import com.example.carnation.domain.order.entity.Order;
 import com.example.carnation.domain.payment.common.entity.Payment;
@@ -68,7 +70,7 @@ public class KakaoPaymentService implements PaymentService {
             return KakaoPaymentSimpleResponseDto.of(resDto);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new RestTemplateException(RestTemplateApiResponseEnum.UNEXPECTED_ERROR,e);
         }
     }
 
