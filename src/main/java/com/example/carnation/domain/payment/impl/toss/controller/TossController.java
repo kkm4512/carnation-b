@@ -23,6 +23,6 @@ public class TossController {
 
     @GetMapping
     public ApiResponse<String> findAllToss() {
-        return ApiResponse.of(SUCCESS,"2");
+        return ApiResponse.of(SUCCESS,"3");
     }
 }
