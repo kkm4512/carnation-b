@@ -23,7 +23,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.KKM_GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.KKM_OPEN_AI_KEY }}
           OPENAI_API_MODEL: "gpt-4o"
-          exclude: "**/*.json, **/*.md"
 
 
 
