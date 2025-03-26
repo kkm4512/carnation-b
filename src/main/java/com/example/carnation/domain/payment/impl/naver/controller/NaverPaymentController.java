@@ -22,4 +22,9 @@ public class NaverPaymentController {
         return "perpare2222";
     }
 
+    @GetMapping("/{id}/{pw}")
+    public String perpare(@PathVariable String id, @PathVariable String pw) {
+        return "perpare3333";
+    }
+
 }
