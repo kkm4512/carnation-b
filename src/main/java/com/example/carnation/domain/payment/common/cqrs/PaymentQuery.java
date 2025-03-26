@@ -1,4 +1,4 @@
-package com.example.carnation.domain.payment.impl.kakao.cqrs;
+package com.example.carnation.domain.payment.common.cqrs;
 
 import com.example.carnation.common.exception.KakaoPaymentException;
 import com.example.carnation.domain.payment.common.entity.Payment;

@@ -1,7 +1,7 @@
 package com.example.carnation.domain.payment.impl.kakao.controller.redirectController;
 
 import com.example.carnation.common.response.ApiResponse;
-import com.example.carnation.domain.payment.impl.kakao.constans.KakaoPaymentStatus;
+import com.example.carnation.domain.payment.impl.kakao.constans.PaymentStatus;
 import com.example.carnation.domain.payment.impl.kakao.service.KakaoPaymentService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
@@ -22,22 +22,22 @@ public class KakaoPaymentRedirectController {
     private final KakaoPaymentService kakaoPaymentService;
 
     @GetMapping("/approval")
-    public ApiResponse<KakaoPaymentStatus> approval(
+    public ApiResponse<PaymentStatus> approval(
             @RequestParam("pg_token") String pgToken,
             @RequestParam("order_id") String orderId
     ) {
-        KakaoPaymentStatus response = kakaoPaymentService.approval(Long.valueOf(orderId), pgToken);
+        PaymentStatus response = kakaoPaymentService.approval(Long.valueOf(orderId), pgToken);
         return ApiResponse.of(SUCCESS,response);
     }
 
     @GetMapping("/cancel")
-    public ApiResponse<KakaoPaymentStatus> cancel(@RequestParam("order_id") String orderId) {
-        KakaoPaymentStatus response = kakaoPaymentService.cancel(Long.valueOf(orderId));
+    public ApiResponse<PaymentStatus> cancel(@RequestParam("order_id") String orderId) {
+        PaymentStatus response = kakaoPaymentService.cancel(Long.valueOf(orderId));
         return ApiResponse.of(SUCCESS,response);
     }
     @GetMapping("/fail")
-    public ApiResponse<KakaoPaymentStatus> fail(@RequestParam("order_id") String orderId) {
-        KakaoPaymentStatus response = kakaoPaymentService.fail(Long.valueOf(orderId));
+    public ApiResponse<PaymentStatus> fail(@RequestParam("order_id") String orderId) {
+        PaymentStatus response = kakaoPaymentService.fail(Long.valueOf(orderId));
         return ApiResponse.of(SUCCESS,response);
     }
 }
