@@ -21,8 +21,8 @@ public class JwtManager {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
-    private static final long ACCESS_TOKEN_EXPIRED_TIME = 60 * 60 * 1000L; // 1시간
-    private static final long REFRESH_TOKEN_EXPIRED_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+    private static final long ACCESS_TOKEN_EXPIRED_TIME = 30 * 60 * 1000L; // 30분
+    private static final long REFRESH_TOKEN_EXPIRED_TIME = 60 * 60 * 1000L; // 1시간
 
 
     @Value("${jwt.secret.key}")

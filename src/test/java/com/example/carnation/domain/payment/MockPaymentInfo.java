@@ -3,7 +3,7 @@ package com.example.carnation.domain.payment;
 import com.example.carnation.domain.order.MockOrderInfo;
 import com.example.carnation.domain.payment.common.entity.Payment;
 import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentRequestDto;
-import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentResponseDto;
+import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentReadyResponseDto;
 import com.example.carnation.domain.user.MockUserInfo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -42,8 +42,8 @@ public class MockPaymentInfo {
     /**
      * 카카오페이 결제 준비 API 응답 (필수값 + 선택값 포함)
      */
-    public static KakaoPaymentResponseDto getKakaoPaymentReadyResponse1() {
-        return new KakaoPaymentResponseDto(
+    public static KakaoPaymentReadyResponseDto getKakaoPaymentReadyResponse1() {
+        return new KakaoPaymentReadyResponseDto(
                 "T09876543210987654321", // 결제 고유 번호
                 "https://mock.kakaopay.com/redirect/app", // 모바일 앱 리디렉트 URL
                 "https://mock.kakaopay.com/redirect/mobile", // 모바일 웹 리디렉트 URL
@@ -73,7 +73,7 @@ public class MockPaymentInfo {
         params.put("cid", entity.getCid());
         params.put("partner_order_id", entity.getPartnerOrderId());
         params.put("partner_user_id", entity.getPartnerUserId());
-        params.put("item_name", entity.getItemName());
+        params.put("item_name", entity.getProductName());
         params.put("quantity", String.valueOf(entity.getQuantity()));
         params.put("total_amount", String.valueOf(entity.getTotalAmount()));
         params.put("tax_free_amount", String.valueOf(entity.getTaxFreeAmount()));

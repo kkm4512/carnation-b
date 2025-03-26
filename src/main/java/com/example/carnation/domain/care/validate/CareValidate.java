@@ -4,6 +4,7 @@ import com.example.carnation.common.exception.CareException;
 import com.example.carnation.common.response.enums.CareApiResponseEnum;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.entity.Patient;
+import com.example.carnation.domain.user.common.entity.User;
 
 public class CareValidate {
     public static void validateCareMatching(Boolean flag) {
@@ -24,6 +25,26 @@ public class CareValidate {
             throw new CareException(CareApiResponseEnum.SELF_CARE_MATCHING_NOT_ALLOWED);
         }
     }
+
+    // user가 간병인으로서 공고를 올렸는데, 환자로 공고를 올릴려고 할시 예외발생
+    public static void validateCaregiverRegisterConflict(User user, Boolean flag) {
+        if (user.getPatient() != null &&
+                user.getPatient().getIsVisible().equals(Boolean.TRUE) &&
+                flag.equals(Boolean.TRUE)) {
+            throw new CareException(CareApiResponseEnum.DUPLICATE_JOB_POSTING_AS_PATIENT);
+        }
+    }
+
+    // user가 환자으로서 공고를 올렸는데, 간병인으로 공고를 올릴려고 할시 예외발생
+    public static void validatePatientRegisterConflict(User user, Boolean flag) {
+        if (user.getCaregiver() != null &&
+                user.getCaregiver().getIsVisible().equals(Boolean.TRUE) &&
+                flag.equals(Boolean.TRUE)) {
+            throw new CareException(CareApiResponseEnum.DUPLICATE_JOB_POSTING_AS_CAREGIVER);
+        }
+    }
+
+
 
 
 

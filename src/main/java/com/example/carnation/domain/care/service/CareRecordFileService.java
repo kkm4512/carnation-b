@@ -30,8 +30,7 @@ public class CareRecordFileService {
         User user = User.of(authUser);
         CareMatching careMatching = careMatchingQuery.readById(careMatchingId);
         Caregiver caregiver = careMatching.getCaregiver();
-        // 특정 careMatching에 들어있는 간병인이, 로그인되있는 유저와 동일한지 체크하는 로직
-        caregiver.isMe(user);
+        user.validateIsMe(caregiver.getUser());
         try (PDDocument document = new PDDocument();
              ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 

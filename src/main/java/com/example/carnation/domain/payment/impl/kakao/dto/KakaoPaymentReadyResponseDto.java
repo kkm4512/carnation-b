@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Schema(name = "카카오 페이먼트 Ready Response Dto")
-public class KakaoPaymentResponseDto {
+public class KakaoPaymentReadyResponseDto {
 
     /**
      * 결제 고유 번호 (20자)

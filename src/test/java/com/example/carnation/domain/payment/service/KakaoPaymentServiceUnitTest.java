@@ -3,12 +3,11 @@ package com.example.carnation.domain.payment.service;
 import com.example.carnation.domain.order.MockOrderInfo;
 import com.example.carnation.domain.payment.MockPaymentInfo;
 import com.example.carnation.domain.payment.impl.kakao.cqrs.PaymentCommand;
-import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentRequestDto;
-import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentResponseDto;
+import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentReadyResponseDto;
 import com.example.carnation.domain.payment.common.entity.Payment;
+import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentSimpleResponseDto;
 import com.example.carnation.domain.payment.impl.kakao.helper.KakaoPaymentHelper;
 import com.example.carnation.domain.payment.impl.kakao.service.KakaoPaymentService;
-import com.example.carnation.domain.product.MockProductInfo;
 import com.example.carnation.domain.product.cqrs.ProductQuery;
 import com.example.carnation.domain.user.MockUserInfo;
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
@@ -53,19 +52,18 @@ class KakaoPaymentServiceUnitTest {
     void test1() {
         // given
         AuthUser authUser = MockUserInfo.getAuthUser1();
-        KakaoPaymentResponseDto mockResponse = MockPaymentInfo.getKakaoPaymentReadyResponse1();
+        KakaoPaymentReadyResponseDto mockResponse = MockPaymentInfo.getKakaoPaymentReadyResponse1();
         Payment mockPayment = MockPaymentInfo.getPayment1();
-        given(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(KakaoPaymentResponseDto.class))).willReturn(ResponseEntity.ok(mockResponse));
+        given(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(), eq(KakaoPaymentReadyResponseDto.class))).willReturn(ResponseEntity.ok(mockResponse));
         given(kakaoPaymentHelper.getHeadersByKakaoPayment()).willReturn(MockPaymentInfo.getHeadersByKakaoPayment());
         given(kakaoPaymentHelper.getParamsByKakaoPayment(any())).willReturn(MockPaymentInfo.getParamsByKakaoPaymentReady1(mockPayment));
         given(paymentCommand.create(any())).willReturn(mockPayment);
 
         // when
-        KakaoPaymentResponseDto response = kakaoPaymentService.ready(MockUserInfo.getUser1(), MockOrderInfo.getOrder1());
+        KakaoPaymentSimpleResponseDto response = kakaoPaymentService.ready(MockUserInfo.getUser1(), MockOrderInfo.getOrder1());
 
         // then
         assertThat(response).isNotNull();
-        assertThat(response.getTid()).isEqualTo(mockResponse.getTid());
         assertThat(response.getNextRedirectPcUrl()).isEqualTo(mockResponse.getNextRedirectPcUrl());
     }
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ProductRequestDto {
     @NotBlank
     @Schema(description = "상품명", example = "비타민C 영양제")
-    String name;
+    String productName;
 
     @NotBlank
     @Schema(description = "상품 설명", example = "면역력을 높이는 비타민C 영양제")

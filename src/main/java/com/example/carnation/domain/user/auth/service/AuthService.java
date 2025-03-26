@@ -38,14 +38,14 @@ public class AuthService {
     private final VerificationHelper verificationHelper;
 
     @Transactional
-    public UserResponseDto signUp(final SignupRequestDto dto) {
+    public UserDetailResponseDto signup(final SignupRequestDto dto) {
         Boolean flag = userQuery.existsByEmail(dto.getEmail());
         // 중복된 이메일이 없을 경우
         if (!flag) {
             String encodedPassword = pe.encode(dto.getPassword());
             User user = User.of(dto,encodedPassword);
             User saveUser = userCommand.create(user);
-            return UserResponseDto.of(saveUser);
+            return UserDetailResponseDto.of(saveUser);
         }
         else {
             throw new UserException(EMAIL_ALREADY_EXISTS);

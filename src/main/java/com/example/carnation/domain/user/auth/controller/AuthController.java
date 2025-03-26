@@ -27,7 +27,7 @@ public class AuthController {
     @Operation(summary = "회원가입", description = "사용자가 회원가입을 요청합니다.")
     @PostMapping("/signup")
     public ApiResponse<Void> signup(@RequestBody @Valid SignupRequestDto dto) {
-        authService.signUp(dto);
+        authService.signup(dto);
         return ApiResponse.of(SUCCESS);
     }
 
