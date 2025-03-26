@@ -4,13 +4,13 @@ import com.example.carnation.common.exception.RestTemplateException;
 import com.example.carnation.common.response.enums.RestTemplateApiResponseEnum;
 import com.example.carnation.domain.order.cqrs.OrderQuery;
 import com.example.carnation.domain.order.entity.Order;
+import com.example.carnation.domain.payment.common.cqrs.PaymentCommand;
+import com.example.carnation.domain.payment.common.cqrs.PaymentQuery;
+import com.example.carnation.domain.payment.common.dto.PaymentResponseDto;
 import com.example.carnation.domain.payment.common.entity.Payment;
-import com.example.carnation.domain.payment.impl.kakao.constans.KakaoPaymentStatus;
-import com.example.carnation.domain.payment.impl.kakao.cqrs.PaymentCommand;
-import com.example.carnation.domain.payment.impl.kakao.cqrs.PaymentQuery;
+import com.example.carnation.domain.payment.impl.kakao.constans.PaymentStatus;
 import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentApprovalResponseDto;
 import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentReadyResponseDto;
-import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentSimpleResponseDto;
 import com.example.carnation.domain.payment.impl.kakao.helper.KakaoPaymentHelper;
 import com.example.carnation.domain.payment.interfaces.PaymentService;
 import com.example.carnation.domain.product.cqrs.ProductQuery;
@@ -45,7 +45,7 @@ public class KakaoPaymentService implements PaymentService {
      * 카카오페이 결제 준비 (ready)
      */
     @Transactional
-    public KakaoPaymentSimpleResponseDto ready(final User user, final Order order) {
+    public PaymentResponseDto ready(final User user, final Order order) {
         try {
             HttpHeaders headers = kakaoPaymentHelper.getHeadersByKakaoPayment();
             Payment payment = Payment.of(user,order);
@@ -67,7 +67,7 @@ public class KakaoPaymentService implements PaymentService {
             log.info("🔹 Redirect URL (Mobile): {}", resDto.getNextRedirectMobileUrl());
             log.info("🔹 Redirect URL (App): {}", resDto.getNextRedirectAppUrl());
             log.info("🔹 응답 생성 시간: {}", resDto.getCreatedAt());
-            return KakaoPaymentSimpleResponseDto.of(resDto);
+            return PaymentResponseDto.of(resDto);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RestTemplateException(RestTemplateApiResponseEnum.UNEXPECTED_ERROR,e);
@@ -78,7 +78,7 @@ public class KakaoPaymentService implements PaymentService {
      * 카카오페이 결제 승인 (approve)
      */
     @Transactional
-    public KakaoPaymentStatus approval(final Long orderId,final String pgToken) {
+    public PaymentStatus approval(final Long orderId, final String pgToken) {
         try {
             Order order = orderQuery.readById(orderId);
             order.getPayment().updatePgToken(pgToken);
@@ -98,9 +98,9 @@ public class KakaoPaymentService implements PaymentService {
             log.info("🔹 결제 승인 금액: {}원", response.getAmount().getTotal());
             log.info("🔹 주문자 ID: {}", response.getPartner_user_id());
             log.info("🔹 가맹점 코드(CID): {}", response.getCid());
-            order.getPayment().updateStatus(KakaoPaymentStatus.APPROVED);
+            order.getPayment().updateStatus(PaymentStatus.APPROVED);
             order.updateIsPaid(true);
-            return KakaoPaymentStatus.APPROVED;
+            return PaymentStatus.APPROVED;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
@@ -108,18 +108,18 @@ public class KakaoPaymentService implements PaymentService {
     }
 
     @Transactional
-    public KakaoPaymentStatus cancel(final Long orderId) {
+    public PaymentStatus cancel(final Long orderId) {
         Order order = orderQuery.readById(orderId);
-        order.getPayment().updateStatus(KakaoPaymentStatus.CANCEL);
-        return KakaoPaymentStatus.CANCEL;
+        order.getPayment().updateStatus(PaymentStatus.CANCEL);
+        return PaymentStatus.CANCEL;
     }
 
 
     @Transactional
-    public KakaoPaymentStatus fail(final Long orderId) {
+    public PaymentStatus fail(final Long orderId) {
         Order order = orderQuery.readById(orderId);
-        order.getPayment().updateStatus(KakaoPaymentStatus.FAIL);
-        return KakaoPaymentStatus.FAIL;
+        order.getPayment().updateStatus(PaymentStatus.FAIL);
+        return PaymentStatus.FAIL;
     }
 
 

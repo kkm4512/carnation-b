@@ -5,7 +5,7 @@ import com.example.carnation.domain.order.dto.OrderRequestDto;
 import com.example.carnation.domain.order.dto.OrderSearchDto;
 import com.example.carnation.domain.order.dto.OrderSimpleResponseDto;
 import com.example.carnation.domain.order.service.OrderService;
-import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentSimpleResponseDto;
+import com.example.carnation.domain.payment.common.dto.PaymentResponseDto;
 import com.example.carnation.security.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -31,12 +31,12 @@ public class OrderController {
     @PostMapping
     @SecurityRequirement(name = "JWT")
     @Operation(summary = "주문 생성", description = "특정 상품(Product)에 대한 주문을 생성합니다.")
-    public ApiResponse<KakaoPaymentSimpleResponseDto> generate(
+    public ApiResponse<PaymentResponseDto> generate(
             @AuthenticationPrincipal AuthUser authUser,
             @RequestBody @Valid OrderRequestDto dto
     ) {
 
-        KakaoPaymentSimpleResponseDto response = orderService.generate(authUser, dto);
+        PaymentResponseDto response = orderService.generate(authUser, dto);
         return ApiResponse.of(SUCCESS,response);
     }
 
