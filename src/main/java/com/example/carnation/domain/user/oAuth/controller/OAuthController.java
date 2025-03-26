@@ -3,7 +3,7 @@ package com.example.carnation.domain.user.oAuth.controller;
 import com.example.carnation.common.exception.OAuthException;
 import com.example.carnation.common.response.ApiResponse;
 import com.example.carnation.domain.user.oAuth.constans.OAuthProviderNameType;
-import com.example.carnation.init.StaticProperties;
+import com.example.carnation.init.PropertyInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +31,7 @@ public class OAuthController {
             @RequestParam("name") OAuthProviderNameType oAuthProviderName
     ) {
         try {
-            final String REDIRECT_URI = StaticProperties.getRedirectUrl();
+            final String REDIRECT_URI = PropertyInfo.SOCIAL_REDIRECT_URL;
             String clientId = getClientId(oAuthProviderName); // ✅ 동적으로 클라이언트 ID 가져오기
             String url = switch (oAuthProviderName) {
                 case KAKAO -> KAKAO_AUTH_URL
@@ -62,9 +62,9 @@ public class OAuthController {
     // ✅ OAuth 제공자별 클라이언트 ID 동적 설정
     private String getClientId(OAuthProviderNameType provider) {
         return switch (provider) {
-            case KAKAO -> StaticProperties.getKakaoClientId();
-            case NAVER -> StaticProperties.getNaverClientId();
-            case GOOGLE -> StaticProperties.getGoogleClientId();
+            case KAKAO -> PropertyInfo.KAKAO_CLIENT_ID;
+            case NAVER -> PropertyInfo.NAVER_CLIENT_ID;
+            case GOOGLE -> PropertyInfo.GOOGLE_CLIENT_ID;
             default -> throw new OAuthException(OAUTH_NOT_FOUND_PROVIDER);
         };
     }

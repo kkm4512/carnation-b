@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o " +
-            "WHERE o.product.user.id = :userId " +
+            "WHERE o.payment.user.id = :userId " +
             "AND (:paymentGateway IS NULL OR o.paymentGateway = :paymentGateway) " +
             "AND (:isPaid IS NULL OR o.isPaid = :isPaid)")
-    Page<Order> findAllMe(Long userId, PaymentGateway paymentGateway, boolean isPaid, Pageable pageable);
+    Page<Order> findAllMe(Long userId, PaymentGateway paymentGateway, Boolean isPaid, Pageable pageable);
 }

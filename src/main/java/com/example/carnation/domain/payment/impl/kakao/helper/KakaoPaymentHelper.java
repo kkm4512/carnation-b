@@ -2,8 +2,8 @@ package com.example.carnation.domain.payment.impl.kakao.helper;
 
 import com.example.carnation.domain.order.entity.Order;
 import com.example.carnation.domain.payment.common.entity.Payment;
+import com.example.carnation.init.PropertyInfo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -15,16 +15,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoPaymentHelper {
 
-
-    @Value("${payment.kakao.secret-key-dev}")
-    private String kakaoPaymentSecretKey;
-
-    @Value("${server.url}")
-    private String serverUrl;
-
     public HttpHeaders getHeadersByKakaoPayment() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "SECRET_KEY " + kakaoPaymentSecretKey);
+        headers.set("Authorization", "SECRET_KEY " + PropertyInfo.PAYMENT_KAKAO_SECRET_KEY_DEV);
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
     }
@@ -34,13 +27,13 @@ public class KakaoPaymentHelper {
         params.put("cid", entity.getPayment().getCid());
         params.put("partner_order_id", entity.getPayment().getPartnerOrderId());
         params.put("partner_user_id", entity.getPayment().getPartnerUserId());
-        params.put("item_name", entity.getPayment().getItemName());
+        params.put("item_name", entity.getPayment().getProductName());
         params.put("quantity", String.valueOf(entity.getPayment().getQuantity()));
         params.put("total_amount", String.valueOf(entity.getPayment().getTotalAmount()));
         params.put("tax_free_amount", String.valueOf(entity.getPayment().getTaxFreeAmount()));
-        params.put("approval_url", serverUrl + "/api/v1/payment/kakao/callback/approval?order_id=" + entity.getId());
-        params.put("cancel_url", serverUrl + "/api/v1/payment/kakao/callback/cancel?order_id=" + entity.getId());
-        params.put("fail_url", serverUrl + "/api/v1/payment/kakao/callback/fail?order_id=" + entity.getId());
+        params.put("approval_url", PropertyInfo.SERVER_URL + "/api/v1/payment/kakao/callback/approval?order_id=" + entity.getId());
+        params.put("cancel_url", PropertyInfo.SERVER_URL + "/api/v1/payment/kakao/callback/cancel?order_id=" + entity.getId());
+        params.put("fail_url", PropertyInfo.SERVER_URL + "/api/v1/payment/kakao/callback/fail?order_id=" + entity.getId());
 
         var payment = entity.getPayment(); // 가독성을 위해 지역 변수로 추출
 

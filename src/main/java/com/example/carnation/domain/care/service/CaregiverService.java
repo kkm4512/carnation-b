@@ -7,7 +7,7 @@ import com.example.carnation.domain.care.dto.CaregiverRequestDto;
 import com.example.carnation.domain.care.dto.CaregiverSimpleResponseDto;
 import com.example.carnation.domain.care.entity.Caregiver;
 import com.example.carnation.domain.care.validate.CareValidate;
-import com.example.carnation.domain.user.auth.dto.UserResponseDto;
+import com.example.carnation.domain.user.auth.dto.UserDetailResponseDto;
 import com.example.carnation.domain.user.common.cqrs.UserCommand;
 import com.example.carnation.domain.user.common.cqrs.UserQuery;
 import com.example.carnation.domain.user.common.entity.User;
@@ -30,13 +30,13 @@ public class CaregiverService {
 
     // 간병인 정보 저장
     @Transactional
-    public UserResponseDto generate(final AuthUser authUser, final CaregiverRequestDto dto) {
+    public UserDetailResponseDto generate(final AuthUser authUser, final CaregiverRequestDto dto) {
         User user = userQuery.readById(authUser.getUserId());
         Caregiver caregiver = Caregiver.of(user, dto);
         user.updateCareGiver(caregiver);
         CareValidate.validateCaregiverRegisterConflict(user,dto.getIsVisible());
         User saveUser = userCommand.create(user);
-        return UserResponseDto.of(saveUser);
+        return UserDetailResponseDto.of(saveUser);
     }
 
     public Page<CaregiverSimpleResponseDto> findPageByAvailable(CaregiverIsMatchSearchDto dto) {

@@ -1,4 +1,4 @@
-package com.example.carnation.domain.payment.impl.toss.controller;
+package com.example.carnation.domain.payment.impl.naver.controller;
 
 import com.example.carnation.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -11,18 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SUCCESS;
 
 @RestController
-@RequestMapping("/api/v1/payment/toss")
+@RequestMapping("/api/v1/payment/naver")
 @RequiredArgsConstructor
 @Slf4j
 @Hidden
-public class TossController {
-    @GetMapping("/health")
-    public ApiResponse<Void> tossGetHealth() {
-        return ApiResponse.of(SUCCESS);
-    }
-
+public class NaverPaymentController {
     @GetMapping
-    public ApiResponse<String> findAllToss() {
-        return ApiResponse.of(SUCCESS,"4");
+    public ApiResponse<Void> naverPay() {
+        return ApiResponse.of(SUCCESS);
     }
 }
