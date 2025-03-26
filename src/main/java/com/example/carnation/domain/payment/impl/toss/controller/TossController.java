@@ -17,7 +17,7 @@ import static com.example.carnation.common.response.enums.BaseApiResponseEnum.SU
 @Hidden
 public class TossController {
     @GetMapping("/health")
-    public ApiResponse<Void> tossHealthCheck() {
+    public ApiResponse<Void> tossGetHealth() {
         return ApiResponse.of(SUCCESS);
     }
 }
