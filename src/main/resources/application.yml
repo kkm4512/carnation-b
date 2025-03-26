@@ -67,10 +67,12 @@ payment:
     secret: ${KAKAO_PAYMENT_SECRET}
     secret-key: ${KAKAO_PAYMENT_SECRET_KEY}
     secret-key-dev: ${KAKAO_PAYMENT_SECRET_KEY_DEV}
-  toss:
-    client-id: ${TOSS_PAYMENT_CLIENT_ID}
-    secret-key: ${TOSS_PAYMENT_SECRET_KEY}
-    security-key: ${TOSS_PAYMENT_SECURITY_KEY}
+    merchant_id: ${KAKAO_PAYMENT_MERCHANT_ID}
+  naver:
+    client-id: ${NAVER_PAYMENT_CLIENT_ID}
+    secret: ${NAVER_PAYMENT_SECRET}
+    chain-id: ${NAVER_PAYMENT_CHAIN_ID}
+    merchant_id: ${NAVER_PAYMENT_MERCHANT_ID}
 
 
 

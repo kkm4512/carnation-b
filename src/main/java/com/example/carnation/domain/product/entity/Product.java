@@ -34,7 +34,7 @@ public class Product {
 
     @Column(nullable = false, length = 100)
     @Schema(description = "상품명", example = "비타민C 영양제")
-    private String name;
+    private String productName;
 
     @Column(nullable = false, length = 255)
     @Schema(description = "상품 설명", example = "면역력을 높이는 비타민C 영양제")
@@ -78,8 +78,8 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
-    public Product(User user, String name, String description, Integer price, Integer quantity, String category, String brand) {
-        this.name = name;
+    public Product(User user, String productName, String description, Integer price, Integer quantity, String category, String brand) {
+        this.productName = productName;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
@@ -92,7 +92,7 @@ public class Product {
     public static Product of(User user, ProductRequestDto dto) {
         return new Product(
                 user,
-                dto.getName(),
+                dto.getProductName(),
                 dto.getDescription(),
                 dto.getPrice(),
                 dto.getQuantity(),

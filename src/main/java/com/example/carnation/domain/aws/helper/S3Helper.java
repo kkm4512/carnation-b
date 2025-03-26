@@ -8,9 +8,9 @@ import com.example.carnation.common.exception.AwsException;
 import com.example.carnation.common.exception.FileException;
 import com.example.carnation.common.response.enums.AwsApiResponseEnum;
 import com.example.carnation.common.response.enums.FileApiResponseEnum;
+import com.example.carnation.init.PropertyInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,8 +21,7 @@ import java.nio.file.Path;
 @Slf4j(topic = "S3Helper")
 @RequiredArgsConstructor
 public class S3Helper {
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    private String bucket = PropertyInfo.AWS_S3_BUCKET;
 
     private final AmazonS3Client amazonS3Client;
 

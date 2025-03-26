@@ -8,7 +8,7 @@ import com.example.carnation.domain.order.dto.OrderSearchDto;
 import com.example.carnation.domain.order.dto.OrderSimpleResponseDto;
 import com.example.carnation.domain.order.entity.Order;
 import com.example.carnation.domain.payment.factory.PaymentFactory;
-import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentResponseDto;
+import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentSimpleResponseDto;
 import com.example.carnation.domain.payment.interfaces.PaymentService;
 import com.example.carnation.domain.product.cqrs.ProductQuery;
 import com.example.carnation.domain.product.entity.Product;
@@ -31,7 +31,7 @@ public class OrderService {
     private final UserQuery userQuery;
 
     @Transactional
-    public KakaoPaymentResponseDto generate(AuthUser authUser, OrderRequestDto dto) {
+    public KakaoPaymentSimpleResponseDto generate(AuthUser authUser, OrderRequestDto dto) {
         User user = userQuery.readById(authUser.getUserId());
         Product product = productQuery.readById(dto.getProductId());
         user.validateIsMe(product.getUser());

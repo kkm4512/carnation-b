@@ -5,6 +5,7 @@ import com.example.carnation.domain.payment.common.constans.PaymentGateway;
 import com.example.carnation.domain.payment.impl.kakao.constans.KakaoPaymentMethodType;
 import com.example.carnation.domain.payment.impl.kakao.constans.KakaoPaymentStatus;
 import com.example.carnation.domain.user.common.entity.User;
+import com.example.carnation.init.PropertyInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,7 +40,7 @@ public class Payment {
     private String partnerUserId;  // 가맹점 회원 ID
 
     @Column(nullable = false, length = 100)
-    private String itemName;  // 상품명
+    private String productName;  // 상품명
 
     @Column(nullable = false)
     private Integer quantity;  // 상품 수량
@@ -102,11 +103,11 @@ public class Payment {
     public static Payment of(User user, Order entity) {
         UUID uuid = UUID.randomUUID();
         return Payment.builder()
-                .cid("TC0ONETIME") // 가맹점 CID (임시 테스트 코드)
+                .cid(PropertyInfo.PAYMENT_KAKAO_MERCHANT_ID)
                 .user(user)
                 .partnerOrderId(uuid + "_" + entity.getId())
                 .partnerUserId(uuid + "_" + user.getId())
-                .itemName(entity.getProduct().getName())
+                .productName(entity.getProduct().getProductName())
                 .quantity(entity.getQuantity())  // 주문 수량
                 .totalAmount(entity.getProduct().getPrice() * entity.getQuantity())  // 총액 계산
                 .taxFreeAmount(0)

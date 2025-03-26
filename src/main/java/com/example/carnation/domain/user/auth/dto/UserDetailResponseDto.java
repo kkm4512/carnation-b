@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "사용자 DTO") // DTO 설명 추가
-public class UserResponseDto {
+public class UserDetailResponseDto {
 
     @Schema(description = "사용자 고유 ID", example = "1")
     private Long id;
@@ -41,8 +41,8 @@ public class UserResponseDto {
     @Schema(description = "마지막 수정 날짜 (자동 입력)", example = "2024-03-01T10:00:00")
     private LocalDateTime updatedAt;
 
-    public static UserResponseDto of(User user) {
-        return new UserResponseDto(
+    public static UserDetailResponseDto of(User user) {
+        return new UserDetailResponseDto(
                 user.getId(),
                 user.getNickname(),
                 user.getEmail(),
