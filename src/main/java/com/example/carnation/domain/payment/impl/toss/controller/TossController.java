@@ -20,4 +20,9 @@ public class TossController {
     public ApiResponse<Void> tossGetHealth() {
         return ApiResponse.of(SUCCESS);
     }
+
+    @GetMapping
+    public ApiResponse<String> findAllToss() {
+        return ApiResponse.of(SUCCESS,"1");
+    }
 }
