@@ -2,8 +2,9 @@ package com.example.carnation.domain.payment;
 
 import com.example.carnation.domain.order.MockOrderInfo;
 import com.example.carnation.domain.payment.common.entity.Payment;
-import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentRequestDto;
 import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentReadyResponseDto;
+import com.example.carnation.domain.payment.impl.kakao.dto.KakaoPaymentRequestDto;
+import com.example.carnation.domain.payment.impl.naver.dto.NaverPaymentResponseDto;
 import com.example.carnation.domain.user.MockUserInfo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -103,4 +104,21 @@ public class MockPaymentInfo {
         if (entity.getTotalAmount() != null) params.put("total_amount", String.valueOf(entity.getTotalAmount()));
         return params;
     }
+
+    public static NaverPaymentResponseDto getNaverPaymentResponse1() {
+        NaverPaymentResponseDto dto = new NaverPaymentResponseDto();
+        dto.setCode("Success");
+        dto.setMessage("테스트용 응답입니다.");
+
+        Map<String, Object> fakeBody = new HashMap<>();
+        fakeBody.put("paymentId", "TEST_NAVER_123456");
+        fakeBody.put("status", "READY");
+        fakeBody.put("amount", 50000);
+
+        dto.setBody(fakeBody);
+        return dto;
+    }
+
+
+
 }

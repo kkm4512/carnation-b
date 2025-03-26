@@ -1,9 +1,11 @@
 package com.example.carnation.domain.payment.common.entity;
 
+import com.example.carnation.common.exception.PaymentException;
+import com.example.carnation.common.response.enums.PaymentApiResponseEnum;
 import com.example.carnation.domain.order.entity.Order;
 import com.example.carnation.domain.payment.common.constans.PaymentGateway;
 import com.example.carnation.domain.payment.impl.kakao.constans.KakaoPaymentMethodType;
-import com.example.carnation.domain.payment.impl.kakao.constans.KakaoPaymentStatus;
+import com.example.carnation.domain.payment.impl.kakao.constans.PaymentStatus;
 import com.example.carnation.domain.user.common.entity.User;
 import com.example.carnation.init.PropertyInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,7 +32,7 @@ public class Payment {
     private Long id;
 
     // ✅ Ready API 요청 데이터
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 100)
     private String cid;  // 가맹점 코드
 
     @Column(nullable = false, length = 100)
@@ -85,7 +87,7 @@ public class Payment {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private KakaoPaymentStatus paymentStatus;  // 결제 상태
+    private PaymentStatus paymentStatus;  // 결제 상태
 
     @CreatedDate
     @Column(updatable = false, nullable = false)
@@ -102,8 +104,14 @@ public class Payment {
 
     public static Payment of(User user, Order entity) {
         UUID uuid = UUID.randomUUID();
+        String cid = switch (entity.getPaymentGateway()) {
+            case KAKAOPAY -> PropertyInfo.PAYMENT_KAKAO_MERCHANT_ID;
+            case NAVERPAY -> PropertyInfo.PAYMENT_NAVER_MERCHANT_ID;
+            default -> throw new PaymentException(PaymentApiResponseEnum.PAYMENT_NOT_FOUND);
+        };
+
         return Payment.builder()
-                .cid(PropertyInfo.PAYMENT_KAKAO_MERCHANT_ID)
+                .cid(cid)
                 .user(user)
                 .partnerOrderId(uuid + "_" + entity.getId())
                 .partnerUserId(uuid + "_" + user.getId())
@@ -112,7 +120,7 @@ public class Payment {
                 .totalAmount(entity.getProduct().getPrice() * entity.getQuantity())  // 총액 계산
                 .taxFreeAmount(0)
                 .paymentGateway(entity.getPaymentGateway())
-                .paymentStatus(KakaoPaymentStatus.PENDING)
+                .paymentStatus(PaymentStatus.PENDING)
                 .build();
     }
 
@@ -126,7 +134,7 @@ public class Payment {
     }
 
 
-    public void updateStatus(KakaoPaymentStatus kakaoPaymentStatus) {
+    public void updateStatus(PaymentStatus kakaoPaymentStatus) {
         this.paymentStatus = kakaoPaymentStatus;
     }
 }
