@@ -13,6 +13,9 @@ permissions: write-all
 jobs:
   review:
     runs-on: ubuntu-latest
+    env:
+      ACTIONS_STEP_DEBUG: true
+      ACTIONS_RUNNER_DEBUG: true
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -23,6 +26,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.KKM_GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.KKM_OPEN_AI_KEY }}
           OPENAI_API_MODEL: "gpt-4o"
+
 
 
 
