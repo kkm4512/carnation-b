@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class NaverPaymentController {
     @GetMapping
     public String perpare() {
-        return "perpare11";
+        return "perpare1111";
     }
 }
