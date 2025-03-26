@@ -30,7 +30,7 @@ public class PaymentResponseDto {
 
     // 공통
     @Schema(name = "현재 페이 상태값")
-    private PaymentStatus PaymentStatus;
+    private PaymentStatus paymentStatus;
 
     // 카카오페이먼트 -> 페이먼트
     public PaymentResponseDto(String nextRedirectAppUrl, String nextRedirectMobileUrl, String nextRedirectPcUrl, String androidAppScheme, String iosAppScheme) {
